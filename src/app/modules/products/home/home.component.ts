@@ -1,62 +1,98 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { ProductService } from '../../../core/services/product.service';
+import { CartService } from '../../../core/services/cart.service';
+import { Product } from '../../../core/models/product.model';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './home.component.html',
   styles: [`
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+      to   { opacity: 1; transform: translateY(0); }
     }
-    .animate-fade-in-up {
-      animation: fadeInUp 0.5s ease-out forwards;
+    .animate-fade-in-up { animation: fadeInUp 0.5s ease-out forwards; }
+    @keyframes shimmer {
+      0%   { background-position: -700px 0; }
+      100% { background-position: 700px 0; }
+    }
+    .skeleton {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 700px 100%;
+      animation: shimmer 1.3s infinite linear;
     }
   `]
 })
-export class HomeComponent {
-  products = [
-    {
-      id: 1,
-      name: 'Farm Fresh Tomatoes',
-      description: 'Hand-picked, locally sourced premium red tomatoes perfect for gravies and salads.',
-      price: 45.00,
-      unit: '1 kg',
-      category: 'Vegetables',
-      image: 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'
-    },
-    {
-      id: 2,
-      name: 'Basmati Rice Premium XXL',
-      description: 'Aged long-grain basmati rice, yields fluffy and aromatic biryani.',
-      price: 1800.00,
-      unit: '25 kg Bag',
-      category: 'Grains',
-      image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'
-    },
-    {
-      id: 3,
-      name: 'Refined Sunflower Oil',
-      description: 'High-quality cooking oil perfect for deep frying and general cooking.',
-      price: 1550.00,
-      unit: '15 Litre Tin',
-      category: 'Oil & Ghee',
-      image: 'https://images.unsplash.com/photo-1625937286074-9ca519d5d9df?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'
-    },
-    {
-      id: 4,
-      name: 'Paneer (Cottage Cheese)',
-      description: 'Soft, malai paneer vacuum-packed for freshness.',
-      price: 360.00,
-      unit: '1 kg',
-      category: 'Dairy',
-      image: 'https://plus.unsplash.com/premium_photo-1663852297125-97e3fb610de5?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'
-    }
-  ];
+export class HomeComponent implements OnInit {
+  private readonly productService = inject(ProductService);
+  readonly cartService = inject(CartService);
 
-  addToCart(product: any) {
-    alert('Please log in as a Restaurant to add items to your cart.');
+  products = signal<Product[]>([]);
+  loading = signal(true);
+  error = signal<string | null>(null);
+  selectedCategory = signal<string>('All');
+  searchQuery = signal<string>('');
+
+  /** Unique category names derived from products */
+  categories = computed(() => {
+    const names = this.products().map(p => p.category.name);
+    return ['All', ...Array.from(new Set(names))];
+  });
+
+  /** Products filtered by category and search query */
+  filteredProducts = computed(() => {
+    const query = this.searchQuery().toLowerCase().trim();
+    return this.products().filter(p => {
+      const matchCat =
+        this.selectedCategory() === 'All' ||
+        p.category.name === this.selectedCategory();
+      const matchSearch =
+        !query ||
+        p.name.toLowerCase().includes(query) ||
+        (p.description ?? '').toLowerCase().includes(query);
+      return matchCat && matchSearch;
+    });
+  });
+
+  skeletons = Array(8).fill(0);
+
+  ngOnInit(): void {
+    this.productService.getProducts().subscribe({
+      next: data => {
+        this.products.set(data);
+        this.loading.set(false);
+      },
+      error: err => {
+        console.error('Failed to load products', err);
+        this.error.set('Could not load products. Please make sure the backend is running.');
+        this.loading.set(false);
+      }
+    });
+  }
+
+  setCategory(cat: string): void {
+    this.selectedCategory.set(cat);
+  }
+
+  addToCart(product: Product): void {
+    this.cartService.addToCart(product);
+  }
+
+  removeFromCart(productId: number): void {
+    this.cartService.removeFromCart(productId);
+  }
+
+  getQuantity(productId: number): number {
+    return this.cartService.getQuantity(productId);
+  }
+
+  /** Fallback when image_url is missing or broken */
+  onImgError(event: Event): void {
+    (event.target as HTMLImageElement).src =
+      'https://placehold.co/400x300/e2e8f0/64748b?text=No+Image';
   }
 }

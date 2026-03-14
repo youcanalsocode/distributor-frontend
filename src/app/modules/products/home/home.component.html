@@ -1,41 +1,147 @@
-<div class="animate-fade-in-up">
-  <div class="mb-10 text-center">
-    <h1 class="text-4xl font-extrabold text-blue-950 tracking-tight sm:text-5xl">Wholesale Ingredients & Supplies</h1>
-    <p class="mt-4 max-w-2xl text-xl text-gray-500 mx-auto">Premium quality produce and essentials for your restaurant, delivered fresh every day.</p>
+<div class="min-h-screen bg-gray-50 animate-fade-in-up">
+
+  <!-- ── Page Header ─────────────────────────────────────────────────────── -->
+  <div class="bg-white border-b border-gray-200 px-4 py-6 sm:px-8">
+    <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">Products</h1>
+    <p class="mt-1 text-gray-500 text-sm">Wholesale ingredients & supplies sourced fresh for your restaurant.</p>
   </div>
 
-  <div class="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-    
-    <div *ngFor="let product of products" class="group relative bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col">
-      <div class="aspect-w-1 aspect-h-1 w-full overflow-hidden bg-gray-200 xl:aspect-w-7 xl:aspect-h-8">
-        <img [src]="product.image" [alt]="product.name" class="h-64 w-full object-cover object-center group-hover:scale-105 transition-transform duration-500">
-        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-      </div>
-      
-      <div class="p-5 flex-grow flex flex-col justify-between">
-        <div>
-          <div class="flex items-center justify-between mb-2">
-            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-teal-100 text-teal-800">
-              {{ product.category }}
-            </span>
-            <span class="text-sm font-medium text-gray-400">{{ product.unit }}</span>
-          </div>
-          <h3 class="text-lg font-bold text-blue-900 mb-1">{{ product.name }}</h3>
-          <p class="mt-1 text-sm text-gray-500 line-clamp-2">{{ product.description }}</p>
-        </div>
-        
-        <div class="mt-4 flex items-center justify-between">
-          <p class="text-2xl font-bold text-blue-950">₹{{ product.price }}</p>
-        </div>
+  <!-- ── Error Banner ──────────────────────────────────────────────────────── -->
+  <div *ngIf="error()" class="mx-4 mt-4 sm:mx-8 bg-red-50 border border-red-200 text-red-700 rounded-xl px-5 py-4 flex items-center gap-3">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+      <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+    </svg>
+    <span>{{ error() }}</span>
+  </div>
 
-        <button (click)="addToCart(product)" class="mt-5 w-full bg-gradient-to-r from-teal-50 to-blue-50 text-blue-900 border border-blue-200 py-2.5 px-4 rounded-xl font-semibold hover:from-teal-500 hover:to-blue-600 hover:text-white hover:border-transparent transition-all duration-200 active:scale-95 flex items-center justify-center gap-2 shadow-sm">
-           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
-           </svg>
-           Add to Cart
-        </button>
+  <!-- ── Category Filter Tabs ──────────────────────────────────────────────── -->
+  <div *ngIf="!loading()" class="sticky top-16 z-40 bg-white border-b border-gray-200 px-4 sm:px-8 overflow-x-auto">
+    <div class="flex gap-1 py-2 min-w-max">
+      <button
+        *ngFor="let cat of categories()"
+        (click)="setCategory(cat)"
+        [class.bg-teal-600]="selectedCategory() === cat"
+        [class.text-white]="selectedCategory() === cat"
+        [class.shadow-sm]="selectedCategory() === cat"
+        [class.bg-gray-100]="selectedCategory() !== cat"
+        [class.text-gray-700]="selectedCategory() !== cat"
+        class="px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 whitespace-nowrap hover:bg-teal-50 hover:text-teal-700"
+      >
+        {{ cat }}
+      </button>
+    </div>
+  </div>
+
+  <div class="px-4 sm:px-8 py-6">
+
+    <!-- ── Skeleton Loading ──────────────────────────────────────────────── -->
+    <div *ngIf="loading()" class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div *ngFor="let s of skeletons" class="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100">
+        <div class="skeleton h-52 w-full"></div>
+        <div class="p-4 space-y-3">
+          <div class="skeleton h-3 w-1/3 rounded-full"></div>
+          <div class="skeleton h-5 w-3/4 rounded-full"></div>
+          <div class="skeleton h-4 w-full rounded-full"></div>
+          <div class="skeleton h-4 w-2/3 rounded-full"></div>
+          <div class="flex justify-between items-center pt-2">
+            <div class="skeleton h-6 w-1/4 rounded-full"></div>
+            <div class="skeleton h-9 w-24 rounded-xl"></div>
+          </div>
+        </div>
       </div>
     </div>
 
+    <!-- ── No Results ────────────────────────────────────────────────────── -->
+    <div *ngIf="!loading() && filteredProducts().length === 0 && !error()"
+         class="flex flex-col items-center justify-center py-24 text-gray-400">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mb-4 opacity-40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+      </svg>
+      <p class="text-lg font-medium">No products found</p>
+      <p class="text-sm mt-1">Try a different category or search term</p>
+    </div>
+
+    <!-- ── Product Grid ──────────────────────────────────────────────────── -->
+    <div *ngIf="!loading()" class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+
+      <div *ngFor="let product of filteredProducts()"
+           class="group bg-white rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col">
+
+        <!-- Product Image -->
+        <div class="relative overflow-hidden bg-gray-100 h-52">
+          <img
+            [src]="product.image_url || 'https://placehold.co/400x300/e2e8f0/64748b?text=No+Image'"
+            [alt]="product.name"
+            (error)="onImgError($event)"
+            class="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
+          />
+          <!-- Stock badge -->
+          <span *ngIf="product.stock <= 5 && product.stock > 0"
+                class="absolute top-3 left-3 bg-orange-500 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow">
+            Only {{ product.stock }} left
+          </span>
+          <span *ngIf="product.stock === 0"
+                class="absolute top-3 left-3 bg-red-500 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow">
+            Out of stock
+          </span>
+        </div>
+
+        <!-- Product Info -->
+        <div class="p-4 flex-grow flex flex-col justify-between">
+          <div>
+            <!-- Category + Unit -->
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-teal-50 text-teal-700 border border-teal-100">
+                {{ product.category.name }}
+              </span>
+              <span *ngIf="product.unit" class="text-xs text-gray-400 font-medium">{{ product.unit }}</span>
+            </div>
+
+            <!-- Name -->
+            <h3 class="text-base font-bold text-gray-900 mb-1 leading-tight">{{ product.name }}</h3>
+
+            <!-- Description -->
+            <p *ngIf="product.description" class="text-sm text-gray-500 line-clamp-2">{{ product.description }}</p>
+          </div>
+
+          <!-- Price + Cart Controls -->
+          <div class="mt-4">
+            <div class="flex items-center justify-between mb-3">
+              <p class="text-xl font-extrabold text-gray-900">₹{{ product.price | number:'1.2-2' }}</p>
+              <span class="text-xs text-gray-400">Stock: {{ product.stock }}</span>
+            </div>
+
+            <!-- No quantity yet → Show "Add" button -->
+            <button
+              *ngIf="getQuantity(product.id) === 0"
+              (click)="addToCart(product)"
+              [disabled]="product.stock === 0"
+              class="w-full py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 active:scale-95
+                     bg-teal-600 text-white hover:bg-teal-700 shadow-sm
+                     disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed disabled:shadow-none"
+            >
+              {{ product.stock === 0 ? 'Out of Stock' : '+ Add to Cart' }}
+            </button>
+
+            <!-- Has quantity → Show stepper -->
+            <div *ngIf="getQuantity(product.id) > 0"
+                 class="flex items-center justify-between bg-teal-50 border border-teal-200 rounded-xl overflow-hidden">
+              <button
+                (click)="removeFromCart(product.id)"
+                class="px-4 py-2.5 text-teal-700 hover:bg-teal-100 font-bold text-lg transition-colors leading-none"
+              >−</button>
+              <span class="text-teal-800 font-bold text-sm">{{ getQuantity(product.id) }}</span>
+              <button
+                (click)="addToCart(product)"
+                [disabled]="getQuantity(product.id) >= product.stock"
+                class="px-4 py-2.5 text-teal-700 hover:bg-teal-100 font-bold text-lg transition-colors leading-none
+                       disabled:text-gray-300 disabled:cursor-not-allowed"
+              >+</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
   </div>
 </div>

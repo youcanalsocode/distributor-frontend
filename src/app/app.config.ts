@@ -7,6 +7,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
 import { definePreset } from '@primeuix/themes';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 
 const VimekPreset = definePreset(Aura, {
     semantic: {
@@ -29,7 +30,8 @@ const VimekPreset = definePreset(Aura, {
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideRouter(routes), 
+    provideRouter(routes),
+    provideHttpClient(withFetch()),
     provideClientHydration(withEventReplay()),
     provideAnimationsAsync(),
     providePrimeNG({
@@ -42,3 +44,4 @@ export const appConfig: ApplicationConfig = {
     })
   ]
 };
+
