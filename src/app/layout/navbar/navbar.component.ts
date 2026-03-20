@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { CartService } from '../../core/services/cart.service';
+import { SearchService } from '../../core/services/search.service';
 
 @Component({
   selector: 'app-navbar',
@@ -14,11 +15,17 @@ import { CartService } from '../../core/services/cart.service';
 })
 export class NavbarComponent {
   readonly cartService = inject(CartService);
-  searchQuery = '';
+  readonly searchService = inject(SearchService);
+
+  get searchQuery(): string {
+    return this.searchService.searchQuery();
+  }
+
+  set searchQuery(value: string) {
+    this.searchService.setQuery(value);
+  }
 
   onSearch() {
-    if (this.searchQuery.trim()) {
-      console.log('Searching for:', this.searchQuery);
-    }
+    console.log('Searching for:', this.searchQuery);
   }
 }

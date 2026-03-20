@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProductService } from '../../../core/services/product.service';
 import { CartService } from '../../../core/services/cart.service';
+import { SearchService } from '../../../core/services/search.service';
 import { Product } from '../../../core/models/product.model';
 import { CarouselModule } from 'primeng/carousel';
 
@@ -31,12 +32,13 @@ import { CarouselModule } from 'primeng/carousel';
 export class HomeComponent implements OnInit {
   private readonly productService = inject(ProductService);
   readonly cartService = inject(CartService);
+  private readonly searchService = inject(SearchService);
 
   products = signal<Product[]>([]);
   loading = signal(true);
   error = signal<string | null>(null);
   selectedCategory = signal<string>('All');
-  searchQuery = signal<string>('');
+  searchQuery = this.searchService.searchQuery;
 
   /** Responsive options for PrimeNG Carousel */
   responsiveOptions = [
