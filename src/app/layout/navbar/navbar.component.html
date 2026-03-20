@@ -11,7 +11,36 @@
           VIMEK RESTOMART
         </span>
       </div>
+      <div class="relative mt-2 w-36 p-2 pl-10">
+        <!-- Current Location Button -->
+        <button 
+          (click)="toggleDropdown()"
+          class="flex  flex-col gap-1 font-medium  "
+        >
+        <span class="text-xs text-gray-400">
+          Delivery in <i class="pi pi-map-marker text-sm" style="color: red;"></i>
+        </span>
+        <span class="flex items-center gap-1 font-semibold">
+         
+          {{ selectedLocation }}
+          <span class="text-xs"><i class="pi pi-angle-down" style="color: teal;"></i></span>
+        </span>
+        </button>
 
+        <!-- Dropdown -->
+        <div 
+          *ngIf="isOpen"
+          class="absolute left-0 mt-2 w-44 bg-white shadow-lg rounded-lg border z-50"
+        >
+          <div 
+            *ngFor="let loc of locations"
+            (click)="selectLocation(loc)"
+            class="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+          >
+            {{ loc }}
+          </div>
+        </div>
+      </div>
       <!-- Search Bar -->
       <div class="flex-1 flex items-center justify-center px-6 max-w-lg mx-auto">
         <div class="relative w-full">
@@ -43,11 +72,7 @@
 
       <div class="flex items-center space-x-4">
         <button class="relative p-2 rounded-full hover:bg-teal/10 transition-colors duration-200 group">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-900 group-hover:text-teal transition-colors"
-            fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-          </svg>
+         <i class="pi pi-shopping-cart " style="color:teal; font-size: 1.5rem"></i>
           <span
             class="absolute top-0 right-0 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full transition-all duration-200"
             [class.opacity-0]="cartService.totalItems() === 0"
@@ -55,7 +80,7 @@
           >{{ cartService.totalItems() }}</span>
         </button>
        
-       <button pButton type="button" label="Login" routerLink="/auth/restaurant" severity="info"></button>
+       <button pButton type="button" label="Login/Signup" routerLink="/auth/restaurant" class="!bg-gradient-to-r from-teal-400 to-blue-600"></button>
       </div>
 
     </div>

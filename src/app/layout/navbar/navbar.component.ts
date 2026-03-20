@@ -16,6 +16,18 @@ import { SearchService } from '../../core/services/search.service';
 export class NavbarComponent {
   readonly cartService = inject(CartService);
   readonly searchService = inject(SearchService);
+  selectedLocation = 'Mumbai';
+  isOpen = false;
+  locations = ['Mumbai', 'Delhi', 'Bangalore', 'Pune'];
+  ngOnInit() {
+   if (typeof window !== 'undefined' && window.localStorage) { 
+    const saved = localStorage.getItem('location');
+    if (saved) {
+      this.selectedLocation = saved;
+    }
+   }
+}
+
 
   get searchQuery(): string {
     return this.searchService.searchQuery();
@@ -28,4 +40,15 @@ export class NavbarComponent {
   onSearch() {
     console.log('Searching for:', this.searchQuery);
   }
+  toggleDropdown() {
+  this.isOpen = !this.isOpen;
+}
+
+selectLocation(loc: string) {
+  this.selectedLocation = loc;
+  this.isOpen = false;
+
+  // Save for later
+  localStorage.setItem('location', loc);
+}
 }
