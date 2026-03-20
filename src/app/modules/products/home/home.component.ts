@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { ProductService } from '../../../core/services/product.service';
 import { CartService } from '../../../core/services/cart.service';
 import { Product } from '../../../core/models/product.model';
+import { CarouselModule } from 'primeng/carousel';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule,CarouselModule],
   templateUrl: './home.component.html',
   styles: [`
     @keyframes fadeInUp {
@@ -36,6 +37,33 @@ export class HomeComponent implements OnInit {
   error = signal<string | null>(null);
   selectedCategory = signal<string>('All');
   searchQuery = signal<string>('');
+
+  /** Responsive options for PrimeNG Carousel */
+  responsiveOptions = [
+    {
+      breakpoint: '1400px',
+      numVisible: 4,
+      numScroll: 1
+    },
+    {
+      breakpoint: '1200px',
+      numVisible: 3,
+      numScroll: 1
+    },
+    {
+      breakpoint: '992px',
+      numVisible: 2,
+      numScroll: 1
+    },
+    {
+      breakpoint: '576px',
+      numVisible: 1,
+      numScroll: 1
+    }
+  ];
+
+  /** Featured products for the carousel (top 6 items) */
+  featuredProducts = computed(() => this.products().slice(0, 6));
 
   /** Unique category names derived from products */
   categories = computed(() => {
