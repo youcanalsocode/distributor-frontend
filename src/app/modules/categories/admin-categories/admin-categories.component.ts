@@ -17,6 +17,8 @@ export class AdminCategoriesComponent implements OnInit {
   categories: Category[] = [];
   
   // Form properties
+  isEditing = false;
+  currentCategoryId: number | null = null;
   name = '';
   description = '';
   selectedFile: File | null = null;
@@ -45,6 +47,27 @@ export class AdminCategoriesComponent implements OnInit {
     }
   }
 
+  editCategory(category: Category) {
+    this.isEditing = true;
+    this.currentCategoryId = category.id;
+    this.name = category.name;
+    this.description = category.description || '';
+    this.selectedFile = null;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  cancelEdit() {
+    this.isEditing = false;
+    this.currentCategoryId = null;
+    this.resetForm();
+  }
+
+  resetForm() {
+    this.name = '';
+    this.description = '';
+    this.selectedFile = null;
+  }
+
   onSubmit() {
     if (!this.name) return;
     
@@ -58,21 +81,33 @@ export class AdminCategoriesComponent implements OnInit {
       formData.append('image', this.selectedFile);
     }
 
-    this.categoryService.addCategory(formData).subscribe({
-      next: () => {
-        this.loadCategories(); // Refresh list
-        this.name = '';
-        this.description = '';
-        this.selectedFile = null;
-        this.isSubmitting = false;
-        // Reset file input is visual only
-      },
-      error: (err) => {
-        console.error('Error adding category', err);
-        this.isSubmitting = false;
-        alert('Failed to add category: ' + (err.error?.detail || err.message));
-      }
-    });
+    if (this.isEditing && this.currentCategoryId) {
+      this.categoryService.updateCategory(this.currentCategoryId, formData).subscribe({
+        next: () => {
+          this.loadCategories(); // Refresh list
+          this.cancelEdit();
+          this.isSubmitting = false;
+        },
+        error: (err) => {
+          console.error('Error updating category', err);
+          this.isSubmitting = false;
+          alert('Failed to update category: ' + (err.error?.detail || err.message));
+        }
+      });
+    } else {
+      this.categoryService.addCategory(formData).subscribe({
+        next: () => {
+          this.loadCategories(); // Refresh list
+          this.resetForm();
+          this.isSubmitting = false;
+        },
+        error: (err) => {
+          console.error('Error adding category', err);
+          this.isSubmitting = false;
+          alert('Failed to add category: ' + (err.error?.detail || err.message));
+        }
+      });
+    }
   }
 
   deleteCategory(id: number) {
