@@ -1,15 +1,73 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-restaurant-login',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './restaurant-login.component.html'
 })
 export class RestaurantLoginComponent {
-  login() {
-    alert('Restaurant Login successful (Mock!). You can now place orders.');
+  isLoginMode = true;
+  error: string = '';
+  successMsg: string = '';
+
+  loginData = {
+    mobile: '',
+    password: ''
+  };
+
+  registerData = {
+    mobile: '',
+    password: '',
+    name: '',
+    address: ''
+  };
+
+  constructor(private authService: AuthService, private router: Router) {}
+
+  toggleMode() {
+    this.isLoginMode = !this.isLoginMode;
+    this.error = '';
+    this.successMsg = '';
+  }
+
+  onSubmit() {
+    this.error = '';
+    this.successMsg = '';
+    
+    if (this.isLoginMode) {
+      if (!this.loginData.mobile || !this.loginData.password) {
+        this.error = 'Please fill in all fields';
+        return;
+      }
+      this.authService.login(this.loginData).subscribe({
+        next: (res) => {
+          this.router.navigate(['/']); // Redirect to home/dashboard
+        },
+        error: (err) => {
+          this.error = err.error?.detail || 'Login failed';
+        }
+      });
+    } else {
+      if (!this.registerData.mobile || !this.registerData.password || !this.registerData.name) {
+        this.error = 'Please fill in required fields';
+        return;
+      }
+      this.authService.register(this.registerData).subscribe({
+        next: (res) => {
+          this.isLoginMode = true;
+          this.loginData.mobile = this.registerData.mobile;
+          this.successMsg = 'Registration successful! You can now sign in.';
+          this.registerData = { mobile: '', password: '', name: '', address: '' };
+        },
+        error: (err) => {
+          this.error = err.error?.detail || 'Registration failed';
+        }
+      });
+    }
   }
 }

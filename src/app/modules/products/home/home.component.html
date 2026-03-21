@@ -1,184 +1,315 @@
-<div class="min-h-screen bg-gray-50 animate-fade-in-up">
-    <!-- ── Featured Products Carousel ──────────────────────────────────── -->
-    <!-- <div *ngIf="!loading() && featuredProducts().length > 0" class="mb-12">
-      <div class="flex items-center justify-between mb-6">
-      </div>
-      
-      <p-carousel 
-        [value]="featuredProducts()" 
-        [numVisible]="1" 
-        [numScroll]="1" 
-        [circular]="true" 
-        [responsiveOptions]="responsiveOptions"
-        autoplayInterval="2000"
-        indicatorStyleClass="hidden"
-      >
-        <ng-template let-product pTemplate="item">
-          <div class="px-2">
-            <div class="group bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col h-full">
-              
-              <div class="relative overflow-hidden bg-gray-50 h-40">
-                <img
-                  [src]="product.image_url || 'https://placehold.co/400x300/e2e8f0/64748b?text=No+Image'"
-                  [alt]="product.name"
-                  (error)="onImgError($event)"
-                  class="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-              </div>
+<div class="min-h-screen bg-white">
 
-            </div>
-          </div>
-        </ng-template>
-      </p-carousel>
-    </div> -->
-  <!-- ── Page Header ─────────────────────────────────────────────────────── -->
-  <div class="bg-green-50  border-b border-gray-200 px-4 py-6 sm:px-8 text-center">
-    <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">
-      Wholesale Essentials for Your Business
-    </h1>
-    <p class="mt-1 text-gray-600 text-sm">
-      Fresh, reliable, and delivered at scale — everything your kitchen needs in one place.
-    </p>
-  </div>
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!-- SECTION 1: STATIC CAROUSEL                                             -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <section class="relative" id="hero-section">
+    <p-carousel
+      [value]="carouselSlides"
+      [numVisible]="1"
+      [numScroll]="1"
+      [circular]="true"
+      [autoplayInterval]="4000"
+      [showNavigators]="true"
+      [showIndicators]="true"
+      [responsiveOptions]="responsiveOptions"
+      styleClass="home-carousel"
+    >
+      <ng-template let-slide pTemplate="item">
+        <div class="carousel-slide">
 
-  <!-- ── Error Banner ──────────────────────────────────────────────────────── -->
-  <div *ngIf="error()" class="mx-4 mt-4 sm:mx-8 bg-red-50 border border-red-200 text-red-700 rounded-xl px-5 py-4 flex items-center gap-3">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-      <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
-    </svg>
-    <span>{{ error() }}</span>
-  </div>
+          <!-- Background Image -->
+          <img [src]="slide.image" [alt]="slide.title" loading="lazy"/>
+          <div class="carousel-overlay"></div>
 
-  <!-- ── Category Filter Tabs ──────────────────────────────────────────────── -->
-  <div *ngIf="!loading()" class="top-16 z-40 bg-white border-b border-gray-200 px-4 sm:px-8 overflow-x-auto">
-    <div class="flex gap-1 py-2 min-w-max">
-      <button
-        *ngFor="let cat of categories()"
-        (click)="setCategory(cat)"
-        [class.bg-teal-600]="selectedCategory() === cat"
-        [class.text-white]="selectedCategory() === cat"
-        [class.shadow-sm]="selectedCategory() === cat"
-        [class.bg-gray-100]="selectedCategory() !== cat"
-        [class.text-gray-700]="selectedCategory() !== cat"
-        class="px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 whitespace-nowrap hover:bg-teal-50 hover:text-teal-700"
-      >
-        {{ cat }}
-      </button>
-    </div>
-  </div>
+          <!-- Text Content -->
+          <div class="carousel-content">
 
-  <div class="px-4 sm:px-8 py-6">
+            <!-- Tag Badge -->
+            <span class="inline-block bg-teal-500/90 backdrop-blur-sm text-white text-xs font-semibold px-3 py-1 rounded-full mb-2 sm:mb-3">
+              {{ slide.tag }}
+            </span>
 
-    <!-- ── Skeleton Loading ──────────────────────────────────────────────── -->
-    <div *ngIf="loading()" class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-      <div *ngFor="let s of skeletons" class="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100">
-        <div class="skeleton h-52 w-full"></div>
-        <div class="p-4 space-y-3">
-          <div class="skeleton h-3 w-1/3 rounded-full"></div>
-          <div class="skeleton h-5 w-3/4 rounded-full"></div>
-          <div class="skeleton h-4 w-full rounded-full"></div>
-          <div class="skeleton h-4 w-2/3 rounded-full"></div>
-          <div class="flex justify-between items-center pt-2">
-            <div class="skeleton h-6 w-1/4 rounded-full"></div>
-            <div class="skeleton h-9 w-24 rounded-xl"></div>
-          </div>
-        </div>
-      </div>
-    </div>
+            <!-- Title — handles newlines via pre-line -->
+            <h2 class="text-xl sm:text-3xl md:text-4xl font-extrabold text-white leading-tight drop-shadow-md mb-1 sm:mb-2"
+                style="white-space: pre-line;">
+              {{ slide.title }}
+            </h2>
 
-    <!-- ── No Results ────────────────────────────────────────────────────── -->
-    <div *ngIf="!loading() && filteredProducts().length === 0 && !error()"
-         class="flex flex-col items-center justify-center py-24 text-gray-400">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mb-4 opacity-40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
-      </svg>
-      <p class="text-lg font-medium">No products found</p>
-      <p class="text-sm mt-1">Try a different category or search term</p>
-    </div>
+            <!-- Subtitle (hidden on very small screens to keep it clean) -->
+            <p class="hidden sm:block text-white/80 text-sm max-w-lg line-clamp-2 drop-shadow mb-3 sm:mb-4">
+              {{ slide.subtitle }}
+            </p>
 
-  
-
-    <!-- ── Product Grid ──────────────────────────────────────────────────── -->
-    <div *ngIf="!loading()" class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-
-      <div *ngFor="let product of filteredProducts()"
-           class="group bg-white rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col">
-
-        <!-- Product Image -->
-        <div class="relative overflow-hidden bg-gray-100 h-52">
-          <img
-            [src]="product.image_url || 'https://placehold.co/400x300/e2e8f0/64748b?text=No+Image'"
-            [alt]="product.name"
-            (error)="onImgError($event)"
-            class="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
-          />
-          <!-- Stock badge -->
-          <span *ngIf="product.stock <= 5 && product.stock > 0"
-                class="absolute top-3 left-3 bg-orange-500 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow">
-            Only {{ product.stock }} left
-          </span>
-          <span *ngIf="product.stock === 0"
-                class="absolute top-3 left-3 bg-red-500 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow">
-            Out of stock
-          </span>
-        </div>
-
-        <!-- Product Info -->
-        <div class="p-4 flex-grow flex flex-col justify-between">
-          <div>
-            <!-- Category + Unit -->
-            <div class="flex items-center justify-between mb-1.5">
-              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-teal-50 text-teal-700 border border-teal-100">
-                {{ product.category.name }}
-              </span>
-              <span *ngIf="product.unit" class="text-xs text-gray-400 font-medium">{{ product.unit }}</span>
-            </div>
-
-            <!-- Name -->
-            <h3 class="text-base font-bold text-gray-900 mb-1 leading-tight">{{ product.name }}</h3>
-
-            <!-- Description -->
-            <p *ngIf="product.description" class="text-sm text-gray-500 line-clamp-2">{{ product.description }}</p>
-          </div>
-
-          <!-- Price + Cart Controls -->
-          <div class="mt-4">
-            <div class="flex items-center justify-between mb-3">
-              <p class="text-xl font-extrabold text-gray-900">₹{{ product.price | number:'1.2-2' }}</p>
-              <span class="text-xs text-gray-400">Stock: {{ product.stock }}</span>
-            </div>
-
-            <!-- No quantity yet → Show "Add" button -->
+            <!-- CTA Button -->
             <button
-              *ngIf="getQuantity(product.id) === 0"
-              (click)="addToCart(product)"
-              [disabled]="product.stock === 0"
-              class="w-full py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 active:scale-95
-                     bg-teal-600 text-white hover:bg-teal-700 shadow-sm
-                     disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed disabled:shadow-none"
+              (click)="handleSlideAction(slide.btnAction)"
+              [class]="slide.btnStyle === 'primary' ? 'slide-btn-primary' : 'slide-btn-outline'"
             >
-              {{ product.stock === 0 ? 'Out of Stock' : '+ Add to Cart' }}
+              <span>{{ slide.btnLabel }}</span>
+              <svg class="btn-arrow w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+              </svg>
             </button>
 
-            <!-- Has quantity → Show stepper -->
-            <div *ngIf="getQuantity(product.id) > 0"
-                 class="flex items-center justify-between bg-teal-50 border border-teal-200 rounded-xl overflow-hidden">
-              <button
-                (click)="removeFromCart(product.id)"
-                class="px-4 py-2.5 text-teal-700 hover:bg-teal-100 font-bold text-lg transition-colors leading-none"
-              >−</button>
-              <span class="text-teal-800 font-bold text-sm">{{ getQuantity(product.id) }}</span>
-              <button
-                (click)="addToCart(product)"
-                [disabled]="getQuantity(product.id) >= product.stock"
-                class="px-4 py-2.5 text-teal-700 hover:bg-teal-100 font-bold text-lg transition-colors leading-none
-                       disabled:text-gray-300 disabled:cursor-not-allowed"
-              >+</button>
+          </div>
+        </div>
+      </ng-template>
+    </p-carousel>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!-- SECTION 2: EXPLORE PRODUCTS CTA                                        -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <section class="relative overflow-hidden bg-gradient-to-br from-slate-900 via-gray-900 to-teal-950 py-14 sm:py-20 md:py-24 px-4 sm:px-8">
+
+    <!-- Decorative blobs (desktop only for performance) -->
+    <div class="hidden sm:block absolute top-0 right-0 w-80 h-80 rounded-full opacity-10 pointer-events-none"
+         style="background: radial-gradient(circle, #14b8a6, transparent); transform: translate(30%, -30%);"></div>
+    <div class="hidden sm:block absolute bottom-0 left-0 w-72 h-72 rounded-full opacity-10 pointer-events-none"
+         style="background: radial-gradient(circle, #3b82f6, transparent); transform: translate(-30%, 30%);"></div>
+
+    <div class="relative max-w-4xl mx-auto text-center fade-up">
+
+      <!-- Eyebrow -->
+      <span class="inline-flex items-center gap-2 bg-teal-500/10 border border-teal-500/30 text-teal-400 text-xs font-semibold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5 sm:mb-6">
+        <span class="w-1.5 h-1.5 bg-teal-400 rounded-full animate-pulse"></span>
+        B2B Wholesale Platform
+      </span>
+
+      <!-- Heading -->
+      <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white leading-tight mb-4 sm:mb-5">
+        Restaurant-Grade Ingredients.<br>
+        <span class="bg-gradient-to-r from-teal-400 to-blue-400 bg-clip-text text-transparent">
+          Directly to Your Kitchen.
+        </span>
+      </h2>
+
+      <!-- Subtext -->
+      <p class="text-gray-400 text-base sm:text-lg max-w-2xl mx-auto mb-7 sm:mb-8 leading-relaxed px-2 sm:px-0">
+        Your single-source wholesale partner — meats, produce, dairy, spices, dry goods —
+        delivered before your kitchen opens.
+      </p>
+
+      <!-- Feature chips -->
+      <div class="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-10">
+        <span
+          *ngFor="let chip of ['500+ Products', 'Next-Day Delivery', 'FSSAI Certified', 'GST Billing', 'Flexible MOQ']"
+          class="px-3 sm:px-4 py-1.5 bg-white/5 border border-white/10 text-white/70 text-xs sm:text-sm rounded-full"
+        >✓ {{ chip }}</span>
+      </div>
+
+      <!-- CTA -->
+      <button (click)="navigateToProducts()" class="arrow-btn text-sm sm:text-base">
+        <span>Explore Products</span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+        </svg>
+      </button>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!-- SECTION 3: DELIVERY FEATURES                                           -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <section class="bg-gray-50 py-14 sm:py-20 px-4 sm:px-8" id="delivery-section">
+
+    <div class="max-w-6xl mx-auto">
+
+      <!-- Header -->
+      <div class="text-center mb-10 sm:mb-14">
+        <span class="text-teal-600 text-xs sm:text-sm font-semibold uppercase tracking-widest">How We Deliver</span>
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 mt-2">
+          Designed for the
+          <span class="text-teal-600">Demands of a Restaurant</span>
+        </h2>
+        <p class="text-gray-500 mt-3 max-w-xl mx-auto text-sm sm:text-base">
+          We understand your kitchen doesn't stop. Neither do we.
+        </p>
+      </div>
+
+      <!-- Feature grid: 1 col mobile → 2 col tablet → 3 col desktop -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        <div *ngFor="let feature of deliveryFeatures"
+             class="delivery-card bg-white rounded-2xl p-5 sm:p-6 border border-gray-100 shadow-sm">
+          <div class="text-3xl sm:text-4xl mb-3 sm:mb-4">{{ feature.icon }}</div>
+          <div class="inline-block bg-teal-50 text-teal-700 text-xs font-bold px-3 py-1 rounded-full mb-2 sm:mb-3">
+            {{ feature.highlight }}
+          </div>
+          <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-1.5 sm:mb-2">{{ feature.title }}</h3>
+          <p class="text-gray-500 text-sm leading-relaxed">{{ feature.desc }}</p>
+        </div>
+      </div>
+
+      <!-- Stats: 2×2 mobile → 4-col desktop -->
+      <div class="mt-10 sm:mt-14 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-6">
+        <div *ngFor="let stat of [
+          {value:'500+', label:'Products Listed'},
+          {value:'200+', label:'Restaurants Served'},
+          {value:'98%', label:'On-Time Delivery'},
+          {value:'4.9★', label:'Average Rating'}
+        ]"
+        class="text-center bg-white rounded-2xl py-5 sm:py-6 px-4 border border-gray-100 shadow-sm">
+          <p class="text-2xl sm:text-3xl font-extrabold text-teal-600">{{ stat.value }}</p>
+          <p class="text-xs sm:text-sm text-gray-500 mt-1 font-medium">{{ stat.label }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!-- SECTION 4: BRANDS & RESTAURANTS LOGOS                                  -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <section class="bg-white py-14 sm:py-20 px-4 sm:px-8" id="brands-section">
+
+    <div class="max-w-6xl mx-auto">
+
+      <div class="text-center mb-10 sm:mb-14">
+        <span class="text-teal-600 text-xs sm:text-sm font-semibold uppercase tracking-widest">Our Ecosystem</span>
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 mt-2">
+          From <span class="text-blue-600">Trusted Farms</span> to
+          <span class="text-teal-600">Renowned Kitchens</span>
+        </h2>
+        <p class="text-gray-500 mt-3 max-w-xl mx-auto text-sm sm:text-base">
+          We source from India's finest producers and supply to the country's most recognisable restaurants.
+        </p>
+      </div>
+
+      <!-- Split Panel: stacks vertically on mobile -->
+      <div class="flex flex-col lg:flex-row gap-0 rounded-3xl overflow-hidden border border-gray-100 shadow-md">
+
+        <!-- LEFT: Sourcing Partners -->
+        <div class="flex-1 bg-gradient-to-br from-teal-50 to-emerald-50 p-6 sm:p-8 md:p-10">
+          <div class="flex items-center gap-3 mb-5 sm:mb-6">
+            <div class="w-9 h-9 sm:w-10 sm:h-10 bg-teal-600 rounded-xl flex items-center justify-center text-white text-lg sm:text-xl">🌾</div>
+            <div>
+              <h3 class="text-base sm:text-lg font-extrabold text-gray-900">Sourcing Partners</h3>
+              <p class="text-xs text-gray-500">Where quality begins</p>
+            </div>
+          </div>
+          <!-- 1 col on small mobile, 2 col from sm+ -->
+          <div class="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 gap-2 sm:gap-3">
+            <div *ngFor="let brand of sourcingBrands" class="logo-pill">
+              <span class="flex-shrink-0 w-8 h-8 sm:w-9 sm:h-9 rounded-lg text-white text-xs font-extrabold flex items-center justify-center"
+                    [style.background]="brand.color">
+                {{ brand.abbr }}
+              </span>
+              <span class="text-xs sm:text-sm truncate">{{ brand.name }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Divider: horizontal on mobile, vertical on desktop -->
+        <div class="lg:hidden h-px bg-gray-200 mx-6"></div>
+        <div class="hidden lg:flex flex-col items-center justify-center bg-white px-2 py-8 relative z-10">
+          <div class="w-px flex-1 bg-gradient-to-b from-transparent via-gray-200 to-transparent"></div>
+          <div class="w-9 h-9 rounded-full bg-white border-2 border-gray-200 flex items-center justify-center my-4 shadow-sm text-base">↔</div>
+          <div class="w-px flex-1 bg-gradient-to-b from-transparent via-gray-200 to-transparent"></div>
+        </div>
+
+        <!-- RIGHT: Trusted Restaurants -->
+        <div class="flex-1 bg-gradient-to-br from-blue-50 to-indigo-50 p-6 sm:p-8 md:p-10">
+          <div class="flex items-center gap-3 mb-5 sm:mb-6">
+            <div class="w-9 h-9 sm:w-10 sm:h-10 bg-blue-700 rounded-xl flex items-center justify-center text-white text-lg sm:text-xl">🍽️</div>
+            <div>
+              <h3 class="text-base sm:text-lg font-extrabold text-gray-900">Trusted Restaurants</h3>
+              <p class="text-xs text-gray-500">Where flavour comes to life</p>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 gap-2 sm:gap-3">
+            <div *ngFor="let rest of trustedRestaurants" class="logo-pill">
+              <span class="flex-shrink-0 w-8 h-8 sm:w-9 sm:h-9 rounded-lg text-white text-xs font-extrabold flex items-center justify-center"
+                    [style.background]="rest.color">
+                {{ rest.abbr }}
+              </span>
+              <span class="text-xs sm:text-sm truncate">{{ rest.name }}</span>
             </div>
           </div>
         </div>
 
       </div>
     </div>
-  </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!-- SECTION 5: OWNER MESSAGE + TESTIMONIALS                                -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <section class="bg-gradient-to-br from-slate-900 via-gray-900 to-teal-950 py-14 sm:py-20 px-4 sm:px-8"
+           id="testimonials-section">
+
+    <div class="max-w-6xl mx-auto">
+
+      <!-- Header -->
+      <div class="text-center mb-10 sm:mb-14">
+        <span class="text-teal-400 text-xs sm:text-sm font-semibold uppercase tracking-widest">Voices That Matter</span>
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white mt-2">
+          Built on <span class="text-teal-400">Trust & Results</span>
+        </h2>
+      </div>
+
+      <!-- Owner Message Card -->
+      <div class="bg-white/5 border border-white/10 rounded-3xl p-6 sm:p-8 md:p-10 mb-8 sm:mb-10 backdrop-blur-sm">
+        <div class="flex flex-col sm:flex-row gap-5 sm:gap-8 items-start">
+
+          <!-- Avatar -->
+          <div class="flex-shrink-0">
+            <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-teal-500 to-blue-600 flex items-center justify-center text-white text-xl sm:text-2xl font-extrabold shadow-lg">
+              {{ ownerMessage.initials }}
+            </div>
+          </div>
+
+          <!-- Message -->
+          <div class="flex-1 min-w-0">
+            <div class="flex items-start sm:items-center gap-3 flex-col sm:flex-row flex-wrap mb-3 sm:mb-4">
+              <h3 class="text-white font-extrabold text-lg sm:text-xl">{{ ownerMessage.name }}</h3>
+              <span class="bg-teal-500/20 text-teal-400 text-xs font-semibold px-3 py-1 rounded-full border border-teal-500/30 whitespace-nowrap">
+                {{ ownerMessage.experience }}
+              </span>
+            </div>
+            <p class="text-sm text-teal-400 font-medium mb-3 sm:mb-4">{{ ownerMessage.title }}</p>
+            <div class="text-teal-500/40 text-5xl sm:text-6xl leading-none font-serif mb-1 select-none">"</div>
+            <p class="text-gray-300 text-sm sm:text-lg leading-relaxed italic -mt-3 sm:-mt-4">
+              {{ ownerMessage.message }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Testimonials label -->
+      <p class="text-gray-400 text-sm font-medium mb-4 text-center">💬 What our restaurant partners say</p>
+
+      <!-- Horizontal scroll — cards fill screen width on mobile -->
+      <div class="flex gap-4 sm:gap-5 overflow-x-auto pb-4" style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;">
+        <div
+          *ngFor="let t of testimonials"
+          class="testimonial-card"
+          style="scroll-snap-align: start;"
+        >
+          <!-- Stars -->
+          <div class="stars text-base sm:text-lg mb-2 sm:mb-3">
+            <span *ngFor="let s of getStars(t.rating)">★</span>
+          </div>
+
+          <!-- Quote -->
+          <p class="text-gray-600 text-xs sm:text-sm leading-relaxed mb-4 sm:mb-5 italic">
+            "{{ t.message }}"
+          </p>
+
+          <!-- Footer -->
+          <div class="flex items-center gap-3 pt-3 sm:pt-4 border-t border-gray-100">
+            <div class="w-9 h-9 rounded-xl flex items-center justify-center text-white text-xs font-extrabold flex-shrink-0"
+                 [style.background]="t.avatarColor">
+              {{ t.initials }}
+            </div>
+            <div class="min-w-0">
+              <p class="font-bold text-gray-900 text-xs sm:text-sm truncate">{{ t.owner }}</p>
+              <p class="text-xs text-gray-500 truncate">{{ t.restaurant }}, {{ t.city }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
 </div>

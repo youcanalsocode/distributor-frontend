@@ -1,52 +1,51 @@
-<nav class="bg-white text-black shadow-lg shadow-blue-900/20 fixed top-0 left-0 w-full z-50">
-  <div class=" mx-auto px-4 sm:px-3 lg:px-4">
-    <div class="flex  justify-between h-16 relative">
+<nav class="bg-white text-black shadow-lg shadow-blue-900/10 fixed top-0 left-0 w-full z-50">
 
+  <!-- ── Main Bar ─────────────────────────────────────────────────────────── -->
+  <div class="mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+
+      <!-- Logo -->
       <div class="flex-shrink-0 cursor-pointer flex items-center gap-2" routerLink="/">
-        <div>
-          <img src="/assets/images/vimek-logo.png" alt="logo" class="h-10 w-auto object-contain">
-        </div>
-        <span
-          class="font-extrabold text-2xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-teal-600 to-blue-800">
+        <img src="/assets/images/vimek-logo.png" alt="logo" class="h-9 w-auto object-contain">
+        <!-- Brand name hidden on mobile (<640px) to prevent hamburger being squeezed off -->
+        <span class="hidden sm:inline font-extrabold text-base sm:text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-teal-600 to-blue-800">
           VIMEK RESTOMART
         </span>
       </div>
-      <div class="relative mt-2 w-36 p-2 pl-10">
-        <!-- Current Location Button -->
-        <button 
-          (click)="toggleDropdown()"
-          class="flex  flex-col gap-1 font-medium  "
-        >
-        <span class="text-xs text-gray-400">
-          Delivery in <i class="pi pi-map-marker text-sm" style="color: red;"></i>
-        </span>
-        <span class="flex items-center gap-1 font-semibold">
-         
-          {{ selectedLocation }}
-          <span class="text-xs"><i class="pi pi-angle-down" style="color: teal;"></i></span>
-        </span>
-        </button>
 
-        <!-- Dropdown -->
-        <div 
-          *ngIf="isOpen"
-          class="absolute left-0 mt-2 w-44 bg-white shadow-lg rounded-lg border z-50"
-        >
-          <div 
-            *ngFor="let loc of locations"
-            (click)="selectLocation(loc)"
-            class="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+      <!-- Desktop: Location + Search (hidden on mobile) -->
+      <div class="hidden md:flex items-center gap-3 flex-1 mx-6">
+
+        <!-- Location Dropdown -->
+        <div class="relative flex-shrink-0">
+          <button
+            (click)="toggleDropdown()"
+            class="flex flex-col gap-0.5 font-medium border border-gray-200 rounded-xl px-3 py-1.5 hover:border-teal-400 transition-colors"
           >
-            {{ loc }}
+            <span class="text-xs text-gray-400 leading-none">
+              Delivery in <i class="pi pi-map-marker text-xs" style="color: red;"></i>
+            </span>
+            <span class="flex items-center gap-1 font-semibold text-sm text-gray-800">
+              {{ selectedLocation }}
+              <i class="pi pi-angle-down text-xs" style="color: teal;"></i>
+            </span>
+          </button>
+
+          <div *ngIf="isOpen"
+               class="absolute left-0 mt-2 w-44 bg-white shadow-xl rounded-xl border border-gray-100 z-50 overflow-hidden">
+            <div *ngFor="let loc of locations"
+                 (click)="selectLocation(loc)"
+                 class="px-4 py-2.5 hover:bg-teal-50 hover:text-teal-700 cursor-pointer text-sm font-medium transition-colors">
+              {{ loc }}
+            </div>
           </div>
         </div>
-      </div>
-      <!-- Search Bar -->
-      <div class="flex-1 flex items-center justify-center px-6 max-w-lg mx-auto">
-        <div class="relative w-full">
+
+        <!-- Search Bar -->
+        <div class="relative flex-1 max-w-md">
           <span class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11A6 6 0 1 0 5 11a6 6 0 0 0 12 0z" />
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11A6 6 0 1 0 5 11a6 6 0 0 0 12 0z"/>
             </svg>
           </span>
           <input
@@ -55,34 +54,117 @@
             [(ngModel)]="searchQuery"
             (keyup.enter)="onSearch()"
             placeholder="Search products..."
-            class="!pl-10 !pr-10 !py-2 !w-full !rounded-full !bg-gray-50"
+            class="!pl-9 !pr-8 !py-2 !w-full !rounded-full !bg-gray-50 !text-sm"
           />
           @if (searchQuery) {
-            <button
-              (click)="searchQuery = ''"
-              class="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-gray-600 " 
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            <button (click)="searchQuery = ''" class="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-gray-600">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
               </svg>
             </button>
           }
         </div>
       </div>
 
-      <div class="flex items-center space-x-4">
-        <button class="relative p-2 rounded-full hover:bg-teal/10 transition-colors duration-200 group">
-         <i class="pi pi-shopping-cart " style="color:teal; font-size: 1.5rem"></i>
+      <!-- Desktop: Right Actions -->
+      <div class="hidden md:flex items-center gap-3">
+        <!-- Cart -->
+        <button class="relative p-2 rounded-full hover:bg-teal-50 transition-colors">
+          <i class="pi pi-shopping-cart" style="color:teal; font-size: 1.4rem"></i>
           <span
-            class="absolute top-0 right-0 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full transition-all duration-200"
+            class="absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full transition-all duration-200"
             [class.opacity-0]="cartService.totalItems() === 0"
             [class.scale-0]="cartService.totalItems() === 0"
           >{{ cartService.totalItems() }}</span>
         </button>
-       
-       <button pButton type="button" label="Login/Signup" routerLink="/auth/restaurant" class="!bg-gradient-to-r from-teal-400 to-blue-600"></button>
+
+        <button pButton type="button" label="Login / Signup" routerLink="/auth/restaurant"
+                class="!bg-gradient-to-r from-teal-500 to-blue-600 !text-sm !px-4 !py-2"></button>
+      </div>
+
+      <!-- Mobile: Cart + Hamburger (flex-shrink-0 ensures it never gets squeezed off) -->
+      <div class="flex md:hidden items-center gap-1 flex-shrink-0 ml-auto">
+        <button class="relative p-2 rounded-full" routerLink="/products">
+          <i class="pi pi-shopping-cart" style="color:teal; font-size:1.3rem"></i>
+          <span
+            class="absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full"
+            [class.opacity-0]="cartService.totalItems() === 0"
+            [class.scale-0]="cartService.totalItems() === 0"
+          >{{ cartService.totalItems() }}</span>
+        </button>
+
+        <!-- Hamburger -->
+        <button
+          (click)="toggleMobileMenu()"
+          class="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-lg hover:bg-gray-100 active:bg-gray-200 transition-colors"
+          aria-label="Open Menu"
+        >
+          <svg *ngIf="!mobileMenuOpen" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+          <svg *ngIf="mobileMenuOpen" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
       </div>
 
     </div>
   </div>
+
+  <!-- ── Mobile Drawer ─────────────────────────────────────────────────────── -->
+  <div
+    *ngIf="mobileMenuOpen"
+    class="md:hidden border-t border-gray-100 bg-white px-4 pb-5 pt-3 shadow-lg"
+  >
+    <!-- Mobile Search -->
+    <div class="relative mb-4">
+      <span class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11A6 6 0 1 0 5 11a6 6 0 0 0 12 0z"/>
+        </svg>
+      </span>
+      <input
+        pInputText
+        type="text"
+        [(ngModel)]="searchQuery"
+        (keyup.enter)="onSearch()"
+        placeholder="Search products..."
+        class="!pl-9 !pr-4 !py-2.5 !w-full !rounded-xl !bg-gray-50 !text-sm"
+      />
+    </div>
+
+    <!-- Mobile Location -->
+    <div class="mb-4">
+      <p class="text-xs text-gray-400 mb-1.5 font-medium uppercase tracking-wider">Delivery Location</p>
+      <div class="flex flex-wrap gap-2">
+        <button *ngFor="let loc of locations"
+                (click)="selectLocation(loc); mobileMenuOpen = false"
+                [class.bg-teal-600]="selectedLocation === loc"
+                [class.text-white]="selectedLocation === loc"
+                [class.bg-gray-100]="selectedLocation !== loc"
+                [class.text-gray-700]="selectedLocation !== loc"
+                class="px-3 py-1.5 rounded-full text-sm font-medium transition-all">
+          {{ loc }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Nav Links -->
+    <div class="flex flex-col gap-1 mb-4">
+      <a routerLink="/" (click)="mobileMenuOpen = false"
+         class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 text-gray-700 font-medium text-sm transition-colors">
+        <i class="pi pi-home text-teal-600"></i> Home
+      </a>
+      <a routerLink="/products" (click)="mobileMenuOpen = false"
+         class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 text-gray-700 font-medium text-sm transition-colors">
+        <i class="pi pi-shopping-bag text-teal-600"></i> Products
+      </a>
+    </div>
+
+    <!-- Mobile Login Button -->
+    <button pButton type="button" label="Login / Signup" routerLink="/auth/restaurant"
+            (click)="mobileMenuOpen = false"
+            class="!w-full !bg-gradient-to-r from-teal-500 to-blue-600 !text-sm"></button>
+  </div>
+
 </nav>
