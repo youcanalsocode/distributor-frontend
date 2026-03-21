@@ -8,10 +8,14 @@ import { BehaviorSubject, tap } from 'rxjs';
 export class AuthService {
   private apiUrl = 'http://localhost:8000/restaurant';
   
-  private tokenSubject = new BehaviorSubject<string | null>(localStorage.getItem('restaurantToken'));
+  private tokenSubject = new BehaviorSubject<string | null>(null);
   public token$ = this.tokenSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      this.tokenSubject.next(localStorage.getItem('restaurantToken'));
+    }
+  }
 
   register(data: any) {
     return this.http.post(`${this.apiUrl}/register`, data);
@@ -21,14 +25,25 @@ export class AuthService {
     return this.http.post<{access_token: string, token_type: string}>(`${this.apiUrl}/login`, data)
       .pipe(
         tap(response => {
-          localStorage.setItem('restaurantToken', response.access_token);
+          if (typeof window !== 'undefined' && window.localStorage) {
+            localStorage.setItem('restaurantToken', response.access_token);
+          }
           this.tokenSubject.next(response.access_token);
         })
       );
   }
 
   logout() {
-    localStorage.removeItem('restaurantToken');
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.removeItem('restaurantToken');
+    }
     this.tokenSubject.next(null);
+  }
+
+  isLoggedIn(): boolean {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      return !!localStorage.getItem('restaurantToken');
+    }
+    return false;
   }
 }

@@ -1,11 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { CartService } from '../../core/services/cart.service';
 import { SearchService } from '../../core/services/search.service';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -16,10 +17,13 @@ import { SearchService } from '../../core/services/search.service';
 export class NavbarComponent {
   readonly cartService = inject(CartService);
   readonly searchService = inject(SearchService);
+  readonly authService = inject(AuthService);
+  readonly router = inject(Router);
 
   selectedLocation = 'Mumbai';
   isOpen = false;        // location dropdown
   mobileMenuOpen = false; // mobile hamburger drawer
+  isProfileOpen = false;  // user profile dropdown
 
   locations = ['Mumbai', 'Delhi', 'Bangalore', 'Pune'];
 
@@ -29,6 +33,17 @@ export class NavbarComponent {
       if (saved) {
         this.selectedLocation = saved;
       }
+    }
+  }
+
+  get isLoggedIn(): boolean {
+    return this.authService.isLoggedIn();
+  }
+
+  logout() {
+    if (confirm('Do you really want to logout?')) {
+      this.authService.logout();
+      this.router.navigate(['/']);
     }
   }
 
@@ -46,17 +61,33 @@ export class NavbarComponent {
 
   toggleDropdown() {
     this.isOpen = !this.isOpen;
-    if (this.isOpen) this.mobileMenuOpen = false;
+    if (this.isOpen) {
+      this.mobileMenuOpen = false;
+      this.isProfileOpen = false;
+    }
   }
 
   toggleMobileMenu() {
     this.mobileMenuOpen = !this.mobileMenuOpen;
-    if (this.mobileMenuOpen) this.isOpen = false;
+    if (this.mobileMenuOpen) {
+      this.isOpen = false;
+      this.isProfileOpen = false;
+    }
+  }
+
+  toggleProfileDropdown() {
+    this.isProfileOpen = !this.isProfileOpen;
+    if (this.isProfileOpen) {
+      this.isOpen = false;
+      this.mobileMenuOpen = false;
+    }
   }
 
   selectLocation(loc: string) {
     this.selectedLocation = loc;
     this.isOpen = false;
-    localStorage.setItem('location', loc);
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.setItem('location', loc);
+    }
   }
 }

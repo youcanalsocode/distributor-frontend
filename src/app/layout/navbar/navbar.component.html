@@ -69,7 +69,7 @@
       <!-- Desktop: Right Actions -->
       <div class="hidden md:flex items-center gap-3">
         <!-- Cart -->
-        <button class="relative p-2 rounded-full hover:bg-teal-50 transition-colors">
+        <button class="relative p-2 rounded-full hover:bg-teal-50 transition-colors" routerLink="/cart">
           <i class="pi pi-shopping-cart" style="color:teal; font-size: 1.4rem"></i>
           <span
             class="absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full transition-all duration-200"
@@ -78,13 +78,33 @@
           >{{ cartService.totalItems() }}</span>
         </button>
 
-        <button pButton type="button" label="Login / Signup" routerLink="/auth/restaurant"
-                class="!bg-gradient-to-r from-teal-500 to-blue-600 !text-sm !px-4 !py-2"></button>
+        <button *ngIf="!isLoggedIn" pButton type="button" label="Login / Signup" routerLink="/auth/restaurant"
+                class="!bg-gradient-to-r from-teal-500 to-blue-600 !text-sm !px-4 !py-2 !border-0"></button>
+        
+        <!-- User Profile Dropdown -->
+        <div class="relative flex-shrink-0" *ngIf="isLoggedIn">
+          <button (click)="toggleProfileDropdown()" class="flex flex-col gap-0.5 font-medium border border-gray-200 rounded-xl px-3 py-1.5 hover:border-teal-400 transition-colors bg-white">
+            <span class="flex items-center gap-2 font-semibold text-sm text-gray-800">
+              <i class="pi pi-user text-teal-600"></i> Profile
+              <i class="pi pi-angle-down text-xs" style="color: teal;"></i>
+            </span>
+          </button>
+          
+          <div *ngIf="isProfileOpen" class="absolute right-0 mt-2 w-44 bg-white shadow-xl rounded-xl border border-gray-100 z-50 overflow-hidden">
+             <!-- Other profile items could go here later -->
+             <div class="px-4 py-2.5 hover:bg-teal-50 hover:text-teal-600 cursor-pointer text-sm font-medium transition-colors text-gray-700 flex items-center gap-2">
+               <i class="pi pi-cog"></i> Settings
+             </div>
+             <div (click)="logout(); isProfileOpen = false" class="px-4 py-2.5 hover:bg-red-50 hover:text-red-600 cursor-pointer text-sm font-medium transition-colors text-red-500 border-t border-gray-50 flex items-center gap-2">
+               <i class="pi pi-sign-out"></i> Logout
+             </div>
+          </div>
+        </div>
       </div>
 
       <!-- Mobile: Cart + Hamburger (flex-shrink-0 ensures it never gets squeezed off) -->
       <div class="flex md:hidden items-center gap-1 flex-shrink-0 ml-auto">
-        <button class="relative p-2 rounded-full" routerLink="/products">
+        <button class="relative p-2 rounded-full" routerLink="/cart">
           <i class="pi pi-shopping-cart" style="color:teal; font-size:1.3rem"></i>
           <span
             class="absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full"
@@ -162,9 +182,23 @@
     </div>
 
     <!-- Mobile Login Button -->
-    <button pButton type="button" label="Login / Signup" routerLink="/auth/restaurant"
+    <button *ngIf="!isLoggedIn" pButton type="button" label="Login / Signup" routerLink="/auth/restaurant"
             (click)="mobileMenuOpen = false"
-            class="!w-full !bg-gradient-to-r from-teal-500 to-blue-600 !text-sm"></button>
+            class="!w-full !bg-gradient-to-r from-teal-500 to-blue-600 !text-sm !border-0 mt-2"></button>
+            
+    <!-- Mobile Profile Menu -->
+    <div *ngIf="isLoggedIn" class="mt-4 border-t border-gray-100 pt-4">
+       <p class="text-xs text-gray-400 mb-2 font-medium uppercase tracking-wider">Account</p>
+       <a class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 text-gray-700 font-medium text-sm transition-colors cursor-pointer" (click)="mobileMenuOpen = false">
+         <i class="pi pi-user text-teal-600"></i> My Profile
+       </a>
+       <a class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 text-gray-700 font-medium text-sm transition-colors cursor-pointer" (click)="mobileMenuOpen = false">
+         <i class="pi pi-cog text-teal-600"></i> Settings
+       </a>
+       <a class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-red-50 text-red-600 font-medium text-sm transition-colors cursor-pointer mt-1" (click)="logout(); mobileMenuOpen = false">
+         <i class="pi pi-sign-out"></i> Logout
+       </a>
+    </div>
   </div>
 
 </nav>

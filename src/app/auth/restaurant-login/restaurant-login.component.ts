@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Router } from '@angular/router';
+import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../core/services/auth.service';
 
@@ -27,7 +27,7 @@ export class RestaurantLoginComponent {
     address: ''
   };
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router, private route: ActivatedRoute) {}
 
   toggleMode() {
     this.isLoginMode = !this.isLoginMode;
@@ -46,10 +46,12 @@ export class RestaurantLoginComponent {
       }
       this.authService.login(this.loginData).subscribe({
         next: (res) => {
-          this.router.navigate(['/']); // Redirect to home/dashboard
+          const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+          this.router.navigateByUrl(returnUrl);
         },
         error: (err) => {
           this.error = err.error?.detail || 'Login failed';
+          alert(this.error);
         }
       });
     } else {
@@ -62,10 +64,12 @@ export class RestaurantLoginComponent {
           this.isLoginMode = true;
           this.loginData.mobile = this.registerData.mobile;
           this.successMsg = 'Registration successful! You can now sign in.';
+          alert('Registration successful! You can now sign in.');
           this.registerData = { mobile: '', password: '', name: '', address: '' };
         },
         error: (err) => {
           this.error = err.error?.detail || 'Registration failed';
+          alert(this.error);
         }
       });
     }
