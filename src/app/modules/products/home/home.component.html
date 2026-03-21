@@ -32,9 +32,13 @@
       </p-carousel>
     </div> -->
   <!-- ── Page Header ─────────────────────────────────────────────────────── -->
-  <div class="bg-white border-b border-gray-200 px-4 py-6 sm:px-8">
-    <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">Products</h1>
-    <p class="mt-1 text-gray-500 text-sm">Wholesale ingredients & supplies sourced fresh for your restaurant.</p>
+  <div class="bg-green-50  border-b border-gray-200 px-4 py-6 sm:px-8 text-center">
+    <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">
+      Wholesale Essentials for Your Business
+    </h1>
+    <p class="mt-1 text-gray-600 text-sm">
+      Fresh, reliable, and delivered at scale — everything your kitchen needs in one place.
+    </p>
   </div>
 
   <!-- ── Error Banner ──────────────────────────────────────────────────────── -->
@@ -46,7 +50,7 @@
   </div>
 
   <!-- ── Category Filter Tabs ──────────────────────────────────────────────── -->
-  <div *ngIf="!loading()" class="sticky top-16 z-40 bg-white border-b border-gray-200 px-4 sm:px-8 overflow-x-auto">
+  <div *ngIf="!loading()" class="top-16 z-40 bg-white border-b border-gray-200 px-4 sm:px-8 overflow-x-auto">
     <div class="flex gap-1 py-2 min-w-max">
       <button
         *ngFor="let cat of categories()"
