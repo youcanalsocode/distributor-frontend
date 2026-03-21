@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 export interface OrderItem {
@@ -25,16 +25,24 @@ export interface Order {
 export class OrderService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = `${environment.apiUrl}/orders`;
+  private ordersCache: Order[] | null = null;
 
   getAdminOrders(): Observable<Order[]> {
+    if (this.ordersCache) {
+      return of(this.ordersCache);
+    }
     const token = typeof window !== 'undefined' ? localStorage.getItem('adminToken') : '';
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this.http.get<Order[]>(this.baseUrl, { headers });
+    return this.http.get<Order[]>(this.baseUrl, { headers }).pipe(
+      tap(data => this.ordersCache = data)
+    );
   }
 
   createOrder(orderData: any): Observable<Order> {
     const token = typeof window !== 'undefined' ? localStorage.getItem('restaurantToken') : '';
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this.http.post<Order>(this.baseUrl, orderData, { headers });
+    return this.http.post<Order>(this.baseUrl, orderData, { headers }).pipe(
+      tap(() => this.ordersCache = null)
+    );
   }
 }

@@ -1,9 +1,11 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CategoryService } from '../../../core/services/category.service';
 import { Category } from '../../../core/models/category.model';
 import { environment } from '../../../../environments/environment';
+import { MessageService } from 'primeng/api';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-admin-categories',
@@ -13,16 +15,20 @@ import { environment } from '../../../../environments/environment';
 })
 export class AdminCategoriesComponent implements OnInit {
   private categoryService = inject(CategoryService);
+  private messageService = inject(MessageService);
+  private cdr = inject(ChangeDetectorRef);
 
   categories: Category[] = [];
-  
+  isLoading = true;
+
   // Form properties
+  @ViewChild('fileInput') fileInput!: ElementRef;
   isEditing = false;
   currentCategoryId: number | null = null;
   name = '';
   description = '';
   selectedFile: File | null = null;
-  
+
   isSubmitting = false;
 
   get envApiUrl() {
@@ -34,9 +40,16 @@ export class AdminCategoriesComponent implements OnInit {
   }
 
   loadCategories() {
+    this.isLoading = true;
     this.categoryService.getCategories().subscribe({
-      next: (data) => this.categories = data,
-      error: (err) => console.error('Error fetching categories', err)
+      next: (data) => {
+        this.categories = data;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Error fetching categories', err);
+        this.isLoading = false;
+      }
     });
   }
 
@@ -66,55 +79,64 @@ export class AdminCategoriesComponent implements OnInit {
     this.name = '';
     this.description = '';
     this.selectedFile = null;
+    if (this.fileInput && this.fileInput.nativeElement) {
+      this.fileInput.nativeElement.value = '';
+    }
   }
 
   onSubmit() {
     if (!this.name) return;
-    
+
     this.isSubmitting = true;
+    this.cdr.detectChanges();
+
     const formData = new FormData();
     formData.append('name', this.name);
-    if (this.description) {
-      formData.append('description', this.description);
-    }
-    if (this.selectedFile) {
-      formData.append('image', this.selectedFile);
-    }
+    if (this.description) formData.append('description', this.description);
+    if (this.selectedFile) formData.append('image', this.selectedFile);
+
+    const savedName = this.name;
 
     if (this.isEditing && this.currentCategoryId) {
-      this.categoryService.updateCategory(this.currentCategoryId, formData).subscribe({
-        next: () => {
-          this.loadCategories(); // Refresh list
-          this.cancelEdit();
-          this.isSubmitting = false;
-        },
-        error: (err) => {
-          console.error('Error updating category', err);
-          this.isSubmitting = false;
-          alert('Failed to update category: ' + (err.error?.detail || err.message));
-        }
-      });
+      this.categoryService.updateCategory(this.currentCategoryId, formData)
+        .pipe(finalize(() => { this.isSubmitting = false; this.cdr.detectChanges(); }))
+        .subscribe({
+          next: () => {
+            this.messageService.add({ severity: 'success', summary: 'Category Updated', detail: `"${savedName}" updated.` });
+            this.cancelEdit();
+            this.loadCategories();
+          },
+          error: (err) => {
+            this.messageService.add({ severity: 'error', summary: 'Update Failed', detail: err.error?.detail || err.message || 'Unknown error' });
+          }
+        });
     } else {
-      this.categoryService.addCategory(formData).subscribe({
-        next: () => {
-          this.loadCategories(); // Refresh list
-          this.resetForm();
-          this.isSubmitting = false;
-        },
-        error: (err) => {
-          console.error('Error adding category', err);
-          this.isSubmitting = false;
-          alert('Failed to add category: ' + (err.error?.detail || err.message));
-        }
-      });
+      this.categoryService.addCategory(formData)
+        .pipe(finalize(() => { this.isSubmitting = false; this.cdr.detectChanges(); }))
+        .subscribe({
+          next: () => {
+            this.messageService.add({ severity: 'success', summary: 'Category Added', detail: `"${savedName}" added.` });
+            this.resetForm();
+            this.loadCategories();
+          },
+          error: (err) => {
+            this.messageService.add({ severity: 'error', summary: 'Add Failed', detail: err.error?.detail || err.message || 'Unknown error' });
+          }
+        });
     }
   }
 
   deleteCategory(id: number) {
-    if(confirm('Are you sure you want to delete this category?')) {
+    const category = this.categories.find(c => c.id === id);
+    if (confirm('Are you sure you want to delete this category?')) {
       this.categoryService.deleteCategory(id).subscribe({
-        next: () => this.loadCategories(),
-        error: (err) => alert('Error deleting category: ' + (err.error?.detail || err.message))
+        next: () => {
+          this.messageService.add({ severity: 'success', summary: 'Category Deleted', detail: `"${category?.name}" has been deleted.` });
+          this.loadCategories();
+        },
+        error: (err) => {
+          this.messageService.add({ severity: 'error', summary: 'Delete Failed', detail: err.error?.detail || err.message || 'Unknown error' });
+        }
       });
     }
   }

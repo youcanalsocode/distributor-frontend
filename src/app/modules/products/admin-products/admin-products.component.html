@@ -1,8 +1,12 @@
 <div class="space-y-6">
   <div class="flex justify-between items-center pb-4 border-b border-slate-200">
     <div>
-      <h2 class="text-2xl font-bold leading-7 text-slate-900 sm:text-3xl sm:truncate">Inventory & Products</h2>
-      <p class="mt-1 text-sm text-slate-500">Add new items, update stock, and manage your catalogue.</p>
+      <h2 class="text-2xl font-bold leading-7 text-slate-900 sm:text-3xl sm:truncate">
+        Inventory & Products
+      </h2>
+      <p class="mt-1 text-sm text-slate-500">
+        Add new items, update stock, and manage your catalogue.
+      </p>
     </div>
   </div>
 
@@ -15,63 +19,129 @@
             <h3 class="text-lg leading-6 font-medium text-slate-900">
               {{ isEditing ? 'Edit Product' : 'Add New Product' }}
             </h3>
-            <button *ngIf="isEditing" (click)="cancelEdit()" class="text-sm text-red-600 hover:underline">
-              Cancel
-            </button>
+            @if (isEditing) {
+              <button (click)="cancelEdit()" class="text-sm text-red-600 hover:underline">
+                Cancel
+              </button>
+            }
           </div>
-          
-          <form class="space-y-4" (ngSubmit)="onSubmit()">
+
+          <form class="space-y-4" novalidate>
             <div>
-              <label for="name" class="block text-sm font-medium text-slate-700">Product Name *</label>
-              <input type="text" id="name" name="name" [(ngModel)]="name" required
-                class="mt-1 flex-1 block w-full border-slate-300 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500 sm:text-sm px-3 py-2 border">
+              <label for="name" class="block text-sm font-medium text-slate-700"
+                >Product Name *</label
+              >
+              <input
+                type="text"
+                id="name"
+                name="name"
+                [(ngModel)]="name"
+                required
+                class="mt-1 flex-1 block w-full border-slate-300 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500 sm:text-sm px-3 py-2 border"
+              />
             </div>
 
             <div class="grid grid-cols-2 gap-4">
               <div>
-                <label for="price" class="block text-sm font-medium text-slate-700">Price (₹) *</label>
-                <input type="number" id="price" name="price" [(ngModel)]="price" required
-                  class="mt-1 flex-1 block w-full border-slate-300 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500 sm:text-sm px-3 py-2 border">
+                <label for="price" class="block text-sm font-medium text-slate-700"
+                  >Price (₹) *</label
+                >
+                <input
+                  type="number"
+                  id="price"
+                  name="price"
+                  [(ngModel)]="price"
+                  required
+                  class="mt-1 flex-1 block w-full border-slate-300 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500 sm:text-sm px-3 py-2 border"
+                />
               </div>
               <div>
-                <label for="stock" class="block text-sm font-medium text-slate-700">Stock Qty *</label>
-                <input type="number" id="stock" name="stock" [(ngModel)]="stock" required
-                  class="mt-1 flex-1 block w-full border-slate-300 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500 sm:text-sm px-3 py-2 border">
+                <label for="stock" class="block text-sm font-medium text-slate-700"
+                  >Stock Qty *</label
+                >
+                <input
+                  type="number"
+                  id="stock"
+                  name="stock"
+                  [(ngModel)]="stock"
+                  required
+                  class="mt-1 flex-1 block w-full border-slate-300 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500 sm:text-sm px-3 py-2 border"
+                />
               </div>
             </div>
 
             <div class="grid grid-cols-2 gap-4">
               <div>
-                <label for="category" class="block text-sm font-medium text-slate-700">Category *</label>
-                <select id="category" name="category" [(ngModel)]="category_id" required
-                  class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-slate-300 focus:outline-none focus:ring-amber-500 focus:border-amber-500 sm:text-sm rounded-md border">
+                <label for="category" class="block text-sm font-medium text-slate-700"
+                  >Category *</label
+                >
+                <select
+                  id="category"
+                  name="category"
+                  [(ngModel)]="category_id"
+                  required
+                  class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-slate-300 focus:outline-none focus:ring-amber-500 focus:border-amber-500 sm:text-sm rounded-md border"
+                >
                   <option [ngValue]="null" disabled>Select...</option>
-                  <option *ngFor="let cat of categories" [value]="cat.id">{{ cat.name }}</option>
+                  @for (cat of categories; track cat) {
+                    <option [ngValue]="cat.id">{{ cat.name }}</option>
+                  }
                 </select>
               </div>
               <div>
-                <label for="unit" class="block text-sm font-medium text-slate-700">Unit (e.g. kg, pcs)</label>
-                <input type="text" id="unit" name="unit" [(ngModel)]="unit" 
-                  class="mt-1 flex-1 block w-full border-slate-300 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500 sm:text-sm px-3 py-2 border">
+                <label for="unit" class="block text-sm font-medium text-slate-700"
+                  >Unit (e.g. kg, pcs)</label
+                >
+                <input
+                  type="text"
+                  id="unit"
+                  name="unit"
+                  [(ngModel)]="unit"
+                  class="mt-1 flex-1 block w-full border-slate-300 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500 sm:text-sm px-3 py-2 border"
+                />
               </div>
             </div>
 
             <div>
-              <label for="description" class="block text-sm font-medium text-slate-700">Description</label>
-              <textarea id="description" name="description" [(ngModel)]="description" rows="2"
-                class="mt-1 flex-1 block w-full border-slate-300 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500 sm:text-sm px-3 py-2 border"></textarea>
+              <label for="description" class="block text-sm font-medium text-slate-700"
+                >Description</label
+              >
+              <textarea
+                id="description"
+                name="description"
+                [(ngModel)]="description"
+                rows="2"
+                class="mt-1 flex-1 block w-full border-slate-300 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500 sm:text-sm px-3 py-2 border"
+              ></textarea>
             </div>
 
             <div>
-              <label for="image" class="block text-sm font-medium text-slate-700">Product Image <span *ngIf="isEditing" class="text-xs font-normal opacity-70">(Leave empty to keep current)</span></label>
-              <input type="file" id="image" (change)="onFileSelected($event)" accept="image/*"
-                class="mt-1 block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-amber-50 file:text-amber-700 hover:file:bg-amber-100 border border-slate-300 rounded-md">
+              <label for="image" class="block text-sm font-medium text-slate-700"
+                >Product Image
+                @if (isEditing) {
+                  <span class="text-xs font-normal opacity-70">(Leave empty to keep current)</span>
+                }
+              </label>
+              <input
+                type="file"
+                #fileInput
+                id="image"
+                (change)="onFileSelected($event)"
+                accept="image/*"
+                class="mt-1 block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-amber-50 file:text-amber-700 hover:file:bg-amber-100 border border-slate-300 rounded-md"
+              />
             </div>
 
-            <button type="submit" [disabled]="isSubmitting || !name || price === null || stock === null || category_id === null"
-              class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 disabled:opacity-50 transition">
-              <i class="fas" [ngClass]="isEditing ? 'fa-save' : 'fa-plus'" class="mr-2"></i> 
-              {{ isSubmitting ? 'Saving...' : (isEditing ? 'Update Product' : 'Add Product') }}
+            <button
+              type="button"
+              (click)="onSubmit()"
+              [disabled]="
+                isSubmitting || !name || price === null || stock === null || category_id === null
+              "
+              class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 disabled:opacity-50 transition"
+            >
+              <i class="fas" [ngClass]="isEditing ? 'fa-save' : 'fa-plus'" class="mr-2"></i>
+              {{ isSubmitting ? 'Saving...' : isEditing ? 'Update Product' : 'Add Product' }}
             </button>
           </form>
         </div>
@@ -81,56 +151,87 @@
     <!-- List Section -->
     <div class="xl:col-span-2">
       <div class="bg-white shadow sm:rounded-lg overflow-hidden border border-slate-200">
-        <div *ngIf="isLoading" class="p-8 text-center text-slate-500">
-          <i class="fas fa-spinner fa-spin text-3xl mb-3 text-amber-500"></i>
-          <p>Loading catalog...</p>
-        </div>
-        
-        <div *ngIf="!isLoading && products.length === 0" class="p-12 text-center">
+        @if (isLoading) {
+          <div class="p-8 text-center text-slate-500">
+            <i class="fas fa-spinner fa-spin text-3xl mb-3 text-amber-500"></i>
+            <p>Loading catalog...</p>
+          </div>
+        }
+
+        @if (!isLoading && products.length === 0) {
+          <div class="p-12 text-center">
             <i class="fas fa-box-open text-5xl text-slate-300 mb-4"></i>
             <h3 class="mt-2 text-lg font-medium text-slate-900">No products found</h3>
-            <p class="mt-1 text-sm text-slate-500">Get started by adding a product to your inventory.</p>
-        </div>
+            <p class="mt-1 text-sm text-slate-500">
+              Get started by adding a product to your inventory.
+            </p>
+          </div>
+        }
 
-        <ul *ngIf="!isLoading && products.length > 0" role="list" class="divide-y divide-slate-200">
-          <li *ngFor="let p of products" class="p-4 sm:p-6 hover:bg-slate-50 transition duration-150 ease-in-out">
-            <div class="flex flex-col sm:flex-row items-center justify-between">
-              
-              <div class="flex items-center w-full sm:w-auto mb-4 sm:mb-0">
-                <div class="flex-shrink-0 h-16 w-16 bg-slate-100 rounded-md overflow-hidden border border-slate-200">
-                  <img *ngIf="p.image_url" [src]="p.image_url" alt="" class="h-16 w-16 object-cover">
-                  <div *ngIf="!p.image_url" class="h-16 w-16 flex items-center justify-center text-slate-400 text-2xl">📦</div>
-                </div>
-                <div class="ml-4 flex-1">
-                  <div class="text-sm font-bold text-slate-900 truncate">
-                      {{ p.name }} 
-                      <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200">
-                        {{ getCategoryName(p.category_id) }}
-                      </span>
-                  </div>
-                  <div class="mt-1 text-sm text-slate-500 line-clamp-1">{{ p.description || 'No description' }}</div>
-                  
-                  <div class="mt-2 flex items-center gap-4 text-xs">
-                      <span class="font-semibold text-amber-700">₹{{ p.price }} / {{ p.unit || 'unit' }}</span>
-                      <span [ngClass]="p.stock > 10 ? 'text-green-600' : 'text-red-600'" class="font-medium flex items-center">
+        @if (!isLoading && products.length > 0) {
+          <ul role="list" class="divide-y divide-slate-200">
+            @for (p of products; track p) {
+              <li class="p-4 sm:p-6 hover:bg-slate-50 transition duration-150 ease-in-out">
+                <div class="flex flex-col sm:flex-row items-center justify-between">
+                  <div class="flex items-center w-full sm:w-auto mb-4 sm:mb-0">
+                    <div
+                      class="flex-shrink-0 h-16 w-16 bg-slate-100 rounded-md overflow-hidden border border-slate-200"
+                    >
+                      @if (p.image_url) {
+                        <img [src]="p.image_url" alt="" class="h-16 w-16 object-cover" />
+                      }
+                      @if (!p.image_url) {
+                        <div
+                          class="h-16 w-16 flex items-center justify-center text-slate-400 text-2xl"
+                        >
+                          📦
+                        </div>
+                      }
+                    </div>
+                    <div class="ml-4 flex-1">
+                      <div class="text-sm font-bold text-slate-900 truncate">
+                        {{ p.name }}
+                        <span
+                          class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200"
+                        >
+                          {{ getCategoryName(p.category_id) }}
+                        </span>
+                      </div>
+                      <div class="mt-1 text-sm text-slate-500 line-clamp-1">
+                        {{ p.description || 'No description' }}
+                      </div>
+                      <div class="mt-2 flex items-center gap-4 text-xs">
+                        <span class="font-semibold text-amber-700"
+                          >₹{{ p.price }} / {{ p.unit || 'unit' }}</span
+                        >
+                        <span
+                          [ngClass]="p.stock > 10 ? 'text-green-600' : 'text-red-600'"
+                          class="font-medium flex items-center"
+                        >
                           <i class="fas fa-box sm:mr-1"></i> Stock: {{ p.stock }}
-                      </span>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex-shrink-0 flex items-center gap-2">
+                    <button
+                      (click)="editProduct(p)"
+                      class="inline-flex items-center p-2 border border-slate-300 rounded-md shadow-sm text-slate-600 bg-white hover:bg-slate-50 focus:outline-none transition"
+                    >
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button
+                      (click)="deleteProduct(p.id)"
+                      class="inline-flex items-center p-2 border border-transparent rounded-md shadow-sm text-red-600 bg-red-100 hover:bg-red-200 focus:outline-none transition"
+                    >
+                      <i class="fas fa-trash"></i>
+                    </button>
                   </div>
                 </div>
-              </div>
-              
-              <div class="flex-shrink-0 flex items-center gap-2">
-                <button (click)="editProduct(p)" class="inline-flex items-center p-2 border border-slate-300 rounded-md shadow-sm text-slate-600 bg-white hover:bg-slate-50 focus:outline-none transition">
-                  <i class="fas fa-edit"></i>
-                </button>
-                <button (click)="deleteProduct(p.id)" class="inline-flex items-center p-2 border border-transparent rounded-md shadow-sm text-red-600 bg-red-100 hover:bg-red-200 focus:outline-none transition">
-                  <i class="fas fa-trash"></i>
-                </button>
-              </div>
-
-            </div>
-          </li>
-        </ul>
+              </li>
+            }
+          </ul>
+        }
       </div>
     </div>
   </div>

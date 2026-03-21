@@ -1,8 +1,12 @@
 <div class="space-y-6">
   <div class="flex justify-between items-center pb-4 border-b border-slate-200">
     <div>
-      <h2 class="text-2xl font-bold leading-7 text-slate-900 sm:text-3xl sm:truncate">Categories</h2>
-      <p class="mt-1 text-sm text-slate-500">Manage the product categories available in the store.</p>
+      <h2 class="text-2xl font-bold leading-7 text-slate-900 sm:text-3xl sm:truncate">
+        Categories
+      </h2>
+      <p class="mt-1 text-sm text-slate-500">
+        Manage the product categories available in the store.
+      </p>
     </div>
   </div>
 
@@ -15,33 +19,69 @@
             <h3 class="text-lg leading-6 font-medium text-slate-900">
               {{ isEditing ? 'Edit Category' : 'Add New Category' }}
             </h3>
-            <button *ngIf="isEditing" type="button" (click)="cancelEdit()" class="text-sm text-red-600 hover:underline">
-              Cancel
-            </button>
+            @if (isEditing) {
+              <button
+                type="button"
+                (click)="cancelEdit()"
+                class="text-sm text-red-600 hover:underline"
+              >
+                Cancel
+              </button>
+            }
           </div>
-          <form class="space-y-4" (ngSubmit)="onSubmit()">
+          <form class="space-y-4" novalidate>
             <div>
-              <label for="name" class="block text-sm font-medium text-slate-700">Category Name *</label>
-              <input type="text" id="name" name="name" [(ngModel)]="name" required
-                class="mt-1 flex-1 block w-full border-slate-300 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500 sm:text-sm px-3 py-2 border">
+              <label for="name" class="block text-sm font-medium text-slate-700"
+                >Category Name *</label
+              >
+              <input
+                type="text"
+                id="name"
+                name="name"
+                [(ngModel)]="name"
+                required
+                class="mt-1 flex-1 block w-full border-slate-300 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500 sm:text-sm px-3 py-2 border"
+              />
             </div>
 
             <div>
-              <label for="description" class="block text-sm font-medium text-slate-700">Description</label>
-              <textarea id="description" name="description" [(ngModel)]="description" rows="3"
-                class="mt-1 flex-1 block w-full border-slate-300 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500 sm:text-sm px-3 py-2 border"></textarea>
+              <label for="description" class="block text-sm font-medium text-slate-700"
+                >Description</label
+              >
+              <textarea
+                id="description"
+                name="description"
+                [(ngModel)]="description"
+                rows="3"
+                class="mt-1 flex-1 block w-full border-slate-300 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500 sm:text-sm px-3 py-2 border"
+              ></textarea>
             </div>
 
             <div>
-              <label for="image" class="block text-sm font-medium text-slate-700">Category Image <span *ngIf="isEditing" class="text-xs font-normal opacity-70">(Leave empty to keep current)</span></label>
-              <input type="file" id="image" (change)="onFileSelected($event)" accept="image/*"
-                class="mt-1 block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-amber-50 file:text-amber-700 hover:file:bg-amber-100 border border-slate-300 rounded-md">
+              <label for="image" class="block text-sm font-medium text-slate-700"
+                >Category Image
+                @if (isEditing) {
+                  <span class="text-xs font-normal opacity-70">(Leave empty to keep current)</span>
+                }
+              </label>
+              <input
+                type="file"
+                #fileInput
+                id="image"
+                (change)="onFileSelected($event)"
+                accept="image/*"
+                class="mt-1 block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-amber-50 file:text-amber-700 hover:file:bg-amber-100 border border-slate-300 rounded-md"
+              />
             </div>
 
-            <button type="submit" [disabled]="isSubmitting || !name"
-              class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 disabled:opacity-50 transition">
-              <i class="fas" [ngClass]="isEditing ? 'fa-save' : 'fa-plus'" class="mr-2"></i> 
-              {{ isSubmitting ? 'Saving...' : (isEditing ? 'Update Category' : 'Add Category') }}
+            <button
+              type="button"
+              (click)="onSubmit()"
+              [disabled]="isSubmitting || !name"
+              class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 disabled:opacity-50 transition"
+            >
+              <i class="fas" [ngClass]="isEditing ? 'fa-save' : 'fa-plus'" class="mr-2"></i>
+              {{ isSubmitting ? 'Saving...' : isEditing ? 'Update Category' : 'Add Category' }}
             </button>
           </form>
         </div>
@@ -51,36 +91,70 @@
     <!-- List Section -->
     <div class="lg:col-span-2">
       <div class="bg-white shadow sm:rounded-lg overflow-hidden border border-slate-200">
-        <ul role="list" class="divide-y divide-slate-200">
-          <li *ngFor="let cat of categories" class="px-4 py-4 sm:px-6 hover:bg-slate-50 transition duration-150 ease-in-out flex flex-col sm:flex-row items-center justify-between">
-            <div class="flex items-center w-full sm:w-auto mb-4 sm:mb-0">
-              <div class="flex-shrink-0 h-16 w-16 bg-slate-100 rounded-md overflow-hidden border border-slate-200">
-                <img *ngIf="cat.image_url" [src]="envApiUrl + cat.image_url" alt="" class="h-16 w-16 object-cover">
-                <div *ngIf="!cat.image_url" class="h-16 w-16 flex items-center justify-center text-slate-400">
-                  <i class="fas fa-image text-2xl"></i>
+        @if (isLoading) {
+          <div class="p-8 text-center text-slate-500">
+            <i class="fas fa-spinner fa-spin text-3xl mb-3 text-amber-500"></i>
+            <p>Loading categories...</p>
+          </div>
+        }
+
+        @if (!isLoading) {
+          <ul role="list" class="divide-y divide-slate-200">
+            @for (cat of categories; track cat) {
+              <li
+                class="px-4 py-4 sm:px-6 hover:bg-slate-50 transition duration-150 ease-in-out flex flex-col sm:flex-row items-center justify-between"
+              >
+                <div class="flex items-center w-full sm:w-auto mb-4 sm:mb-0">
+                  <div
+                    class="flex-shrink-0 h-16 w-16 bg-slate-100 rounded-md overflow-hidden border border-slate-200"
+                  >
+                    @if (cat.image_url) {
+                      <img
+                        [src]="envApiUrl + cat.image_url"
+                        alt=""
+                        class="h-16 w-16 object-cover"
+                      />
+                    }
+                    @if (!cat.image_url) {
+                      <div class="h-16 w-16 flex items-center justify-center text-slate-400">
+                        <i class="fas fa-image text-2xl"></i>
+                      </div>
+                    }
+                  </div>
+                  <div class="ml-4 flex-1">
+                    <div class="text-sm font-bold text-amber-600 truncate">{{ cat.name }}</div>
+                    <div class="mt-1 text-sm text-slate-500 line-clamp-2">
+                      {{ cat.description || 'No description provided' }}
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div class="ml-4 flex-1">
-                <div class="text-sm font-bold text-amber-600 truncate">{{ cat.name }}</div>
-                <div class="mt-1 text-sm text-slate-500 line-clamp-2">{{ cat.description || 'No description provided' }}</div>
-              </div>
-            </div>
-            <div class="flex-shrink-0 flex items-center gap-2 ml-auto">
-              <button (click)="editCategory(cat)" class="inline-flex items-center p-2 border border-slate-300 rounded-md shadow-sm text-slate-600 bg-white hover:bg-slate-50 focus:outline-none transition">
-                <i class="fas fa-edit"></i>
-              </button>
-              <button (click)="deleteCategory(cat.id)" class="inline-flex items-center p-2 border border-transparent rounded-md shadow-sm text-red-600 bg-red-100 hover:bg-red-200 focus:outline-none transition">
-                <i class="fas fa-trash"></i>
-              </button>
-            </div>
-          </li>
-          
-          <li *ngIf="categories.length === 0" class="px-4 py-12 text-center">
-            <i class="fas fa-folder-open text-4xl text-slate-300 mb-3"></i>
-            <h3 class="mt-2 text-sm font-medium text-slate-900">No categories</h3>
-            <p class="mt-1 text-sm text-slate-500">Get started by creating a new category on the left.</p>
-          </li>
-        </ul>
+                <div class="flex-shrink-0 flex items-center gap-2 ml-auto">
+                  <button
+                    (click)="editCategory(cat)"
+                    class="inline-flex items-center p-2 border border-slate-300 rounded-md shadow-sm text-slate-600 bg-white hover:bg-slate-50 focus:outline-none transition"
+                  >
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button
+                    (click)="deleteCategory(cat.id)"
+                    class="inline-flex items-center p-2 border border-transparent rounded-md shadow-sm text-red-600 bg-red-100 hover:bg-red-200 focus:outline-none transition"
+                  >
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </li>
+            }
+            @if (categories.length === 0) {
+              <li class="px-4 py-12 text-center">
+                <i class="fas fa-folder-open text-4xl text-slate-300 mb-3"></i>
+                <h3 class="mt-2 text-sm font-medium text-slate-900">No categories</h3>
+                <p class="mt-1 text-sm text-slate-500">
+                  Get started by creating a new category on the left.
+                </p>
+              </li>
+            }
+          </ul>
+        }
       </div>
     </div>
   </div>

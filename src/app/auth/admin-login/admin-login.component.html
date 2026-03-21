@@ -1,39 +1,61 @@
-<div class="min-h-screen bg-slate-900 flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-[url('https://www.transparenttextures.com/patterns/dark-matter.png')]">
+<div
+  class="min-h-screen bg-slate-900 flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-[url('https://www.transparenttextures.com/patterns/dark-matter.png')]"
+>
   <div class="sm:mx-auto sm:w-full sm:max-w-md z-10">
     <h2 class="mt-6 text-center text-4xl font-extrabold text-white tracking-tight drop-shadow-md">
       Admin Portal
     </h2>
-    <p class="mt-2 text-center text-sm text-slate-300">
-      Restricted to authorized personnel only
-    </p>
+    <p class="mt-2 text-center text-sm text-slate-300">Restricted to authorized personnel only</p>
   </div>
 
-  <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md z-10 transition-all duration-500 ease-in-out transform hover:scale-[1.01]">
+  <div
+    class="mt-8 sm:mx-auto sm:w-full sm:max-w-md z-10 transition-all duration-500 ease-in-out transform hover:scale-[1.01]"
+  >
     <div class="glass-panel py-8 px-4 sm:rounded-2xl sm:px-10 border border-slate-700 relative">
       <form class="space-y-6 mt-4" (ngSubmit)="submitForm()">
         <div>
           <label for="username" class="block text-sm font-semibold text-slate-700">Username</label>
           <div class="mt-2 relative rounded-md shadow-sm">
-            <input id="username" name="username" type="text" autocomplete="username" required [(ngModel)]="username"
-              class="appearance-none block w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 sm:text-sm transition duration-200">
+            <input
+              id="username"
+              name="username"
+              type="text"
+              autocomplete="username"
+              required
+              [(ngModel)]="username"
+              class="appearance-none block w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 sm:text-sm transition duration-200"
+            />
           </div>
         </div>
 
         <div>
           <label for="password" class="block text-sm font-semibold text-slate-700">Password</label>
           <div class="mt-2 relative rounded-md shadow-sm">
-            <input id="password" name="password" type="password" autocomplete="current-password" required [(ngModel)]="password"
-              class="appearance-none block w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 sm:text-sm transition duration-200">
+            <input
+              id="password"
+              name="password"
+              type="password"
+              autocomplete="current-password"
+              required
+              [(ngModel)]="password"
+              class="appearance-none block w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 sm:text-sm transition duration-200"
+            />
           </div>
         </div>
 
-        <div *ngIf="errorMessage" class="p-3 bg-red-100 border border-red-400 text-red-700 text-sm rounded transition-opacity duration-300 ease-in-out">
+        @if (errorMessage) {
+          <div
+            class="p-3 bg-red-100 border border-red-400 text-red-700 text-sm rounded transition-opacity duration-300 ease-in-out"
+          >
             <i class="fas fa-exclamation-circle mr-2"></i> {{ errorMessage }}
-        </div>
+          </div>
+        }
 
         <div class="pt-2">
-          <button type="submit"
-            class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow font-medium text-white bg-gradient-to-r from-amber-600 to-yellow-500 hover:from-amber-700 hover:to-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 transition-all duration-300 ease-in-out transform hover:-translate-y-px">
+          <button
+            type="submit"
+            class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow font-medium text-white bg-gradient-to-r from-amber-600 to-yellow-500 hover:from-amber-700 hover:to-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 transition-all duration-300 ease-in-out transform hover:-translate-y-px"
+          >
             Authenticate
           </button>
         </div>

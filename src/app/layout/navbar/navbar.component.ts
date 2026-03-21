@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
@@ -11,8 +11,8 @@ import { AuthService } from '../../core/services/auth.service';
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, ButtonModule, InputTextModule],
-  templateUrl: './navbar.component.html'
+  imports: [RouterModule, FormsModule, ButtonModule, InputTextModule],
+  templateUrl: './navbar.component.html',
 })
 export class NavbarComponent {
   readonly cartService = inject(CartService);
@@ -21,9 +21,9 @@ export class NavbarComponent {
   readonly router = inject(Router);
 
   selectedLocation = 'Mumbai';
-  isOpen = false;        // location dropdown
+  isOpen = false; // location dropdown
   mobileMenuOpen = false; // mobile hamburger drawer
-  isProfileOpen = false;  // user profile dropdown
+  isProfileOpen = false; // user profile dropdown
 
   locations = ['Mumbai', 'Delhi', 'Bangalore', 'Pune'];
 

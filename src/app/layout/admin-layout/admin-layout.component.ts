@@ -1,13 +1,13 @@
 import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterOutlet, RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-admin-layout',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterModule],
-  templateUrl: './admin-layout.component.html'
+  imports: [RouterOutlet, RouterModule],
+  templateUrl: './admin-layout.component.html',
 })
 export class AdminLayoutComponent {
   authService = inject(AuthService);

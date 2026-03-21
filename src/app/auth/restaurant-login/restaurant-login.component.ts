@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../core/services/auth.service';
@@ -7,8 +7,8 @@ import { AuthService } from '../../core/services/auth.service';
 @Component({
   selector: 'app-restaurant-login',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
-  templateUrl: './restaurant-login.component.html'
+  imports: [RouterModule, FormsModule],
+  templateUrl: './restaurant-login.component.html',
 })
 export class RestaurantLoginComponent {
   isLoginMode = true;
@@ -17,17 +17,21 @@ export class RestaurantLoginComponent {
 
   loginData = {
     mobile: '',
-    password: ''
+    password: '',
   };
 
   registerData = {
     mobile: '',
     password: '',
     name: '',
-    address: ''
+    address: '',
   };
 
-  constructor(private authService: AuthService, private router: Router, private route: ActivatedRoute) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private route: ActivatedRoute,
+  ) {}
 
   toggleMode() {
     this.isLoginMode = !this.isLoginMode;
@@ -38,7 +42,7 @@ export class RestaurantLoginComponent {
   onSubmit() {
     this.error = '';
     this.successMsg = '';
-    
+
     if (this.isLoginMode) {
       if (!this.loginData.mobile || !this.loginData.password) {
         this.error = 'Please fill in all fields';
@@ -52,7 +56,7 @@ export class RestaurantLoginComponent {
         error: (err) => {
           this.error = err.error?.detail || 'Login failed';
           alert(this.error);
-        }
+        },
       });
     } else {
       if (!this.registerData.mobile || !this.registerData.password || !this.registerData.name) {
@@ -70,7 +74,7 @@ export class RestaurantLoginComponent {
         error: (err) => {
           this.error = err.error?.detail || 'Registration failed';
           alert(this.error);
-        }
+        },
       });
     }
   }
