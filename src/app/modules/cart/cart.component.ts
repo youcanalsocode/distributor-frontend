@@ -4,6 +4,9 @@ import { RouterModule } from '@angular/router';
 import { CartService } from '../../core/services/cart.service';
 import { Product } from '../../core/models/product.model';
 import { CartItem } from '../../core/models/cart-item.model';
+import { OrderService } from '../../core/services/order.service';
+import { AuthService } from '../../core/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cart',
@@ -20,6 +23,9 @@ import { CartItem } from '../../core/models/cart-item.model';
 })
 export class CartComponent {
   readonly cartService = inject(CartService);
+  private readonly orderService = inject(OrderService);
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
 
   get items(): CartItem[] {
     return this.cartService.items();
@@ -63,6 +69,38 @@ export class CartComponent {
   }
 
   checkout(): void {
-    alert('Checkout functionality coming soon!');
+    if (!this.authService.isLoggedIn()) {
+      alert('Please login to place an order.');
+      this.router.navigate(['/auth/restaurant'], { 
+        queryParams: { returnUrl: '/cart' } 
+      });
+      return;
+    }
+
+    if (this.items.length === 0) {
+      alert('Your cart is empty.');
+      return;
+    }
+
+    const orderData = {
+      total_amount: this.totalPrice,
+      items: this.items.map((item) => ({
+        product_id: item.productId,
+        quantity: item.quantity,
+        price: item.price,
+      })),
+    };
+
+    this.orderService.createOrder(orderData).subscribe({
+      next: (res) => {
+        alert('Order placed successfully!');
+        this.cartService.clearCart();
+        this.router.navigate(['/']);
+      },
+      error: (err) => {
+        console.error('Order creation failed:', err);
+        alert('Failed to place order. Please try again.');
+      },
+    });
   }
 }

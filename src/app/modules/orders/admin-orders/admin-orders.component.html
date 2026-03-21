@@ -74,7 +74,7 @@
                   #{{ order.id }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
-                  Rest-{{ order.restaurant_id }}
+                  {{ order.restaurant_name || 'Rest-' + order.restaurant_id }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   <span

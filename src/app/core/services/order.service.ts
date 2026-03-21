@@ -13,6 +13,7 @@ export interface OrderItem {
 export interface Order {
   id: number;
   restaurant_id: number;
+  restaurant_name?: string;
   total_amount: number;
   status: string;
   created_at: string;

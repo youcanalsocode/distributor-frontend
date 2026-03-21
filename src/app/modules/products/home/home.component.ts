@@ -351,7 +351,7 @@ export class HomeComponent {
     title: 'Founder & CEO, Vimek Restomart',
     message: `"We built Vimek Restomart because we've seen first-hand how much time restaurant owners lose chasing multiple vendors, dealing with inconsistent quality, and managing last-minute shortages. Our promise is simple — you focus on cooking great food, and we handle everything before it reaches your kitchen. Every morning, fresh. Every time, reliable."`,
     initials: 'VS',
-    experience: '18+ Years in F&B Supply Chain',
+    experience: '4+ Years in F&B Supply Chain',
   };
 
   testimonials: Testimonial[] = [
