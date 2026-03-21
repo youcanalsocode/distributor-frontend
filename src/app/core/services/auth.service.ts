@@ -22,11 +22,13 @@ export class AuthService {
   }
 
   login(data: any) {
-    return this.http.post<{access_token: string, token_type: string}>(`${this.apiUrl}/restaurant/login`, data)
+    return this.http.post<{access_token: string, token_type: string, name: string, address: string}>(`${this.apiUrl}/restaurant/login`, data)
       .pipe(
         tap(response => {
           if (typeof window !== 'undefined' && window.localStorage) {
             localStorage.setItem('restaurantToken', response.access_token);
+            localStorage.setItem('restaurantName', response.name);
+            localStorage.setItem('restaurantAddress', response.address || '');
           }
           this.tokenSubject.next(response.access_token);
         })
@@ -36,6 +38,8 @@ export class AuthService {
   logout() {
     if (typeof window !== 'undefined' && window.localStorage) {
       localStorage.removeItem('restaurantToken');
+      localStorage.removeItem('restaurantName');
+      localStorage.removeItem('restaurantAddress');
     }
     this.tokenSubject.next(null);
   }
@@ -69,5 +73,19 @@ export class AuthService {
       return !!localStorage.getItem('adminToken');
     }
     return false;
+  }
+
+  getRestaurantName(): string | null {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      return localStorage.getItem('restaurantName');
+    }
+    return null;
+  }
+
+  getRestaurantAddress(): string | null {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      return localStorage.getItem('restaurantAddress');
+    }
+    return null;
   }
 }

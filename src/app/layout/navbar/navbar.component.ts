@@ -40,6 +40,10 @@ export class NavbarComponent {
     return this.authService.isLoggedIn();
   }
 
+  get restaurantName(): string {
+    return this.authService.getRestaurantName() || 'Profile';
+  }
+
   logout() {
     if (confirm('Do you really want to logout?')) {
       this.authService.logout();
