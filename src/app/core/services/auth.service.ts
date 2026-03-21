@@ -6,7 +6,7 @@ import { BehaviorSubject, tap } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8000/restaurant';
+  private apiUrl = 'http://localhost:8000';
   
   private tokenSubject = new BehaviorSubject<string | null>(null);
   public token$ = this.tokenSubject.asObservable();
@@ -18,11 +18,11 @@ export class AuthService {
   }
 
   register(data: any) {
-    return this.http.post(`${this.apiUrl}/register`, data);
+    return this.http.post(`${this.apiUrl}/restaurant/register`, data);
   }
 
   login(data: any) {
-    return this.http.post<{access_token: string, token_type: string}>(`${this.apiUrl}/login`, data)
+    return this.http.post<{access_token: string, token_type: string}>(`${this.apiUrl}/restaurant/login`, data)
       .pipe(
         tap(response => {
           if (typeof window !== 'undefined' && window.localStorage) {
@@ -43,6 +43,30 @@ export class AuthService {
   isLoggedIn(): boolean {
     if (typeof window !== 'undefined' && window.localStorage) {
       return !!localStorage.getItem('restaurantToken');
+    }
+    return false;
+  }
+
+  adminLogin(data: any) {
+    return this.http.post<{access_token: string, token_type: string}>(`${this.apiUrl}/admin/login`, data)
+      .pipe(
+        tap(response => {
+          if (typeof window !== 'undefined' && window.localStorage) {
+            localStorage.setItem('adminToken', response.access_token);
+          }
+        })
+      );
+  }
+
+  adminLogout() {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.removeItem('adminToken');
+    }
+  }
+
+  isAdminLoggedIn(): boolean {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      return !!localStorage.getItem('adminToken');
     }
     return false;
   }

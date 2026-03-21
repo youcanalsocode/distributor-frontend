@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { Product } from '../models/product.model';
 import { environment } from '../../../environments/environment';
@@ -40,5 +40,23 @@ export class ProductService {
       };
     }
     return product;
+  }
+
+  addProduct(formData: FormData): Observable<Product> {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('adminToken') : '';
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.post<Product>(this.baseUrl, formData, { headers });
+  }
+
+  updateProduct(id: number, formData: FormData): Observable<Product> {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('adminToken') : '';
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.put<Product>(`${this.baseUrl}/${id}`, formData, { headers });
+  }
+
+  deleteProduct(id: number): Observable<any> {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('adminToken') : '';
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.delete(`${this.baseUrl}/${id}`, { headers });
   }
 }
