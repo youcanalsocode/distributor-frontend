@@ -1,106 +1,235 @@
 <div class="space-y-6">
+
+  <!-- Header -->
   <div class="flex justify-between items-center pb-4 border-b border-slate-200">
     <div>
-      <h2 class="text-2xl font-bold leading-7 text-slate-900 sm:text-3xl sm:truncate">
-        Orders Management
-      </h2>
-      <p class="mt-1 text-sm text-slate-500">View and manage all orders placed by restaurants.</p>
+      <h2 class="text-2xl font-bold text-slate-900 sm:text-3xl">Orders Management</h2>
+      <p class="mt-1 text-sm text-slate-500">
+        All restaurant orders displayed in ascending order. Click an order to view details.
+      </p>
+    </div>
+    <div class="flex items-center gap-3">
+      <span class="text-sm text-slate-500 font-medium">{{ orders.length }} Total Orders</span>
+      <button
+        (click)="loadOrders()"
+        class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-sm font-semibold transition"
+      >
+        <i class="fas fa-sync-alt"></i> Refresh
+      </button>
     </div>
   </div>
 
-  <div class="bg-white shadow overflow-hidden sm:rounded-lg border border-slate-200">
-    @if (isLoading) {
-      <div class="p-8 text-center text-slate-500">
-        <i class="fas fa-spinner fa-spin text-3xl mb-3 text-amber-500"></i>
-        <p>Loading orders...</p>
-      </div>
-    }
+  <!-- Status Toast -->
+  @if (statusMessage) {
+    <div
+      class="fixed top-5 right-5 z-50 flex items-center gap-3 px-5 py-3 rounded-xl shadow-lg text-white text-sm font-medium transition-all"
+      [class.bg-green-600]="statusMessage.type === 'success'"
+      [class.bg-red-600]="statusMessage.type === 'error'"
+    >
+      <i [class]="statusMessage.type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle'"></i>
+      {{ statusMessage.text }}
+    </div>
+  }
 
-    @if (!isLoading && orders.length === 0) {
-      <div class="p-12 text-center">
-        <i class="fas fa-receipt text-5xl text-slate-300 mb-4"></i>
-        <h3 class="mt-2 text-lg font-medium text-slate-900">No orders found</h3>
-        <p class="mt-1 text-sm text-slate-500">It seems no restaurants have placed orders yet.</p>
-      </div>
-    }
+  <!-- Loading -->
+  @if (isLoading) {
+    <div class="py-20 text-center text-slate-500">
+      <i class="fas fa-spinner fa-spin text-4xl text-amber-500 mb-4"></i>
+      <p class="text-base">Loading orders...</p>
+    </div>
+  }
 
-    @if (!isLoading && orders.length > 0) {
-      <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-slate-200">
-          <thead class="bg-slate-50">
-            <tr>
-              <th
-                scope="col"
-                class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider"
-              >
-                Order ID
-              </th>
-              <th
-                scope="col"
-                class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider"
-              >
-                Restaurant ID
-              </th>
-              <th
-                scope="col"
-                class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider"
-              >
-                Status
-              </th>
-              <th
-                scope="col"
-                class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider"
-              >
-                Total Amount
-              </th>
-              <th
-                scope="col"
-                class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider"
-              >
-                Date
-              </th>
-              <th
-                scope="col"
-                class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider"
-              >
-                Items
-              </th>
-            </tr>
-          </thead>
-          <tbody class="bg-white divide-y divide-slate-200">
-            @for (order of orders; track order) {
-              <tr class="hover:bg-slate-50 transition duration-150">
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-amber-600">
-                  #{{ order.id }}
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
-                  {{ order.restaurant_name || 'Rest-' + order.restaurant_id }}
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <span
-                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-amber-100 text-amber-800"
-                  >
-                    {{ order.status }}
-                  </span>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-slate-900">
-                  ₹{{ order.total_amount | number: '1.2-2' }}
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
-                  {{ order.created_at | date: 'medium' }}
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
-                  <span
-                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-800"
-                  >
-                    {{ order.items.length }} items
-                  </span>
-                </td>
-              </tr>
+  <!-- Empty -->
+  @if (!isLoading && orders.length === 0) {
+    <div class="py-20 text-center">
+      <i class="fas fa-receipt text-6xl text-slate-300 mb-4"></i>
+      <h3 class="text-lg font-semibold text-slate-800">No orders yet</h3>
+      <p class="text-slate-500 text-sm mt-1">Restaurants haven't placed any orders yet.</p>
+    </div>
+  }
+
+  <!-- Orders List -->
+  @if (!isLoading && orders.length > 0) {
+    <div class="space-y-3">
+      @for (order of sortedOrders; track order.id) {
+        <div
+          class="bg-white border rounded-xl shadow-sm transition-all overflow-hidden"
+          [class.border-amber-400]="isExpanded(order.id)"
+          [class.border-slate-200]="!isExpanded(order.id)"
+        >
+
+          <!-- Order Summary Row (always visible, clickable) -->
+          <button
+            type="button"
+            class="w-full text-left px-5 py-4 flex flex-wrap items-center gap-x-6 gap-y-2 hover:bg-slate-50 transition"
+            (click)="toggleExpand(order.id)"
+          >
+            <!-- Order Number -->
+            <div class="flex-shrink-0 w-20">
+              <p class="text-xs text-slate-400 uppercase font-semibold">Order</p>
+              <p class="text-lg font-bold text-amber-600">#{{ order.id }}</p>
+            </div>
+
+            <!-- Restaurant Name -->
+            <div class="flex-1 min-w-[150px]">
+              <p class="text-xs text-slate-400 uppercase font-semibold">Restaurant</p>
+              <p class="font-semibold text-slate-800 text-sm truncate">
+                {{ order.restaurant_name || ('REST-' + order.restaurant_id) }}
+              </p>
+            </div>
+
+            <!-- Phone -->
+            @if (order.restaurant_phone) {
+              <div class="min-w-[130px]">
+                <p class="text-xs text-slate-400 uppercase font-semibold">Phone</p>
+                <a
+                  [href]="'tel:' + order.restaurant_phone"
+                  class="text-sm text-blue-600 hover:underline font-medium"
+                  (click)="$event.stopPropagation()"
+                >{{ order.restaurant_phone }}</a>
+              </div>
             }
-          </tbody>
-        </table>
-      </div>
-    }
-  </div>
+
+            <!-- Items Count -->
+            <div class="min-w-[70px]">
+              <p class="text-xs text-slate-400 uppercase font-semibold">Items</p>
+              <p class="text-sm font-semibold text-slate-700">{{ order.items.length }}</p>
+            </div>
+
+            <!-- Total -->
+            <div class="min-w-[90px]">
+              <p class="text-xs text-slate-400 uppercase font-semibold">Total</p>
+              <p class="text-sm font-bold text-slate-900">₹{{ getOrderTotal(order) | number: '1.2-2' }}</p>
+            </div>
+
+            <!-- Date -->
+            <div class="min-w-[120px]">
+              <p class="text-xs text-slate-400 uppercase font-semibold">Placed On</p>
+              <p class="text-xs text-slate-600">{{ order.created_at | date: 'dd MMM yyyy, hh:mm a' }}</p>
+            </div>
+
+            <!-- Status Badge -->
+            <div class="flex items-center gap-2">
+              <span
+                class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold"
+                [class]="getStatusConfig(order.status).bg + ' ' + getStatusConfig(order.status).text"
+              >
+                <span class="w-2 h-2 rounded-full inline-block" [class]="getStatusConfig(order.status).dot"></span>
+                {{ getStatusConfig(order.status).label }}
+              </span>
+            </div>
+
+            <!-- Expand Icon -->
+            <div class="ml-auto flex-shrink-0">
+              <i
+                class="fas transition-transform duration-200 text-slate-400"
+                [class.fa-chevron-down]="!isExpanded(order.id)"
+                [class.fa-chevron-up]="isExpanded(order.id)"
+              ></i>
+            </div>
+          </button>
+
+          <!-- Expanded Detail Panel -->
+          @if (isExpanded(order.id)) {
+            <div class="border-t border-slate-100 bg-slate-50 px-5 py-5 space-y-5">
+
+              <!-- Restaurant Info Card -->
+              <div class="bg-white rounded-xl border border-slate-200 p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div>
+                  <p class="text-xs text-slate-400 font-semibold uppercase mb-0.5">Restaurant Name</p>
+                  <p class="text-sm font-bold text-slate-800">
+                    {{ order.restaurant_name || ('REST-' + order.restaurant_id) }}
+                  </p>
+                </div>
+                @if (order.restaurant_address) {
+                  <div>
+                    <p class="text-xs text-slate-400 font-semibold uppercase mb-0.5">Address</p>
+                    <p class="text-sm text-slate-700">{{ order.restaurant_address }}</p>
+                  </div>
+                }
+                @if (order.restaurant_phone) {
+                  <div>
+                    <p class="text-xs text-slate-400 font-semibold uppercase mb-0.5">Phone</p>
+                    <a [href]="'tel:' + order.restaurant_phone" class="text-sm text-blue-600 hover:underline font-medium">
+                      {{ order.restaurant_phone }}
+                    </a>
+                  </div>
+                }
+                @if (order.restaurant_email) {
+                  <div>
+                    <p class="text-xs text-slate-400 font-semibold uppercase mb-0.5">Email</p>
+                    <a [href]="'mailto:' + order.restaurant_email" class="text-sm text-blue-600 hover:underline font-medium">
+                      {{ order.restaurant_email }}
+                    </a>
+                  </div>
+                }
+              </div>
+
+              <!-- Order Items Table -->
+              <div>
+                <h4 class="text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
+                  <i class="fas fa-list-ul text-amber-500"></i> Order Items
+                </h4>
+                <div class="overflow-x-auto rounded-lg border border-slate-200">
+                  <table class="min-w-full divide-y divide-slate-200">
+                    <thead class="bg-slate-100">
+                      <tr>
+                        <th class="px-4 py-2 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">#</th>
+                        <th class="px-4 py-2 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Product</th>
+                        <th class="px-4 py-2 text-right text-xs font-bold text-slate-500 uppercase tracking-wider">Qty</th>
+                        <th class="px-4 py-2 text-right text-xs font-bold text-slate-500 uppercase tracking-wider">Unit Price</th>
+                        <th class="px-4 py-2 text-right text-xs font-bold text-slate-500 uppercase tracking-wider">Subtotal</th>
+                      </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-slate-100">
+                      @for (item of order.items; track item.id; let i = $index) {
+                        <tr class="hover:bg-amber-50 transition">
+                          <td class="px-4 py-3 text-xs text-slate-400 font-medium">{{ i + 1 }}</td>
+                          <td class="px-4 py-3 text-sm text-slate-800 font-medium">
+                            {{ item.product_name || 'Product #' + item.product_id }}
+                          </td>
+                          <td class="px-4 py-3 text-sm text-slate-700 text-right font-semibold">{{ item.quantity }}</td>
+                          <td class="px-4 py-3 text-sm text-slate-600 text-right">₹{{ item.price | number: '1.2-2' }}</td>
+                          <td class="px-4 py-3 text-sm font-bold text-slate-900 text-right">₹{{ (item.price * item.quantity) | number: '1.2-2' }}</td>
+                        </tr>
+                      }
+                    </tbody>
+                    <tfoot class="bg-slate-50">
+                      <tr>
+                        <td colspan="4" class="px-4 py-3 text-right text-sm font-bold text-slate-700 uppercase">Grand Total</td>
+                        <td class="px-4 py-3 text-right text-base font-extrabold text-amber-600">₹{{ getOrderTotal(order) | number: '1.2-2' }}</td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Action: Update Status -->
+              <div class="flex flex-wrap items-center gap-3 pt-2">
+                <span class="text-sm font-semibold text-slate-600">Update Status:</span>
+                @for (status of statusOptions; track status) {
+                  <button
+                    type="button"
+                    class="px-3 py-1.5 rounded-lg text-xs font-bold border transition"
+                    [disabled]="updatingStatusId === order.id"
+                    [class]="order.status === status
+                      ? getStatusConfig(status).bg + ' ' + getStatusConfig(status).text + ' border-transparent cursor-default'
+                      : 'bg-white text-slate-600 border-slate-300 hover:border-amber-400 hover:text-amber-600'"
+                    (click)="updateStatus(order, status)"
+                  >
+                    @if (updatingStatusId === order.id && order.status !== status) {
+                      <i class="fas fa-spinner fa-spin mr-1"></i>
+                    }
+                    {{ getStatusConfig(status).label }}
+                  </button>
+                }
+              </div>
+
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+
 </div>

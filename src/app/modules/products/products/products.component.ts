@@ -32,7 +32,7 @@ import { Product } from '../../../core/models/product.model';
 export class ProductsComponent implements OnInit {
   private readonly productService = inject(ProductService);
   readonly cartService = inject(CartService);
-  private readonly searchService = inject(SearchService);
+  readonly searchService = inject(SearchService);
 
   products = signal<Product[]>([]);
   loading = signal(true);

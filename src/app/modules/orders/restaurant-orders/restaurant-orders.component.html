@@ -1,0 +1,197 @@
+<div class="max-w-4xl mx-auto px-4 py-8 space-y-6">
+
+  <!-- Header -->
+  <div class="flex items-center justify-between pb-4 border-b border-slate-200">
+    <div>
+      <h2 class="text-2xl font-bold text-slate-900">My Orders</h2>
+      <p class="mt-1 text-sm text-slate-500">Track all your orders and their current status.</p>
+    </div>
+    <button
+      (click)="loadOrders()"
+      class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-sm font-semibold transition"
+    >
+      <i class="fas fa-sync-alt"></i> Refresh
+    </button>
+  </div>
+
+  <!-- Loading -->
+  @if (isLoading) {
+    <div class="py-20 text-center text-slate-500">
+      <i class="fas fa-spinner fa-spin text-4xl text-amber-500 mb-4"></i>
+      <p>Loading your orders...</p>
+    </div>
+  }
+
+  <!-- Error -->
+  @if (!isLoading && errorMessage) {
+    <div class="py-10 text-center">
+      <i class="fas fa-exclamation-circle text-4xl text-red-400 mb-3"></i>
+      <p class="text-red-600 font-medium">{{ errorMessage }}</p>
+      <button (click)="loadOrders()" class="mt-4 px-4 py-2 bg-red-100 text-red-700 rounded-lg text-sm hover:bg-red-200 transition">
+        Try Again
+      </button>
+    </div>
+  }
+
+  <!-- Empty -->
+  @if (!isLoading && !errorMessage && orders.length === 0) {
+    <div class="py-20 text-center">
+      <i class="fas fa-shopping-bag text-6xl text-slate-300 mb-4"></i>
+      <h3 class="text-lg font-semibold text-slate-800">No orders yet</h3>
+      <p class="text-slate-500 text-sm mt-1">Your placed orders will appear here.</p>
+    </div>
+  }
+
+  <!-- Orders -->
+  @if (!isLoading && !errorMessage && orders.length > 0) {
+    <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">{{ orders.length }} Order(s) — sorted by oldest first</p>
+
+    <div class="space-y-3">
+      @for (order of sortedOrders; track order.id) {
+        <div
+          class="bg-white rounded-xl border shadow-sm overflow-hidden transition-all"
+          [class.border-amber-400]="isExpanded(order.id)"
+          [class.border-slate-200]="!isExpanded(order.id)"
+        >
+
+          <!-- Summary row (clickable) -->
+          <button
+            type="button"
+            class="w-full text-left px-5 py-4 flex flex-wrap items-center gap-x-5 gap-y-2 hover:bg-slate-50 transition"
+            (click)="toggleExpand(order.id)"
+          >
+
+            <!-- Order # -->
+            <div class="flex-shrink-0 w-20">
+              <p class="text-xs text-slate-400 uppercase font-semibold">Order</p>
+              <p class="text-lg font-bold text-amber-600">#{{ order.id }}</p>
+            </div>
+
+            <!-- Date -->
+            <div class="min-w-[140px]">
+              <p class="text-xs text-slate-400 uppercase font-semibold">Placed On</p>
+              <p class="text-xs text-slate-600">{{ order.created_at | date: 'dd MMM yyyy, hh:mm a' }}</p>
+            </div>
+
+            <!-- Items -->
+            <div class="min-w-[60px]">
+              <p class="text-xs text-slate-400 uppercase font-semibold">Items</p>
+              <p class="text-sm font-semibold text-slate-700">{{ order.items.length }}</p>
+            </div>
+
+            <!-- Total -->
+            <div class="min-w-[90px]">
+              <p class="text-xs text-slate-400 uppercase font-semibold">Total</p>
+              <p class="text-sm font-bold text-slate-900">₹{{ getOrderTotal(order) | number: '1.2-2' }}</p>
+            </div>
+
+            <!-- Status Badge -->
+            <div class="ml-auto flex items-center gap-3">
+              <span
+                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold"
+                [class]="getStatusConfig(order.status).bg + ' ' + getStatusConfig(order.status).text"
+              >
+                <span class="w-2 h-2 rounded-full" [class]="getStatusConfig(order.status).dot"></span>
+                <i [class]="'fas ' + getStatusConfig(order.status).icon + ' text-xs'"></i>
+                {{ getStatusConfig(order.status).label }}
+              </span>
+              <i
+                class="fas text-slate-400 transition-transform duration-200"
+                [class.fa-chevron-down]="!isExpanded(order.id)"
+                [class.fa-chevron-up]="isExpanded(order.id)"
+              ></i>
+            </div>
+          </button>
+
+          <!-- Expanded Details -->
+          @if (isExpanded(order.id)) {
+            <div class="border-t border-slate-100 bg-slate-50 px-5 py-5 space-y-4">
+
+              <!-- Status Timeline -->
+              <div class="flex items-center gap-1 overflow-x-auto pb-1">
+                @for (step of ['pending','confirmed','dispatched','delivered']; track step) {
+                  <ng-container>
+                    <div class="flex flex-col items-center min-w-[70px]">
+                      <div
+                        class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold border-2 transition-all"
+                        [class.border-amber-500]="isCurrentOrPastStatus(order.status, step)"
+                        [class.bg-amber-500]="isCurrentOrPastStatus(order.status, step)"
+                        [class.text-white]="isCurrentOrPastStatus(order.status, step)"
+                        [class.border-slate-300]="!isCurrentOrPastStatus(order.status, step)"
+                        [class.bg-white]="!isCurrentOrPastStatus(order.status, step)"
+                        [class.text-slate-400]="!isCurrentOrPastStatus(order.status, step)"
+                      >
+                        <i [class]="'fas ' + getStatusConfig(step).icon + ' text-xs'"></i>
+                      </div>
+                      <p class="text-xs mt-1 text-center font-medium"
+                        [class.text-amber-600]="isCurrentOrPastStatus(order.status, step)"
+                        [class.text-slate-400]="!isCurrentOrPastStatus(order.status, step)"
+                      >{{ getStatusConfig(step).label }}</p>
+                    </div>
+                    @if (step !== 'delivered') {
+                      <div class="flex-1 h-0.5 mb-4 min-w-[24px]"
+                        [class.bg-amber-400]="isCurrentOrPastStatus(order.status, step)"
+                        [class.bg-slate-200]="!isCurrentOrPastStatus(order.status, step)"
+                      ></div>
+                    }
+                  </ng-container>
+                }
+
+                <!-- Cancelled separately -->
+                @if (order.status === 'cancelled') {
+                  <div class="ml-4 flex flex-col items-center">
+                    <div class="w-8 h-8 rounded-full flex items-center justify-center bg-red-100 border-2 border-red-400 text-red-500">
+                      <i class="fas fa-times text-xs"></i>
+                    </div>
+                    <p class="text-xs mt-1 text-red-500 font-medium">Cancelled</p>
+                  </div>
+                }
+              </div>
+
+              <!-- Items Table -->
+              <div>
+                <h4 class="text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
+                  <i class="fas fa-list-ul text-amber-500"></i> Order Items
+                </h4>
+                <div class="overflow-x-auto rounded-lg border border-slate-200">
+                  <table class="min-w-full divide-y divide-slate-200">
+                    <thead class="bg-slate-100">
+                      <tr>
+                        <th class="px-4 py-2 text-left text-xs font-bold text-slate-500 uppercase">#</th>
+                        <th class="px-4 py-2 text-left text-xs font-bold text-slate-500 uppercase">Product</th>
+                        <th class="px-4 py-2 text-right text-xs font-bold text-slate-500 uppercase">Qty</th>
+                        <th class="px-4 py-2 text-right text-xs font-bold text-slate-500 uppercase">Price</th>
+                        <th class="px-4 py-2 text-right text-xs font-bold text-slate-500 uppercase">Subtotal</th>
+                      </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-slate-100">
+                      @for (item of order.items; track item.id; let i = $index) {
+                        <tr class="hover:bg-amber-50 transition">
+                          <td class="px-4 py-3 text-xs text-slate-400">{{ i + 1 }}</td>
+                          <td class="px-4 py-3 text-sm text-slate-800 font-medium">
+                            {{ item.product_name || 'Product #' + item.product_id }}
+                          </td>
+                          <td class="px-4 py-3 text-sm text-right font-semibold text-slate-700">{{ item.quantity }}</td>
+                          <td class="px-4 py-3 text-sm text-right text-slate-600">₹{{ item.price | number: '1.2-2' }}</td>
+                          <td class="px-4 py-3 text-sm text-right font-bold text-slate-900">₹{{ (item.price * item.quantity) | number: '1.2-2' }}</td>
+                        </tr>
+                      }
+                    </tbody>
+                    <tfoot class="bg-slate-50">
+                      <tr>
+                        <td colspan="4" class="px-4 py-3 text-right text-sm font-bold text-slate-700">Grand Total</td>
+                        <td class="px-4 py-3 text-right text-base font-extrabold text-amber-600">₹{{ getOrderTotal(order) | number: '1.2-2' }}</td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+              </div>
+
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+
+</div>

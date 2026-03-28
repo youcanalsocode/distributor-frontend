@@ -11,6 +11,7 @@ import { AdminLayoutComponent } from './layout/admin-layout/admin-layout.compone
 import { AdminOrdersComponent } from './modules/orders/admin-orders/admin-orders.component';
 import { AdminCategoriesComponent } from './modules/categories/admin-categories/admin-categories.component';
 import { AdminProductsComponent } from './modules/products/admin-products/admin-products.component';
+import { RestaurantOrdersComponent } from './modules/orders/restaurant-orders/restaurant-orders.component';
 
 export const routes: Routes = [
   {
@@ -19,7 +20,8 @@ export const routes: Routes = [
     children: [
       { path: '', component: HomeComponent },
       { path: 'products', component: ProductsComponent },
-      { path: 'cart', component: CartComponent, canActivate: [authGuard] }
+      { path: 'cart', component: CartComponent, canActivate: [authGuard] },
+      { path: 'orders', component: RestaurantOrdersComponent, canActivate: [authGuard] }
     ]
   },
   { path: 'auth/admin', component: AdminLoginComponent },

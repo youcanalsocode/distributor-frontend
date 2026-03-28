@@ -9,7 +9,7 @@ interface CarouselSlide {
   title: string;
   subtitle: string;
   btnLabel: string;
-  btnAction: 'products' | 'feedback' | 'delivery' | 'brands';
+  btnAction: 'products' | 'feedback' | 'delivery' | 'brands' | 'contact';
   btnStyle: 'primary' | 'outline';
 }
 
@@ -239,12 +239,12 @@ export class HomeComponent {
       btnStyle: 'primary',
     },
     {
-      image: 'https://images.unsplash.com/photo-1596524430615-b46475ddff6e?w=1400&h=520&fit=crop',
-      tag: 'Contact us',
-      title: 'Restaurant-Grade Dairy Products,\nFeshness Assured',
-      subtitle: 'Temperature-controlled from farm to kitchen. FSSAI-certified, audit-ready.',
-      btnLabel: 'Shop Dairy ',
-      btnAction: 'products',
+      image: 'https://images.unsplash.com/photo-1556745753-b2904692b3cd?w=1400&h=520&fit=crop',
+      tag: 'Partner With Us',
+      title: 'Grow Your Business With\nVimek Restomart',
+      subtitle: 'Get a dedicated manager, bulk wholesale pricing, and 6 AM daily delivery. Let\'s discuss your kitchen\'s needs.',
+      btnLabel: 'Contact us',
+      btnAction: 'contact',
       btnStyle: 'primary',
     },
     {
@@ -421,8 +421,20 @@ export class HomeComponent {
       case 'brands':
         document.getElementById('brands-section')?.scrollIntoView({ behavior: 'smooth' });
         break;
+      case 'contact':
+        document.getElementById('contact-section')?.scrollIntoView({ behavior: 'smooth' });
+        break;
     }
   }
+  openWhatsAppChat() {
+  const phoneNumber = '8369108352';
+  const message = 'Hello, I want to know more about your services';
+
+  const encodedMessage = encodeURIComponent(message);
+  const url = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+
+  window.open(url, '_blank'); 
+}
 
   navigateToProducts(): void {
     this.router.navigate(['/products']);
