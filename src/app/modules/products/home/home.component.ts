@@ -231,9 +231,8 @@ export class HomeComponent {
     {
       image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=1400&h=520&fit=crop',
       tag: 'Fresh Produce',
-      title: 'Farm-Fresh Vegetables,\nDelivered Before Dawn',
-      subtitle:
-        'Bulk sourcing from certified farms — consistent quality, fair pricing, every morning.',
+      title: 'Your Complete Restaurant Supply Partner',
+      subtitle: 'From frozen foods to dairy and daily essentials — consistent quality, competitive pricing, delivered on time.',
       btnLabel: 'Explore Products',
       btnAction: 'products',
       btnStyle: 'primary',
@@ -245,15 +244,6 @@ export class HomeComponent {
       subtitle: 'Get a dedicated manager, bulk wholesale pricing, and 6 AM daily delivery. Let\'s discuss your kitchen\'s needs.',
       btnLabel: 'Contact us',
       btnAction: 'contact',
-      btnStyle: 'primary',
-    },
-    {
-      image: 'https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=1400&h=520&fit=crop',
-      tag: 'Dairy & Pantry',
-      title: 'Everything Your Kitchen\nNeeds in One Order',
-      subtitle: 'Dairy, dry goods, spices, oils — one partner, one invoice, zero hassle.',
-      btnLabel: 'See All Products',
-      btnAction: 'products',
       btnStyle: 'primary',
     },
     {
@@ -427,14 +417,14 @@ export class HomeComponent {
     }
   }
   openWhatsAppChat() {
-  const phoneNumber = '8369108352';
-  const message = 'Hello, I want to know more about your services';
+    const phoneNumber = '9004207375';
+    const message = 'Hello, I run a restaurant and I am looking to purchase supplies in bulk. Please share your catalog and pricing.';
 
-  const encodedMessage = encodeURIComponent(message);
-  const url = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+    const encodedMessage = encodeURIComponent(message);
+    const url = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
 
-  window.open(url, '_blank'); 
-}
+    window.open(url, '_blank');
+  }
 
   navigateToProducts(): void {
     this.router.navigate(['/products']);

@@ -13,16 +13,17 @@
         </span>
       </div>
 
-      <!-- Desktop: Location + Search (hidden on mobile) -->
+      <!-- Desktop: Location -->
       <div class="hidden md:flex items-center gap-3 flex-1 mx-6">
         <!-- Location Dropdown -->
         <div class="relative flex-shrink-0">
           <button
             (click)="toggleDropdown()"
-            class="flex flex-col gap-0.5 font-medium border border-gray-200 rounded-xl px-3 py-1.5 hover:border-teal-400 transition-colors"
+            class="flex flex-col gap-0.5 font-medium  rounded-xl px-3 py-1.5"
           >
             <span class="text-xs text-gray-400 leading-none">
-              Delivery in <i class="pi pi-map-marker text-xs" style="color: red"></i>
+              Delivery in 
+              <!-- <i class="pi pi-map-marker text-xs" style="color: red"></i> -->
             </span>
             <span class="flex items-center gap-1 font-semibold text-sm text-gray-800">
               {{ selectedLocation }}
@@ -179,38 +180,9 @@
   <!-- ── Mobile Drawer ─────────────────────────────────────────────────────── -->
   @if (mobileMenuOpen) {
     <div class="md:hidden border-t border-gray-100 bg-white px-4 pb-5 pt-3 shadow-lg">
-      <!-- Mobile Search -->
-      <div class="relative mb-4">
-        <span class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-4 w-4 text-gray-400"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M21 21l-4.35-4.35M17 11A6 6 0 1 0 5 11a6 6 0 0 0 12 0z"
-            />
-          </svg>
-        </span>
-        <input
-          pInputText
-          type="text"
-          [(ngModel)]="searchQuery"
-          (keyup.enter)="onSearch()"
-          placeholder="Search products..."
-          class="!pl-9 !pr-4 !py-2.5 !w-full !rounded-xl !bg-gray-50 !text-sm"
-        />
-      </div>
-      <!-- Mobile Location -->
-      <div class="mb-4">
-        <p class="text-xs text-gray-400 mb-1.5 font-medium uppercase tracking-wider">
-          Delivery Location
-        </p>
+      <!-- Mobile Location (Optional, keeping it simple) -->
+      <div class="mb-5 px-3">
+        <p class="text-[10px] text-gray-400 mb-3 font-bold uppercase tracking-[0.2em]">Delivery Location</p>
         <div class="flex flex-wrap gap-2">
           @for (loc of locations; track loc) {
             <button
@@ -219,7 +191,8 @@
               [class.text-white]="selectedLocation === loc"
               [class.bg-gray-100]="selectedLocation !== loc"
               [class.text-gray-700]="selectedLocation !== loc"
-              class="px-3 py-1.5 rounded-full text-sm font-medium transition-all"
+              class="px-4 py-2 rounded-full text-xs font-bold transition-all border border-transparent shadow-sm"
+              [class.border-teal-200]="selectedLocation === loc"
             >
               {{ loc }}
             </button>
@@ -227,64 +200,58 @@
         </div>
       </div>
       <!-- Mobile Nav Links -->
-      <div class="flex flex-col gap-1 mb-4">
+      <div class="flex flex-col border-t border-gray-100 mt-2">
         <a
           routerLink="/"
           (click)="mobileMenuOpen = false"
-          class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 text-gray-700 font-medium text-sm transition-colors"
+          class="px-3 py-4 text-gray-800 font-semibold text-base border-b border-gray-50 active:bg-gray-50"
         >
-          <i class="pi pi-home text-teal-600"></i> Home
+          Home
         </a>
         <a
           routerLink="/products"
           (click)="mobileMenuOpen = false"
-          class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 text-gray-700 font-medium text-sm transition-colors"
+          class="px-3 py-4 text-gray-800 font-semibold text-base border-b border-gray-50 active:bg-gray-50"
         >
-          <i class="pi pi-shopping-bag text-teal-600"></i> Products
+          Products
         </a>
         @if (isLoggedIn) {
           <a
             routerLink="/orders"
             (click)="mobileMenuOpen = false"
-            class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 text-gray-700 font-medium text-sm transition-colors"
+            class="px-3 py-4 text-gray-800 font-semibold text-base border-b border-gray-50 active:bg-gray-50"
           >
-            <i class="pi pi-list text-teal-600"></i> My Orders
+            My Orders
           </a>
         }
       </div>
-      <!-- Mobile Login Button -->
-      @if (!isLoggedIn) {
-        <button
-          pButton
-          type="button"
-          label="Login / Signup"
-          routerLink="/auth/restaurant"
-          (click)="mobileMenuOpen = false"
-          class="!w-full !bg-gradient-to-r from-teal-500 to-blue-600 !text-sm !border-0 mt-2"
-        ></button>
-      }
-      <!-- Mobile Profile Menu -->
+
+      <!-- Mobile Profile/Account -->
       @if (isLoggedIn) {
-        <div class="mt-4 border-t border-gray-100 pt-4">
-          <p class="text-xs text-gray-400 mb-2 font-medium uppercase tracking-wider">Account</p>
+        <div class="mt-2">
           <a
-            class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 text-gray-700 font-medium text-sm transition-colors cursor-pointer"
+            class="block px-3 py-4 text-gray-600 font-medium text-sm border-b border-gray-50 active:bg-gray-50"
             (click)="mobileMenuOpen = false"
           >
-            <i class="pi pi-user text-teal-600"></i> {{ restaurantName }}
+            Settings
           </a>
           <a
-            class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 text-gray-700 font-medium text-sm transition-colors cursor-pointer"
-            (click)="mobileMenuOpen = false"
-          >
-            <i class="pi pi-cog text-teal-600"></i> Settings
-          </a>
-          <a
-            class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-red-50 text-red-600 font-medium text-sm transition-colors cursor-pointer mt-1"
+            class="block px-3 py-4 text-red-500 font-bold text-sm active:bg-red-50"
             (click)="logout(); mobileMenuOpen = false"
           >
-            <i class="pi pi-sign-out"></i> Logout
+            Logout ({{ restaurantName }})
           </a>
+        </div>
+      } @else {
+        <div class="px-3 pt-6">
+          <button
+            pButton
+            type="button"
+            label="Login / Signup"
+            routerLink="/auth/restaurant"
+            (click)="mobileMenuOpen = false"
+            class="!w-full !bg-slate-900 !text-white !font-bold !py-3 !rounded-2xl !border-0 shadow-lg"
+          ></button>
         </div>
       }
     </div>

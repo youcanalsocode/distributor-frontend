@@ -1,9 +1,7 @@
 import { Component, inject } from '@angular/core';
-
 import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
 import { CartService } from '../../core/services/cart.service';
 import { SearchService } from '../../core/services/search.service';
 import { AuthService } from '../../core/services/auth.service';
@@ -11,7 +9,7 @@ import { AuthService } from '../../core/services/auth.service';
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterModule, FormsModule, ButtonModule, InputTextModule],
+  imports: [RouterModule, FormsModule, ButtonModule],
   templateUrl: './navbar.component.html',
 })
 export class NavbarComponent {
@@ -25,7 +23,7 @@ export class NavbarComponent {
   mobileMenuOpen = false; // mobile hamburger drawer
   isProfileOpen = false; // user profile dropdown
 
-  locations = ['Mumbai', 'Delhi', 'Bangalore', 'Pune'];
+  locations = ['Mumbai'];
 
   ngOnInit() {
     if (typeof window !== 'undefined' && window.localStorage) {
@@ -49,18 +47,6 @@ export class NavbarComponent {
       this.authService.logout();
       this.router.navigate(['/']);
     }
-  }
-
-  get searchQuery(): string {
-    return this.searchService.searchQuery();
-  }
-
-  set searchQuery(value: string) {
-    this.searchService.setQuery(value);
-  }
-
-  onSearch() {
-    console.log('Searching for:', this.searchQuery);
   }
 
   toggleDropdown() {
