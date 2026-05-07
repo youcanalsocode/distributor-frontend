@@ -21,6 +21,14 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/restaurant/register`, data);
   }
 
+  getSecurityQuestion(mobile: string) {
+    return this.http.get<{security_question: string}>(`${this.apiUrl}/restaurant/security-question/${mobile}`);
+  }
+
+  resetPassword(data: {mobile: string, security_answer: string, new_password: string}) {
+    return this.http.post<{message: string}>(`${this.apiUrl}/restaurant/reset-password`, data);
+  }
+
   login(data: any) {
     return this.http.post<{access_token: string, token_type: string, name: string, address: string}>(`${this.apiUrl}/restaurant/login`, data)
       .pipe(

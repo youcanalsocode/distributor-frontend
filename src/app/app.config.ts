@@ -1,4 +1,4 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -29,21 +29,22 @@ const VimekPreset = definePreset(Aura, {
 });
 
 export const appConfig: ApplicationConfig = {
-  providers: [
-    provideBrowserGlobalErrorListeners(),
-    provideRouter(routes),
-    provideHttpClient(withFetch()),
-    provideClientHydration(withEventReplay(), withNoHttpTransferCache()),
-    provideAnimationsAsync(),
-    MessageService,
-    providePrimeNG({
-        theme: {
-            preset: VimekPreset,
-            options: {
-                darkModeSelector: '.dark'
+    providers: [
+        provideBrowserGlobalErrorListeners(),
+        provideRouter(routes),
+        provideZonelessChangeDetection(),
+        provideHttpClient(withFetch()),
+        provideClientHydration(withEventReplay(), withNoHttpTransferCache()),
+        provideAnimationsAsync(),
+        MessageService,
+        providePrimeNG({
+            theme: {
+                preset: VimekPreset,
+                options: {
+                    darkModeSelector: '.dark'
+                }
             }
-        }
-    })
-  ]
+        })
+    ]
 };
 

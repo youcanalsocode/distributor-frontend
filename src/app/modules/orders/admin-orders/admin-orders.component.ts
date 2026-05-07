@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { OrderService, Order } from '../../../core/services/order.service';
@@ -10,13 +10,16 @@ import { OrderService, Order } from '../../../core/services/order.service';
   templateUrl: './admin-orders.component.html'
 })
 export class AdminOrdersComponent implements OnInit {
-  private orderService = inject(OrderService);
+  constructor(
+    private orderService: OrderService,
+    private cdr: ChangeDetectorRef
+  ) { }
 
-  orders: Order[] = [];
-  isLoading = true;
-  expandedOrderId: number | null = null;
-  updatingStatusId: number | null = null;
-  statusMessage: { text: string; type: 'success' | 'error' } | null = null;
+  orders = signal<Order[]>([]);
+  isLoading = signal(true);
+  expandedOrderId = signal<number | null>(null);
+  updatingStatusId = signal<number | null>(null);
+  statusMessage = signal<{ text: string; type: 'success' | 'error' } | null>(null);
 
   readonly statusOptions = ['pending', 'confirmed', 'dispatched', 'delivered', 'cancelled'];
 
@@ -28,34 +31,36 @@ export class AdminOrdersComponent implements OnInit {
     cancelled:  { label: 'Cancelled',  bg: 'bg-red-100',    text: 'text-red-800',    dot: 'bg-red-400'    }
   };
 
-  get sortedOrders(): Order[] {
-    return [...this.orders].sort((a, b) => a.id - b.id);
-  }
+  sortedOrders = computed(() => {
+    return [...this.orders()].sort((a, b) => a.id - b.id);
+  });
 
   ngOnInit(): void {
     this.loadOrders();
   }
 
   loadOrders() {
-    this.isLoading = true;
+    this.isLoading.set(true);
     this.orderService.getAdminOrders().subscribe({
       next: (data) => {
-        this.orders = data;
-        this.isLoading = false;
+        this.orders.set(data);
+        this.isLoading.set(false);
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Error fetching orders', err);
-        this.isLoading = false;
+        this.isLoading.set(false);
+        this.cdr.detectChanges();
       }
     });
   }
 
   toggleExpand(orderId: number) {
-    this.expandedOrderId = this.expandedOrderId === orderId ? null : orderId;
+    this.expandedOrderId.set(this.expandedOrderId() === orderId ? null : orderId);
   }
 
   isExpanded(orderId: number): boolean {
-    return this.expandedOrderId === orderId;
+    return this.expandedOrderId() === orderId;
   }
 
   getStatusConfig(status: string) {
@@ -73,24 +78,32 @@ export class AdminOrdersComponent implements OnInit {
 
   updateStatus(order: Order, newStatus: string) {
     if (order.status === newStatus) return;
-    this.updatingStatusId = order.id;
+    this.updatingStatusId.set(order.id);
     this.orderService.updateOrderStatus(order.id, newStatus).subscribe({
       next: (updated) => {
-        const idx = this.orders.findIndex(o => o.id === order.id);
-        if (idx !== -1) this.orders[idx] = { ...this.orders[idx], status: updated.status };
-        this.updatingStatusId = null;
+        this.orders.update(orders => {
+          const idx = orders.findIndex(o => o.id === order.id);
+          if (idx !== -1) orders[idx] = { ...orders[idx], status: updated.status };
+          return [...orders];
+        });
+        this.updatingStatusId.set(null);
         this.showMessage(`Order #${order.id} status updated to ${newStatus}`, 'success');
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Status update failed', err);
-        this.updatingStatusId = null;
+        this.updatingStatusId.set(null);
         this.showMessage('Failed to update status. Please try again.', 'error');
+        this.cdr.detectChanges();
       }
     });
   }
 
   private showMessage(text: string, type: 'success' | 'error') {
-    this.statusMessage = { text, type };
-    setTimeout(() => this.statusMessage = null, 3500);
+    this.statusMessage.set({ text, type });
+    setTimeout(() => {
+      this.statusMessage.set(null);
+      this.cdr.detectChanges();
+    }, 3500);
   }
 }

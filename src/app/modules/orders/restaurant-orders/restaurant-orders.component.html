@@ -15,7 +15,7 @@
   </div>
 
   <!-- Loading -->
-  @if (isLoading) {
+  @if (isLoading()) {
     <div class="py-20 text-center text-slate-500">
       <i class="fas fa-spinner fa-spin text-4xl text-amber-500 mb-4"></i>
       <p>Loading your orders...</p>
@@ -23,10 +23,10 @@
   }
 
   <!-- Error -->
-  @if (!isLoading && errorMessage) {
+  @if (!isLoading() && errorMessage()) {
     <div class="py-10 text-center">
       <i class="fas fa-exclamation-circle text-4xl text-red-400 mb-3"></i>
-      <p class="text-red-600 font-medium">{{ errorMessage }}</p>
+      <p class="text-red-600 font-medium">{{ errorMessage() }}</p>
       <button (click)="loadOrders()" class="mt-4 px-4 py-2 bg-red-100 text-red-700 rounded-lg text-sm hover:bg-red-200 transition">
         Try Again
       </button>
@@ -34,7 +34,7 @@
   }
 
   <!-- Empty -->
-  @if (!isLoading && !errorMessage && orders.length === 0) {
+  @if (!isLoading() && !errorMessage() && orders().length === 0) {
     <div class="py-20 text-center">
       <i class="fas fa-shopping-bag text-6xl text-slate-300 mb-4"></i>
       <h3 class="text-lg font-semibold text-slate-800">No orders yet</h3>
@@ -43,11 +43,11 @@
   }
 
   <!-- Orders -->
-  @if (!isLoading && !errorMessage && orders.length > 0) {
-    <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">{{ orders.length }} Order(s) — sorted by oldest first</p>
+  @if (!isLoading() && !errorMessage() && orders().length > 0) {
+    <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">{{ orders().length }} Order(s) — sorted by oldest first</p>
 
     <div class="space-y-3">
-      @for (order of sortedOrders; track order.id) {
+      @for (order of sortedOrders(); track order.id) {
         <div
           class="bg-white rounded-xl border shadow-sm overflow-hidden transition-all"
           [class.border-amber-400]="isExpanded(order.id)"

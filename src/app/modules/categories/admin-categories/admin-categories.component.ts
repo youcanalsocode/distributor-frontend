@@ -45,10 +45,12 @@ export class AdminCategoriesComponent implements OnInit {
       next: (data) => {
         this.categories = data;
         this.isLoading = false;
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Error fetching categories', err);
         this.isLoading = false;
+        this.cdr.detectChanges();
       }
     });
   }
@@ -133,9 +135,11 @@ export class AdminCategoriesComponent implements OnInit {
         next: () => {
           this.messageService.add({ severity: 'success', summary: 'Category Deleted', detail: `"${category?.name}" has been deleted.` });
           this.loadCategories();
+          this.cdr.detectChanges();
         },
         error: (err) => {
           this.messageService.add({ severity: 'error', summary: 'Delete Failed', detail: err.error?.detail || err.message || 'Unknown error' });
+          this.cdr.detectChanges();
         }
       });
     }

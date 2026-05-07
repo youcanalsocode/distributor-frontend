@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { OrderService, Order } from '../../../core/services/order.service';
 
@@ -9,12 +9,15 @@ import { OrderService, Order } from '../../../core/services/order.service';
   templateUrl: './restaurant-orders.component.html'
 })
 export class RestaurantOrdersComponent implements OnInit {
-  private orderService = inject(OrderService);
+  constructor(
+    private orderService: OrderService,
+    private cdr: ChangeDetectorRef
+  ) { }
 
-  orders: Order[] = [];
-  isLoading = true;
-  expandedOrderId: number | null = null;
-  errorMessage: string | null = null;
+  orders = signal<Order[]>([]);
+  isLoading = signal(true);
+  expandedOrderId = signal<number | null>(null);
+  errorMessage = signal<string | null>(null);
 
   readonly statusConfig: Record<string, { label: string; bg: string; text: string; dot: string; icon: string }> = {
     pending:    { label: 'Pending',    bg: 'bg-yellow-100', text: 'text-yellow-800', dot: 'bg-yellow-400', icon: 'fa-clock'            },
@@ -24,36 +27,38 @@ export class RestaurantOrdersComponent implements OnInit {
     cancelled:  { label: 'Cancelled',  bg: 'bg-red-100',    text: 'text-red-800',    dot: 'bg-red-400',    icon: 'fa-times-circle'     }
   };
 
-  get sortedOrders(): Order[] {
-    return [...this.orders].sort((a, b) => a.id - b.id);
-  }
+  sortedOrders = computed(() => {
+    return [...this.orders()].sort((a, b) => a.id - b.id);
+  });
 
   ngOnInit(): void {
     this.loadOrders();
   }
 
   loadOrders() {
-    this.isLoading = true;
-    this.errorMessage = null;
+    this.isLoading.set(true);
+    this.errorMessage.set(null);
     this.orderService.getMyOrders().subscribe({
       next: (data) => {
-        this.orders = data;
-        this.isLoading = false;
+        this.orders.set(data);
+        this.isLoading.set(false);
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Failed to load orders', err);
-        this.errorMessage = 'Could not load your orders. Please try again.';
-        this.isLoading = false;
+        this.errorMessage.set('Could not load your orders. Please try again.');
+        this.isLoading.set(false);
+        this.cdr.detectChanges();
       }
     });
   }
 
   toggleExpand(orderId: number) {
-    this.expandedOrderId = this.expandedOrderId === orderId ? null : orderId;
+    this.expandedOrderId.set(this.expandedOrderId() === orderId ? null : orderId);
   }
 
   isExpanded(orderId: number): boolean {
-    return this.expandedOrderId === orderId;
+    return this.expandedOrderId() === orderId;
   }
 
   getStatusConfig(status: string) {

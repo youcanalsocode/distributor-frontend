@@ -4,6 +4,7 @@ import { HomeComponent } from './modules/products/home/home.component';
 import { ProductsComponent } from './modules/products/products/products.component';
 import { AdminLoginComponent } from './auth/admin-login/admin-login.component';
 import { RestaurantLoginComponent } from './auth/restaurant-login/restaurant-login.component';
+import { ForgotPasswordComponent } from './auth/forgot-password/forgot-password.component';
 import { authGuard } from './core/guards/auth.guard';
 import { adminGuard } from './core/guards/admin.guard';
 import { CartComponent } from './modules/cart/cart.component';
@@ -26,6 +27,7 @@ export const routes: Routes = [
   },
   { path: 'auth/admin', component: AdminLoginComponent },
   { path: 'auth/restaurant', component: RestaurantLoginComponent },
+  { path: 'auth/forgot-password', component: ForgotPasswordComponent },
   {
     path: 'admin',
     component: AdminLayoutComponent,

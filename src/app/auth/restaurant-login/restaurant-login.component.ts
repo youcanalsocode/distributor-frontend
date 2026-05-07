@@ -25,6 +25,8 @@ export class RestaurantLoginComponent {
     password: '',
     name: '',
     address: '',
+    security_question: '',
+    security_answer: '',
   };
 
   constructor(
@@ -59,8 +61,8 @@ export class RestaurantLoginComponent {
         },
       });
     } else {
-      if (!this.registerData.mobile || !this.registerData.password || !this.registerData.name) {
-        this.error = 'Please fill in required fields';
+      if (!this.registerData.mobile || !this.registerData.password || !this.registerData.name || !this.registerData.security_question || !this.registerData.security_answer) {
+        this.error = 'Please fill in all required fields';
         return;
       }
       this.authService.register(this.registerData).subscribe({
@@ -69,7 +71,7 @@ export class RestaurantLoginComponent {
           this.loginData.mobile = this.registerData.mobile;
           this.successMsg = 'Registration successful! You can now sign in.';
           alert('Registration successful! You can now sign in.');
-          this.registerData = { mobile: '', password: '', name: '', address: '' };
+          this.registerData = { mobile: '', password: '', name: '', address: '', security_question: '', security_answer: '' };
         },
         error: (err) => {
           this.error = err.error?.detail || 'Registration failed';

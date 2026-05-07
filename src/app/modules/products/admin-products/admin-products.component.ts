@@ -56,10 +56,12 @@ export class AdminProductsComponent implements OnInit {
       next: (res) => {
         this.products = res;
         this.isLoading = false;
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error(err);
         this.isLoading = false;
+        this.cdr.detectChanges();
       }
     });
   }
@@ -171,9 +173,11 @@ export class AdminProductsComponent implements OnInit {
         next: () => {
           this.messageService.add({ severity: 'success', summary: 'Product Deleted', detail: `"${product?.name}" has been deleted.` });
           this.loadData();
+          this.cdr.detectChanges();
         },
         error: (err) => {
           this.messageService.add({ severity: 'error', summary: 'Delete Failed', detail: err.error?.detail || err.message || 'Unknown error' });
+          this.cdr.detectChanges();
         }
       });
     }
