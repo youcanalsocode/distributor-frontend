@@ -92,48 +92,32 @@
 
   <!-- SECTION 2: EXPLORE PRODUCTS CTA                                        -->
   <section
-    class="relative overflow-hidden bg-gradient-to-br from-slate-900 via-gray-900 to-teal-950 py-10 sm:py-20 md:py-24 px-4 sm:px-8"
+    class="relative overflow-hidden bg-gray-50 py-10 sm:py-20 md:py-24 px-4 sm:px-8 border-b border-gray-200"
   >
-    <!-- Decorative blobs (desktop only for performance) -->
-    <div
-      class="hidden sm:block absolute top-0 right-0 w-80 h-80 rounded-full opacity-10 pointer-events-none"
-      style="
-        background: radial-gradient(circle, #14b8a6, transparent);
-        transform: translate(30%, -30%);
-      "
-    ></div>
-    <div
-      class="hidden sm:block absolute bottom-0 left-0 w-72 h-72 rounded-full opacity-10 pointer-events-none"
-      style="
-        background: radial-gradient(circle, #3b82f6, transparent);
-        transform: translate(-30%, 30%);
-      "
-    ></div>
-
     <div class="relative max-w-4xl mx-auto text-center fade-up">
       <!-- Eyebrow -->
       <span
-        class="inline-flex items-center gap-2 bg-teal-500/10 border border-teal-500/30 text-teal-400 text-xs font-semibold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5 sm:mb-6"
+        class="inline-flex items-center gap-2 bg-teal-50 border border-teal-200 text-teal-600 text-xs font-semibold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5 sm:mb-6"
       >
-        <span class="w-1.5 h-1.5 bg-teal-400 rounded-full animate-pulse"></span>
+        <span class="w-1.5 h-1.5 bg-teal-500 rounded-full animate-pulse"></span>
         B2B Wholesale Platform
       </span>
 
       <!-- Heading -->
       <h2
-        class="text-2xl sm:text-4xl md:text-5xl font-extrabold text-white leading-tight mb-4 sm:mb-5"
+        class="text-2xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight mb-4 sm:mb-5"
       >
         Restaurant-Grade Ingredients.<br />
-        <span class="bg-gradient-to-r from-teal-400 to-blue-400 bg-clip-text text-transparent">
+        <span class="bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">
           Directly to Your Kitchen.
         </span>
       </h2>
 
       <!-- Subtext -->
       <p
-        class="text-gray-400 text-base sm:text-lg max-w-2xl mx-auto mb-7 sm:mb-8 leading-relaxed px-2 sm:px-0"
+        class="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto mb-7 sm:mb-8 leading-relaxed px-2 sm:px-0"
       >
-        Your single-source wholesale partner — dairy, spices, dry goods-> delivered
+        Your single-source wholesale partner — dairy, spices, dry goods delivered
         before your kitchen opens.
       </p>
 
@@ -150,7 +134,7 @@
           track chip
         ) {
           <span
-            class="px-3 sm:px-4 py-1.5 bg-white/5 border border-white/10 text-white/70 text-xs sm:text-sm rounded-full"
+            class="px-3 sm:px-4 py-1.5 bg-white border border-gray-200 text-gray-600 text-xs sm:text-sm rounded-full shadow-sm"
             >✓ {{ chip }}</span
           >
         }
@@ -173,59 +157,62 @@
     </div>
   </section>
   <!-- SECTION 3: DELIVERY FEATURES                                           -->
-  <section class="bg-gray-50 py-10 sm:py-20 px-4 sm:px-8" id="delivery-section">
-    <div class="max-w-6xl mx-auto">
+  <section class="relative overflow-hidden bg-gradient-to-br from-slate-900 via-gray-900 to-teal-950 py-10 sm:py-20 px-4 sm:px-8" id="delivery-section">
+    <!-- Decorative blobs -->
+    <div class="hidden sm:block absolute top-0 right-0 w-80 h-80 rounded-full opacity-5 pointer-events-none" style="background: radial-gradient(circle, #14b8a6, transparent); transform: translate(30%, -30%);"></div>
+    
+    <div class="relative max-w-6xl mx-auto">
       <!-- Header -->
       <div class="text-center mb-8 sm:mb-14">
-        <span class="text-teal-600 text-xs sm:text-sm font-semibold uppercase tracking-widest"
+        <span class="text-teal-400 text-xs sm:text-sm font-semibold uppercase tracking-widest"
           >How We Deliver</span
         >
-        <h2 class="text-xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 mt-2 px-4">
+        <h2 class="text-xl sm:text-3xl md:text-4xl font-extrabold text-white mt-2 px-4">
           Designed for the
-          <span class="text-teal-600">Demands of a Restaurant</span>
+          <span class="text-teal-400">Demands of a Restaurant</span>
         </h2>
-        <p class="text-gray-500 mt-3 max-w-xl mx-auto text-xs sm:text-base px-6">
+        <p class="text-gray-400 mt-3 max-w-xl mx-auto text-xs sm:text-base px-6">
           We understand your kitchen doesn't stop. Neither do we.
         </p>
       </div>
 
-      <!-- Feature grid: 1 col mobile → 2 col tablet → 3 col desktop -->
+      <!-- Feature grid -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         @for (feature of deliveryFeatures; track feature) {
           @if ($index < 3 || showAllFeatures) {
             <div
-              class="delivery-card bg-white rounded-2xl p-5 sm:p-6 border border-gray-100 shadow-sm"
+              class="delivery-card bg-white/5 backdrop-blur-sm rounded-2xl p-5 sm:p-6 border border-white/10 shadow-lg"
               [class.hidden]="!showAllFeatures && $index >= 3 && 'sm:block'"
             >
               <div class="text-2xl sm:text-4xl mb-3 sm:mb-4">{{ feature.icon }}</div>
               <div
-                class="inline-block bg-teal-50 text-teal-700 text-[10px] sm:text-xs font-bold px-3 py-1 rounded-full mb-2 sm:mb-3"
+                class="inline-block bg-teal-500/20 text-teal-400 text-[10px] sm:text-xs font-bold px-3 py-1 rounded-full mb-2 sm:mb-3 border border-teal-500/30"
               >
                 {{ feature.highlight }}
               </div>
-              <h3 class="text-sm sm:text-lg font-bold text-gray-900 mb-1 sm:mb-2">
+              <h3 class="text-sm sm:text-lg font-bold text-white mb-1 sm:mb-2">
                 {{ feature.title }}
               </h3>
-              <p class="text-gray-500 text-xs sm:text-sm leading-relaxed">{{ feature.desc }}</p>
+              <p class="text-gray-400 text-xs sm:text-sm leading-relaxed">{{ feature.desc }}</p>
             </div>
           }
         }
       </div>
 
-      <!-- Show More Toggle for Features (Mobile Only) -->
+      <!-- Show More Toggle -->
       <div class="mt-6 text-center sm:hidden">
         <button 
           (click)="toggleFeatures()"
-          class="text-teal-600 font-bold text-sm flex items-center justify-center gap-2 mx-auto py-2 px-4 rounded-full bg-teal-50 border border-teal-100"
+          class="text-teal-400 font-bold text-sm flex items-center justify-center gap-2 mx-auto py-2.5 px-6 rounded-full bg-white/5 border border-white/10 backdrop-blur-md"
         >
-          {{ showAllFeatures ? 'Show Less Features' : 'Show All Features (' + (deliveryFeatures.length - 3) + ' more)' }}
+          {{ showAllFeatures ? 'Show Less' : 'Show All Features' }}
           <svg class="w-4 h-4 transition-transform duration-300" [class.rotate-180]="showAllFeatures" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
           </svg>
         </button>
       </div>
 
-      <!-- Stats: 2×2 mobile → 4-col desktop -->
+      <!-- Stats -->
       <div class="mt-10 sm:mt-14 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-6">
         @for (
           stat of [
@@ -237,10 +224,10 @@
           track stat
         ) {
           <div
-            class="text-center bg-white rounded-2xl py-5 sm:py-6 px-4 border border-gray-100 shadow-sm"
+            class="text-center bg-white/5 backdrop-blur-sm rounded-2xl py-5 sm:py-6 px-4 border border-white/10 shadow-md"
           >
-            <p class="text-2xl sm:text-3xl font-extrabold text-teal-600">{{ stat.value }}</p>
-            <p class="text-xs sm:text-sm text-gray-500 mt-1 font-medium">{{ stat.label }}</p>
+            <p class="text-2xl sm:text-3xl font-extrabold text-teal-400">{{ stat.value }}</p>
+            <p class="text-xs sm:text-sm text-gray-400 mt-1 font-medium">{{ stat.label }}</p>
           </div>
         }
       </div>
