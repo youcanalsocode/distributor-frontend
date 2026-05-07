@@ -92,7 +92,7 @@
 
   <!-- SECTION 2: EXPLORE PRODUCTS CTA                                        -->
   <section
-    class="relative overflow-hidden bg-gradient-to-br from-slate-900 via-gray-900 to-teal-950 py-14 sm:py-20 md:py-24 px-4 sm:px-8"
+    class="relative overflow-hidden bg-gradient-to-br from-slate-900 via-gray-900 to-teal-950 py-10 sm:py-20 md:py-24 px-4 sm:px-8"
   >
     <!-- Decorative blobs (desktop only for performance) -->
     <div
@@ -121,7 +121,7 @@
 
       <!-- Heading -->
       <h2
-        class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white leading-tight mb-4 sm:mb-5"
+        class="text-2xl sm:text-4xl md:text-5xl font-extrabold text-white leading-tight mb-4 sm:mb-5"
       >
         Restaurant-Grade Ingredients.<br />
         <span class="bg-gradient-to-r from-teal-400 to-blue-400 bg-clip-text text-transparent">
@@ -173,18 +173,18 @@
     </div>
   </section>
   <!-- SECTION 3: DELIVERY FEATURES                                           -->
-  <section class="bg-gray-50 py-14 sm:py-20 px-4 sm:px-8" id="delivery-section">
+  <section class="bg-gray-50 py-10 sm:py-20 px-4 sm:px-8" id="delivery-section">
     <div class="max-w-6xl mx-auto">
       <!-- Header -->
-      <div class="text-center mb-10 sm:mb-14">
+      <div class="text-center mb-8 sm:mb-14">
         <span class="text-teal-600 text-xs sm:text-sm font-semibold uppercase tracking-widest"
           >How We Deliver</span
         >
-        <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 mt-2">
+        <h2 class="text-xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 mt-2 px-4">
           Designed for the
           <span class="text-teal-600">Demands of a Restaurant</span>
         </h2>
-        <p class="text-gray-500 mt-3 max-w-xl mx-auto text-sm sm:text-base">
+        <p class="text-gray-500 mt-3 max-w-xl mx-auto text-xs sm:text-base px-6">
           We understand your kitchen doesn't stop. Neither do we.
         </p>
       </div>
@@ -192,21 +192,37 @@
       <!-- Feature grid: 1 col mobile → 2 col tablet → 3 col desktop -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         @for (feature of deliveryFeatures; track feature) {
-          <div
-            class="delivery-card bg-white rounded-2xl p-5 sm:p-6 border border-gray-100 shadow-sm"
-          >
-            <div class="text-3xl sm:text-4xl mb-3 sm:mb-4">{{ feature.icon }}</div>
+          @if ($index < 3 || showAllFeatures) {
             <div
-              class="inline-block bg-teal-50 text-teal-700 text-xs font-bold px-3 py-1 rounded-full mb-2 sm:mb-3"
+              class="delivery-card bg-white rounded-2xl p-5 sm:p-6 border border-gray-100 shadow-sm"
+              [class.hidden]="!showAllFeatures && $index >= 3 && 'sm:block'"
             >
-              {{ feature.highlight }}
+              <div class="text-2xl sm:text-4xl mb-3 sm:mb-4">{{ feature.icon }}</div>
+              <div
+                class="inline-block bg-teal-50 text-teal-700 text-[10px] sm:text-xs font-bold px-3 py-1 rounded-full mb-2 sm:mb-3"
+              >
+                {{ feature.highlight }}
+              </div>
+              <h3 class="text-sm sm:text-lg font-bold text-gray-900 mb-1 sm:mb-2">
+                {{ feature.title }}
+              </h3>
+              <p class="text-gray-500 text-xs sm:text-sm leading-relaxed">{{ feature.desc }}</p>
             </div>
-            <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-1.5 sm:mb-2">
-              {{ feature.title }}
-            </h3>
-            <p class="text-gray-500 text-sm leading-relaxed">{{ feature.desc }}</p>
-          </div>
+          }
         }
+      </div>
+
+      <!-- Show More Toggle for Features (Mobile Only) -->
+      <div class="mt-6 text-center sm:hidden">
+        <button 
+          (click)="toggleFeatures()"
+          class="text-teal-600 font-bold text-sm flex items-center justify-center gap-2 mx-auto py-2 px-4 rounded-full bg-teal-50 border border-teal-100"
+        >
+          {{ showAllFeatures ? 'Show Less Features' : 'Show All Features (' + (deliveryFeatures.length - 3) + ' more)' }}
+          <svg class="w-4 h-4 transition-transform duration-300" [class.rotate-180]="showAllFeatures" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
       </div>
 
       <!-- Stats: 2×2 mobile → 4-col desktop -->
@@ -231,17 +247,17 @@
     </div>
   </section>
   <!-- SECTION 4: BRANDS & RESTAURANTS LOGOS                                  -->
-  <section class="bg-white py-14 sm:py-20 px-4 sm:px-8" id="brands-section">
+  <section class="bg-white py-10 sm:py-20 px-4 sm:px-8" id="brands-section">
     <div class="max-w-6xl mx-auto">
-      <div class="text-center mb-10 sm:mb-14">
+      <div class="text-center mb-8 sm:mb-14">
         <span class="text-teal-600 text-xs sm:text-sm font-semibold uppercase tracking-widest"
           >Our Ecosystem</span
         >
-        <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 mt-2">
+        <h2 class="text-xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 mt-2">
           From <span class="text-blue-600">Trusted Farms</span> to
           <span class="text-teal-600">Renowned Kitchens</span>
         </h2>
-        <p class="text-gray-500 mt-3 max-w-xl mx-auto text-sm sm:text-base">
+        <p class="text-gray-500 mt-3 max-w-xl mx-auto text-xs sm:text-base px-6">
           We source from India's finest producers and supply to the country's most recognisable
           restaurants.
         </p>
@@ -267,15 +283,17 @@
           <!-- 1 col on small mobile, 2 col from sm+ -->
           <div class="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 gap-2 sm:gap-3">
             @for (brand of sourcingBrands; track brand) {
-              <div class="logo-pill">
-                <span
-                  class="flex-shrink-0 w-8 h-8 sm:w-9 sm:h-9 rounded-lg text-white text-xs font-extrabold flex items-center justify-center"
-                  [style.background]="brand.color"
-                >
-                  {{ brand.abbr }}
-                </span>
-                <span class="text-xs sm:text-sm truncate">{{ brand.name }}</span>
-              </div>
+              @if ($index < 4 || showEcosystem) {
+                <div class="logo-pill">
+                  <span
+                    class="flex-shrink-0 w-6 h-6 sm:w-9 sm:h-9 rounded-lg text-white text-[10px] sm:text-xs font-extrabold flex items-center justify-center"
+                    [style.background]="brand.color"
+                  >
+                    {{ brand.abbr }}
+                  </span>
+                  <span class="text-[10px] sm:text-sm truncate">{{ brand.name }}</span>
+                </div>
+              }
             }
           </div>
         </div>
@@ -313,16 +331,31 @@
           </div>
           <div class="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 gap-2 sm:gap-3">
             @for (rest of trustedRestaurants; track rest) {
-              <div class="logo-pill">
-                <span
-                  class="flex-shrink-0 w-8 h-8 sm:w-9 sm:h-9 rounded-lg text-white text-xs font-extrabold flex items-center justify-center"
-                  [style.background]="rest.color"
-                >
-                  {{ rest.abbr }}
-                </span>
-                <span class="text-xs sm:text-sm truncate">{{ rest.name }}</span>
-              </div>
+              @if ($index < 4 || showEcosystem) {
+                <div class="logo-pill">
+                  <span
+                    class="flex-shrink-0 w-6 h-6 sm:w-9 sm:h-9 rounded-lg text-white text-[10px] sm:text-xs font-extrabold flex items-center justify-center"
+                    [style.background]="rest.color"
+                  >
+                    {{ rest.abbr }}
+                  </span>
+                  <span class="text-[10px] sm:text-sm truncate">{{ rest.name }}</span>
+                </div>
+              }
             }
+          </div>
+          
+          <!-- View More Ecosystem (Mobile Only) -->
+          <div class="mt-6 text-center lg:hidden">
+            <button 
+              (click)="toggleEcosystem()"
+              class="text-blue-700 font-bold text-xs flex items-center justify-center gap-2 mx-auto py-2 px-4 rounded-full bg-blue-50 border border-blue-100"
+            >
+              {{ showEcosystem ? 'View Less' : 'View Full Ecosystem' }}
+              <svg class="w-4 h-4 transition-transform duration-300" [class.rotate-180]="showEcosystem" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
           </div>
         </div>
       </div>
@@ -330,7 +363,7 @@
   </section>
   <!-- SECTION 5: OWNER MESSAGE + TESTIMONIALS                                -->
   <section
-    class="bg-gradient-to-br from-slate-900 via-gray-900 to-teal-950 py-14 sm:py-20 px-4 sm:px-8"
+    class="bg-gradient-to-br from-slate-900 via-gray-900 to-teal-950 py-10 sm:py-20 px-4 sm:px-8"
     id="testimonials-section"
   >
     <div class="max-w-6xl mx-auto">
@@ -370,15 +403,22 @@
                 {{ ownerMessage.experience }}
               </span>
             </div>
-            <p class="text-sm text-teal-400 font-medium mb-3 sm:mb-4">{{ ownerMessage.title }}</p>
-            <div
-              class="text-teal-500/40 text-5xl sm:text-6xl leading-none font-serif mb-1 select-none"
-            >
+            <p class="text-teal-500/40 text-4xl sm:text-6xl leading-none font-serif mb-1 select-none">
               "
-            </div>
-            <p class="text-gray-300 text-sm sm:text-lg leading-relaxed italic -mt-3 sm:-mt-4">
+            </p>
+            <p 
+              class="text-gray-300 text-xs sm:text-lg leading-relaxed italic -mt-2 sm:-mt-4 transition-all duration-300"
+              [class.line-clamp-3]="!showFullMessage"
+              [class.line-clamp-none]="showFullMessage"
+            >
               {{ ownerMessage.message }}
             </p>
+            <button 
+              (click)="toggleMessage()"
+              class="sm:hidden mt-2 text-teal-400 text-[10px] font-bold uppercase tracking-wider"
+            >
+              {{ showFullMessage ? 'Read Less' : 'Read Full Message' }}
+            </button>
           </div>
         </div>
       </div>
@@ -424,7 +464,7 @@
     </div>
   </section>
   <!-- SECTION 6: CONTACT US                                                   -->
-  <section class="bg-gray-50 py-16 sm:py-24 px-4 sm:px-8 border-t border-gray-200" id="contact-section">
+  <section class="bg-gray-50 py-10 sm:py-24 px-4 sm:px-8 border-t border-gray-200" id="contact-section">
     <div class="max-w-6xl mx-auto">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         

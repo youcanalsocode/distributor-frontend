@@ -334,6 +334,11 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
   currentSlide = 0;
   private autoPlayTimer?: any;
 
+  // Mobile Collapsible States
+  showAllFeatures = false;
+  showEcosystem = false;
+  showFullMessage = false;
+
   ngAfterViewInit() {
     this.startAutoPlay();
   }
@@ -582,5 +587,17 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
 
   getStars(rating: number): number[] {
     return Array(rating).fill(0);
+  }
+
+  toggleFeatures() {
+    this.showAllFeatures = !this.showAllFeatures;
+  }
+
+  toggleEcosystem() {
+    this.showEcosystem = !this.showEcosystem;
+  }
+
+  toggleMessage() {
+    this.showFullMessage = !this.showFullMessage;
   }
 }
