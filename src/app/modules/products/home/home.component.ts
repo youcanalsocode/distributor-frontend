@@ -1,7 +1,6 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
 
 import { Router } from '@angular/router';
-import { CarouselModule } from 'primeng/carousel';
 
 interface CarouselSlide {
   image: string;
@@ -32,7 +31,7 @@ interface Testimonial {
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CarouselModule],
+  imports: [],
   templateUrl: './home.component.html',
   styles: [
     `
@@ -213,6 +212,111 @@ interface Testimonial {
         color: #f59e0b;
       }
 
+      /* ── Custom Hero Slider (Full-Width) ────────────────────────────────── */
+      .slider-container {
+        position: relative;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      .slider-track {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+        gap: 0;
+        border-radius: 0;
+        scrollbar-width: none;
+      }
+      .slider-track::-webkit-scrollbar {
+        display: none;
+      }
+
+      .slider-item {
+        flex: 0 0 100%;
+        scroll-snap-align: center;
+        position: relative;
+        height: clamp(280px, 60vw, 560px);
+        overflow: hidden;
+      }
+
+      /* Ultra-Light Navigation */
+      .nav-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 44px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(4px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: white;
+        border-radius: 50%;
+        cursor: pointer;
+        z-index: 10;
+        opacity: 0;
+        transition: all 0.3s ease;
+      }
+      .slider-container:hover .nav-btn {
+        opacity: 1;
+      }
+      .nav-btn:hover {
+        background: rgba(0, 0, 0, 0.25);
+        border-color: rgba(255, 255, 255, 0.3);
+      }
+      .prev-btn { left: 1rem; }
+      .next-btn { right: 1rem; }
+
+      @media (max-width: 640px) {
+        .slider-item { height: clamp(240px, 70vw, 400px); }
+        .nav-btn {
+          width: 32px;
+          height: 32px;
+          opacity: 0.6;
+          background: rgba(0, 0, 0, 0.15);
+        }
+        .prev-btn { left: 0.5rem; }
+        .next-btn { right: 0.5rem; }
+        .nav-btn svg { width: 14px; height: 14px; }
+        .carousel-content {
+          padding: 1.5rem !important;
+        }
+      }
+
+      .slider-dots {
+        position: absolute;
+        bottom: 1.5rem;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 0.6rem;
+        z-index: 10;
+        padding: 0.5rem 1rem;
+        background: rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(8px);
+        border-radius: 999px;
+      }
+      .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        border: none;
+        cursor: pointer;
+        transition: all 0.4s ease;
+        padding: 0;
+      }
+      .dot.active {
+        background: #14b8a6;
+        width: 20px;
+        border-radius: 10px;
+      }
+
       ::-webkit-scrollbar {
         height: 4px;
       }
@@ -223,13 +327,65 @@ interface Testimonial {
     `,
   ],
 })
-export class HomeComponent {
+export class HomeComponent implements AfterViewInit, OnDestroy {
   private readonly router = inject(Router);
+
+  @ViewChild('sliderTrack') sliderTrack!: ElementRef<HTMLDivElement>;
+  currentSlide = 0;
+  private autoPlayTimer?: any;
+
+  ngAfterViewInit() {
+    this.startAutoPlay();
+  }
+
+  ngOnDestroy() {
+    this.stopAutoPlay();
+  }
+
+  onScroll(event: Event) {
+    const element = event.target as HTMLElement;
+    const index = Math.round(element.scrollLeft / element.offsetWidth);
+    if (this.currentSlide !== index) {
+      this.currentSlide = index;
+    }
+  }
+
+  goToSlide(index: number) {
+    const element = this.sliderTrack.nativeElement;
+    element.scrollTo({
+      left: index * element.offsetWidth,
+      behavior: 'smooth'
+    });
+    this.stopAutoPlay();
+    this.startAutoPlay();
+  }
+
+  nextSlide() {
+    this.currentSlide = (this.currentSlide + 1) % this.carouselSlides.length;
+    this.goToSlide(this.currentSlide);
+  }
+
+  prevSlide() {
+    this.currentSlide = (this.currentSlide - 1 + this.carouselSlides.length) % this.carouselSlides.length;
+    this.goToSlide(this.currentSlide);
+  }
+
+  private startAutoPlay() {
+    this.autoPlayTimer = setInterval(() => {
+      this.nextSlide();
+    }, 6000);
+  }
+
+  private stopAutoPlay() {
+    if (this.autoPlayTimer) {
+      clearInterval(this.autoPlayTimer);
+    }
+  }
 
   // ── Section 1: Static Carousel Slides ─────────────────────────────────────
   carouselSlides: CarouselSlide[] = [
     {
-      image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=1400&h=520&fit=crop',
+      image: '/assets/images/frozen_food.png',
       tag: 'Fresh Produce',
       title: 'Your Complete Restaurant Supply Partner',
       subtitle: 'From frozen foods to dairy and daily essentials — consistent quality, competitive pricing, delivered on time.',
@@ -238,7 +394,7 @@ export class HomeComponent {
       btnStyle: 'primary',
     },
     {
-      image: 'https://images.unsplash.com/photo-1556745753-b2904692b3cd?w=1400&h=520&fit=crop',
+      image: '/assets/images/contact_us.png',
       tag: 'Partner With Us',
       title: 'Grow Your Business With\nVimek Restomart',
       subtitle: 'Get a dedicated manager, bulk wholesale pricing, and 6 AM daily delivery. Let\'s discuss your kitchen\'s needs.',
@@ -247,7 +403,7 @@ export class HomeComponent {
       btnStyle: 'primary',
     },
     {
-      image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1400&h=520&fit=crop',
+      image: '/assets/images/restaurant.png',
       tag: 'Trusted by Restaurants',
       title: '200+ Restaurants Trust\nVimek Restomart',
       subtitle: 'From cloud kitchens to fine dining — see what our partners have to say.',
@@ -256,7 +412,7 @@ export class HomeComponent {
       btnStyle: 'outline',
     },
     {
-      image: 'https://images.unsplash.com/photo-1516908943150-a2494e04a52d?w=1400&h=520&fit=crop',
+      image: '/assets/images/delivery.png',
       tag: 'Reliable Delivery',
       title: 'Next-Day Delivery,\n98% On-Time Rate',
       subtitle: 'Order by midnight, receive by 6 AM. Zero surprises, zero shortages.',
@@ -264,12 +420,6 @@ export class HomeComponent {
       btnAction: 'delivery',
       btnStyle: 'outline',
     },
-  ];
-
-  responsiveOptions = [
-    { breakpoint: '1400px', numVisible: 1, numScroll: 1 },
-    { breakpoint: '992px', numVisible: 1, numScroll: 1 },
-    { breakpoint: '576px', numVisible: 1, numScroll: 1 },
   ];
 
   // ── Section 3: Delivery Features ──────────────────────────────────────────
