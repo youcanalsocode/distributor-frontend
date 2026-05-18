@@ -1,66 +1,45 @@
 <div class="min-h-screen bg-white">
   <!-- SECTION 1: CUSTOM HERO SLIDER                                          -->
-  <section id="hero-section"  class="!py-2" >
+  <section id="hero-section" class="!py-2">
     <div class="slider-container">
       <!-- Slider Track -->
       <div class="slider-track" #sliderTrack (scroll)="onScroll($event)">
         @for (slide of carouselSlides; track $index) {
-          <div class="slider-item">
-            <!-- Background Image -->
-            <img
-              [src]="slide.image"
-              [alt]="slide.title"
-              loading="lazy"
-              class="w-full h-full object-cover"
-            />
-            <div class="carousel-overlay"></div>
+        <div class="slider-item">
+          <!-- Background Image -->
+          <img [src]="slide.image" [alt]="slide.title" loading="lazy" class="w-full h-full object-cover" />
+          <div class="carousel-overlay"></div>
 
-            <!-- Text Content -->
-            <div class="carousel-content">
-              <!-- Tag Badge -->
-              <span
-                class="inline-block bg-teal-500/90 backdrop-blur-sm text-white text-xs font-semibold px-3 py-1 rounded-full mb-2 sm:mb-3"
-              >
-                {{ slide.tag }}
-              </span>
+          <!-- Text Content -->
+          <div class="carousel-content">
+            <!-- Tag Badge -->
+            <span
+              class="inline-block bg-teal-500/90 backdrop-blur-sm text-white text-xs font-semibold px-3 py-1 rounded-full mb-2 sm:mb-3">
+              {{ slide.tag }}
+            </span>
 
-              <!-- Title — handles newlines via pre-line -->
-              <h2
-                class="text-xl sm:text-3xl md:text-4xl font-extrabold text-white leading-tight drop-shadow-md mb-1 sm:mb-2"
-                style="white-space: pre-line"
-              >
-                {{ slide.title }}
-              </h2>
+            <!-- Title — handles newlines via pre-line -->
+            <h2
+              class="text-xl sm:text-3xl md:text-4xl font-extrabold text-white leading-tight drop-shadow-md mb-1 sm:mb-2"
+              style="white-space: pre-line">
+              {{ slide.title }}
+            </h2>
 
-              <!-- Subtitle (hidden on very small screens to keep it clean) -->
-              <p
-                class="hidden sm:block text-white/80 text-sm max-w-lg line-clamp-2 drop-shadow mb-3 sm:mb-4"
-              >
-                {{ slide.subtitle }}
-              </p>
+            <!-- Subtitle (hidden on very small screens to keep it clean) -->
+            <p class="hidden sm:block text-white/80 text-sm max-w-lg line-clamp-2 drop-shadow mb-3 sm:mb-4">
+              {{ slide.subtitle }}
+            </p>
 
-              <!-- CTA Button -->
-              <button
-                (click)="handleSlideAction(slide.btnAction)"
-                [class]="slide.btnStyle === 'primary' ? 'slide-btn-primary' : 'slide-btn-outline'"
-              >
-                <span>{{ slide.btnLabel }}</span>
-                <svg
-                  class="btn-arrow w-4 h-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  stroke-width="2.5"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M13 7l5 5m0 0l-5 5m5-5H6"
-                  />
-                </svg>
-              </button>
-            </div>
+            <!-- CTA Button -->
+            <button (click)="handleSlideAction(slide.btnAction)"
+              [class]="slide.btnStyle === 'primary' ? 'slide-btn-primary' : 'slide-btn-outline'">
+              <span>{{ slide.btnLabel }}</span>
+              <svg class="btn-arrow w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </button>
           </div>
+        </div>
         }
       </div>
 
@@ -79,34 +58,25 @@
       <!-- Dot Indicators -->
       <div class="slider-dots">
         @for (slide of carouselSlides; track $index) {
-          <button
-            class="dot"
-            [class.active]="currentSlide === $index"
-            (click)="goToSlide($index)"
-            [attr.aria-label]="'Go to slide ' + ($index + 1)"
-          ></button>
+        <button class="dot" [class.active]="currentSlide === $index" (click)="goToSlide($index)"
+          [attr.aria-label]="'Go to slide ' + ($index + 1)"></button>
         }
       </div>
     </div>
   </section>
 
   <!-- SECTION 2: EXPLORE PRODUCTS CTA                                        -->
-  <section
-    class="relative overflow-hidden bg-gray-50 py-10 sm:py-20 md:py-24 px-4 sm:px-8 border-b border-gray-200"
-  >
+  <section class="relative overflow-hidden bg-gray-50 py-10 sm:py-20 md:py-24 px-4 sm:px-8 border-b border-gray-200">
     <div class="relative max-w-4xl mx-auto text-center fade-up">
       <!-- Eyebrow -->
       <span
-        class="inline-flex items-center gap-2 bg-teal-50 border border-teal-200 text-teal-600 text-xs font-semibold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5 sm:mb-6"
-      >
+        class="inline-flex items-center gap-2 bg-teal-50 border border-teal-200 text-teal-600 text-xs font-semibold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5 sm:mb-6">
         <span class="w-1.5 h-1.5 bg-teal-500 rounded-full animate-pulse"></span>
         B2B Wholesale Platform
       </span>
 
       <!-- Heading -->
-      <h2
-        class="text-2xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight mb-4 sm:mb-5"
-      >
+      <h2 class="text-2xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight mb-4 sm:mb-5">
         Restaurant-Grade Ingredients.<br />
         <span class="bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">
           Directly to Your Kitchen.
@@ -114,9 +84,7 @@
       </h2>
 
       <!-- Subtext -->
-      <p
-        class="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto mb-7 sm:mb-8 leading-relaxed px-2 sm:px-0"
-      >
+      <p class="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto mb-7 sm:mb-8 leading-relaxed px-2 sm:px-0">
         Your single-source wholesale partner — dairy, spices, dry goods delivered
         before your kitchen opens.
       </p>
@@ -124,49 +92,43 @@
       <!-- Feature chips -->
       <div class="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-10">
         @for (
-          chip of [
-            '500+ Products',
-            'Next-Day Delivery',
-            'FSSAI Certified',
-            'GST Billing',
-            'Flexible MOQ',
-          ];
-          track chip
+        chip of [
+        '100+ Products',
+        'Next-Day Delivery',
+        'FSSAI Certified',
+        'GST Billing',
+        'Flexible MOQ',
+        ];
+        track chip
         ) {
-          <span
-            class="px-3 sm:px-4 py-1.5 bg-white border border-gray-200 text-gray-600 text-xs sm:text-sm rounded-full shadow-sm"
-            >✓ {{ chip }}</span
-          >
+        <span
+          class="px-3 sm:px-4 py-1.5 bg-white border border-gray-200 text-gray-600 text-xs sm:text-sm rounded-full shadow-sm">✓
+          {{ chip }}</span>
         }
       </div>
 
       <!-- CTA -->
       <button (click)="navigateToProducts()" class="arrow-btn text-sm sm:text-base">
         <span>Explore Products</span>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-5 w-5"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          stroke-width="2.5"
-        >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+          stroke-width="2.5">
           <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
         </svg>
       </button>
     </div>
   </section>
   <!-- SECTION 3: DELIVERY FEATURES                                           -->
-  <section class="relative overflow-hidden bg-gradient-to-br from-slate-900 via-gray-900 to-teal-950 py-10 sm:py-20 px-4 sm:px-8" id="delivery-section">
+  <section
+    class="relative overflow-hidden bg-gradient-to-br from-slate-900 via-gray-900 to-teal-950 py-10 sm:py-20 px-4 sm:px-8"
+    id="delivery-section">
     <!-- Decorative blobs -->
-    <div class="hidden sm:block absolute top-0 right-0 w-80 h-80 rounded-full opacity-5 pointer-events-none" style="background: radial-gradient(circle, #14b8a6, transparent); transform: translate(30%, -30%);"></div>
-    
+    <div class="hidden sm:block absolute top-0 right-0 w-80 h-80 rounded-full opacity-5 pointer-events-none"
+      style="background: radial-gradient(circle, #14b8a6, transparent); transform: translate(30%, -30%);"></div>
+
     <div class="relative max-w-6xl mx-auto">
       <!-- Header -->
       <div class="text-center mb-8 sm:mb-14">
-        <span class="text-teal-400 text-xs sm:text-sm font-semibold uppercase tracking-widest"
-          >How We Deliver</span
-        >
+        <span class="text-teal-400 text-xs sm:text-sm font-semibold uppercase tracking-widest">How We Deliver</span>
         <h2 class="text-xl sm:text-3xl md:text-4xl font-extrabold text-white mt-2 px-4">
           Designed for the
           <span class="text-teal-400">Demands of a Restaurant</span>
@@ -179,409 +141,379 @@
       <!-- Feature grid -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         @for (feature of deliveryFeatures; track feature) {
-          @if ($index < 3 || showAllFeatures) {
-            <div
-              class="delivery-card bg-white/5 backdrop-blur-sm rounded-2xl p-5 sm:p-6 border border-white/10 shadow-lg"
-              [class.hidden]="!showAllFeatures && $index >= 3 && 'sm:block'"
-            >
-              <div class="text-2xl sm:text-4xl mb-3 sm:mb-4">{{ feature.icon }}</div>
-              <div
-                class="inline-block bg-teal-500/20 text-teal-400 text-[10px] sm:text-xs font-bold px-3 py-1 rounded-full mb-2 sm:mb-3 border border-teal-500/30"
-              >
-                {{ feature.highlight }}
-              </div>
-              <h3 class="text-sm sm:text-lg font-bold text-white mb-1 sm:mb-2">
-                {{ feature.title }}
-              </h3>
-              <p class="text-gray-400 text-xs sm:text-sm leading-relaxed">{{ feature.desc }}</p>
-            </div>
-          }
-        }
-      </div>
-
-      <!-- Show More Toggle -->
-      <div class="mt-6 text-center sm:hidden">
-        <button 
-          (click)="toggleFeatures()"
-          class="text-teal-400 font-bold text-sm flex items-center justify-center gap-2 mx-auto py-2.5 px-6 rounded-full bg-white/5 border border-white/10 backdrop-blur-md"
-        >
-          {{ showAllFeatures ? 'Show Less' : 'Show All Features' }}
-          <svg class="w-4 h-4 transition-transform duration-300" [class.rotate-180]="showAllFeatures" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
-          </svg>
-        </button>
-      </div>
-
-      <!-- Stats -->
-      <div class="mt-10 sm:mt-14 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-6">
-        @for (
-          stat of [
-            { value: '500+', label: 'Products Listed' },
-            { value: '200+', label: 'Restaurants Served' },
-            { value: '98%', label: 'On-Time Delivery' },
-            { value: '4.9★', label: 'Average Rating' },
-          ];
-          track stat
-        ) {
+        @if ($index < 3 || showAllFeatures) { <div
+          class="delivery-card bg-white/5 backdrop-blur-sm rounded-2xl p-5 sm:p-6 border border-white/10 shadow-lg"
+          [class.hidden]="!showAllFeatures && $index >= 3 && 'sm:block'">
+          <div class="text-2xl sm:text-4xl mb-3 sm:mb-4">{{ feature.icon }}</div>
           <div
-            class="text-center bg-white/5 backdrop-blur-sm rounded-2xl py-5 sm:py-6 px-4 border border-white/10 shadow-md"
-          >
-            <p class="text-2xl sm:text-3xl font-extrabold text-teal-400">{{ stat.value }}</p>
-            <p class="text-xs sm:text-sm text-gray-400 mt-1 font-medium">{{ stat.label }}</p>
+            class="inline-block bg-teal-500/20 text-teal-400 text-[10px] sm:text-xs font-bold px-3 py-1 rounded-full mb-2 sm:mb-3 border border-teal-500/30">
+            {{ feature.highlight }}
           </div>
-        }
+          <h3 class="text-sm sm:text-lg font-bold text-white mb-1 sm:mb-2">
+            {{ feature.title }}
+          </h3>
+          <p class="text-gray-400 text-xs sm:text-sm leading-relaxed">{{ feature.desc }}</p>
       </div>
+      }
+      }
     </div>
-  </section>
-  <!-- SECTION 4: BRANDS & RESTAURANTS LOGOS                                  -->
-  <section class="bg-white py-10 sm:py-20 px-4 sm:px-8" id="brands-section">
-    <div class="max-w-6xl mx-auto">
-      <div class="text-center mb-8 sm:mb-14">
-        <span class="text-teal-600 text-xs sm:text-sm font-semibold uppercase tracking-widest"
-          >Our Ecosystem</span
-        >
-        <h2 class="text-xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 mt-2">
-          From <span class="text-blue-600">Trusted Farms</span> to
-          <span class="text-teal-600">Renowned Kitchens</span>
-        </h2>
-        <p class="text-gray-500 mt-3 max-w-xl mx-auto text-xs sm:text-base px-6">
-          We source from India's finest producers and supply to the country's most recognisable
-          restaurants.
-        </p>
-      </div>
 
-      <!-- Split Panel: stacks vertically on mobile -->
-      <div
-        class="flex flex-col lg:flex-row gap-0 rounded-3xl overflow-hidden border border-gray-100 shadow-md"
-      >
-        <!-- LEFT: Sourcing Partners -->
-        <div class="flex-1 bg-gradient-to-br from-teal-50 to-emerald-50 p-6 sm:p-8 md:p-10">
-          <div class="flex items-center gap-3 mb-5 sm:mb-6">
-            <div
-              class="w-9 h-9 sm:w-10 sm:h-10 bg-teal-600 rounded-xl flex items-center justify-center text-white text-lg sm:text-xl"
-            >
-              🌾
-            </div>
-            <div>
-              <h3 class="text-base sm:text-lg font-extrabold text-gray-900">Sourcing Partners</h3>
-              <p class="text-xs text-gray-500">Where quality begins</p>
-            </div>
-          </div>
-          <!-- 1 col on small mobile, 2 col from sm+ -->
-          <div class="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 gap-2 sm:gap-3">
-            @for (brand of sourcingBrands; track brand) {
-              @if ($index < 4 || showEcosystem) {
-                <div class="logo-pill">
-                  <span
-                    class="flex-shrink-0 w-6 h-6 sm:w-9 sm:h-9 rounded-lg text-white text-[10px] sm:text-xs font-extrabold flex items-center justify-center"
-                    [style.background]="brand.color"
-                  >
-                    {{ brand.abbr }}
-                  </span>
-                  <span class="text-[10px] sm:text-sm truncate">{{ brand.name }}</span>
-                </div>
-              }
-            }
-          </div>
-        </div>
-
-        <!-- Divider: horizontal on mobile, vertical on desktop -->
-        <div class="lg:hidden h-px bg-gray-200 mx-6"></div>
-        <div
-          class="hidden lg:flex flex-col items-center justify-center bg-white px-2 py-8 relative z-10"
-        >
-          <div
-            class="w-px flex-1 bg-gradient-to-b from-transparent via-gray-200 to-transparent"
-          ></div>
-          <div
-            class="w-9 h-9 rounded-full bg-white border-2 border-gray-200 flex items-center justify-center my-4 shadow-sm text-base"
-          >
-            ↔
-          </div>
-          <div
-            class="w-px flex-1 bg-gradient-to-b from-transparent via-gray-200 to-transparent"
-          ></div>
-        </div>
-
-        <!-- RIGHT: Trusted Restaurants -->
-        <div class="flex-1 bg-gradient-to-br from-blue-50 to-indigo-50 p-6 sm:p-8 md:p-10">
-          <div class="flex items-center gap-3 mb-5 sm:mb-6">
-            <div
-              class="w-9 h-9 sm:w-10 sm:h-10 bg-blue-700 rounded-xl flex items-center justify-center text-white text-lg sm:text-xl"
-            >
-              🍽️
-            </div>
-            <div>
-              <h3 class="text-base sm:text-lg font-extrabold text-gray-900">Trusted Restaurants</h3>
-              <p class="text-xs text-gray-500">Where flavour comes to life</p>
-            </div>
-          </div>
-          <div class="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 gap-2 sm:gap-3">
-            @for (rest of trustedRestaurants; track rest) {
-              @if ($index < 4 || showEcosystem) {
-                <div class="logo-pill">
-                  <span
-                    class="flex-shrink-0 w-6 h-6 sm:w-9 sm:h-9 rounded-lg text-white text-[10px] sm:text-xs font-extrabold flex items-center justify-center"
-                    [style.background]="rest.color"
-                  >
-                    {{ rest.abbr }}
-                  </span>
-                  <span class="text-[10px] sm:text-sm truncate">{{ rest.name }}</span>
-                </div>
-              }
-            }
-          </div>
-          
-          <!-- View More Ecosystem (Mobile Only) -->
-          <div class="mt-6 text-center lg:hidden">
-            <button 
-              (click)="toggleEcosystem()"
-              class="text-blue-700 font-bold text-xs flex items-center justify-center gap-2 mx-auto py-2 px-4 rounded-full bg-blue-50 border border-blue-100"
-            >
-              {{ showEcosystem ? 'View Less' : 'View Full Ecosystem' }}
-              <svg class="w-4 h-4 transition-transform duration-300" [class.rotate-180]="showEcosystem" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-          </div>
-        </div>
-      </div>
+    <!-- Show More Toggle -->
+    <div class="mt-6 text-center sm:hidden">
+      <button (click)="toggleFeatures()"
+        class="text-teal-400 font-bold text-sm flex items-center justify-center gap-2 mx-auto py-2.5 px-6 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
+        {{ showAllFeatures ? 'Show Less' : 'Show All Features' }}
+        <svg class="w-4 h-4 transition-transform duration-300" [class.rotate-180]="showAllFeatures" fill="none"
+          stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
     </div>
-  </section>
-  <!-- SECTION 5: OWNER MESSAGE + TESTIMONIALS                                -->
-  <section
-    class="bg-gradient-to-br from-slate-900 via-gray-900 to-teal-950 py-10 sm:py-20 px-4 sm:px-8"
-    id="testimonials-section"
-  >
-    <div class="max-w-6xl mx-auto">
-      <!-- Header -->
-      <div class="text-center mb-10 sm:mb-14">
-        <span class="text-teal-400 text-xs sm:text-sm font-semibold uppercase tracking-widest"
-          >Voices That Matter</span
-        >
-        <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white mt-2">
-          Built on <span class="text-teal-400">Trust & Results</span>
-        </h2>
-      </div>
 
-      <!-- Owner Message Card -->
+    <!-- Stats -->
+    <div class="mt-10 sm:mt-14 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-6">
+      @for (
+      stat of [
+      { value: '100+', label: 'Products Listed' },
+      { value: '50+', label: 'Restaurants Served' },
+      { value: '98%', label: 'On-Time Delivery' },
+      { value: '4.9★', label: 'Average Rating' },
+      ];
+      track stat
+      ) {
       <div
-        class="bg-white/5 border border-white/10 rounded-3xl p-6 sm:p-8 md:p-10 mb-8 sm:mb-10 backdrop-blur-sm"
-      >
-        <div class="flex flex-col sm:flex-row gap-5 sm:gap-8 items-start">
-          <!-- Avatar -->
-          <div class="flex-shrink-0">
-            <div
-              class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-teal-500 to-blue-600 flex items-center justify-center text-white text-xl sm:text-2xl font-extrabold shadow-lg"
-            >
-              {{ ownerMessage.initials }}
-            </div>
-          </div>
-
-          <!-- Message -->
-          <div class="flex-1 min-w-0">
-            <div
-              class="flex items-start sm:items-center gap-3 flex-col sm:flex-row flex-wrap mb-3 sm:mb-4"
-            >
-              <h3 class="text-white font-extrabold text-lg sm:text-xl">{{ ownerMessage.name }}</h3>
-              <span
-                class="bg-teal-500/20 text-teal-400 text-xs font-semibold px-3 py-1 rounded-full border border-teal-500/30 whitespace-nowrap"
-              >
-                {{ ownerMessage.experience }}
-              </span>
-            </div>
-            <p class="text-teal-500/40 text-4xl sm:text-6xl leading-none font-serif mb-1 select-none">
-              "
-            </p>
-            <p 
-              class="text-gray-300 text-xs sm:text-lg leading-relaxed italic -mt-2 sm:-mt-4 transition-all duration-300"
-              [class.line-clamp-3]="!showFullMessage"
-              [class.line-clamp-none]="showFullMessage"
-            >
-              {{ ownerMessage.message }}
-            </p>
-            <button 
-              (click)="toggleMessage()"
-              class="sm:hidden mt-2 text-teal-400 text-[10px] font-bold uppercase tracking-wider"
-            >
-              {{ showFullMessage ? 'Read Less' : 'Read Full Message' }}
-            </button>
-          </div>
-        </div>
+        class="text-center bg-white/5 backdrop-blur-sm rounded-2xl py-5 sm:py-6 px-4 border border-white/10 shadow-md">
+        <p class="text-2xl sm:text-3xl font-extrabold text-teal-400">{{ stat.value }}</p>
+        <p class="text-xs sm:text-sm text-gray-400 mt-1 font-medium">{{ stat.label }}</p>
       </div>
-
-      <!-- Testimonials label -->
-      <p class="text-gray-400 text-sm font-medium mb-4 text-center">
-        💬 What our restaurant partners say
+      }
+    </div>
+</div>
+</section>
+<!-- SECTION 4: BRANDS & RESTAURANTS LOGOS                                  -->
+<section class="bg-white py-10 sm:py-20 px-4 sm:px-8" id="brands-section">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-8 sm:mb-14">
+      <span class="text-teal-600 text-xs sm:text-sm font-semibold uppercase tracking-widest">Our Ecosystem</span>
+      <h2 class="text-xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 mt-2">
+        From <span class="text-blue-600">Trusted Farms</span> to
+        <span class="text-teal-600">Renowned Kitchens</span>
+      </h2>
+      <p class="text-gray-500 mt-3 max-w-xl mx-auto text-xs sm:text-base px-6">
+        We source from India's finest producers and supply to the country's most recognisable
+        restaurants.
       </p>
+    </div>
 
-      <!-- Horizontal scroll — cards fill screen width on mobile -->
-      <div
-        class="flex gap-4 sm:gap-5 overflow-x-auto pb-4"
-        style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch"
-      >
-        @for (t of testimonials; track t) {
-          <div class="testimonial-card" style="scroll-snap-align: start">
-            <!-- Stars -->
-            <div class="stars text-base sm:text-lg mb-2 sm:mb-3">
-              @for (s of getStars(t.rating); track s) {
-                <span>★</span>
-              }
-            </div>
-            <!-- Quote -->
-            <p class="text-gray-600 text-xs sm:text-sm leading-relaxed mb-4 sm:mb-5 italic">
-              "{{ t.message }}"
-            </p>
-            <!-- Footer -->
-            <div class="flex items-center gap-3 pt-3 sm:pt-4 border-t border-gray-100">
-              <div
-                class="w-9 h-9 rounded-xl flex items-center justify-center text-white text-xs font-extrabold flex-shrink-0"
-                [style.background]="t.avatarColor"
-              >
-                {{ t.initials }}
-              </div>
-              <div class="min-w-0">
-                <p class="font-bold text-gray-900 text-xs sm:text-sm truncate">{{ t.owner }}</p>
-                <p class="text-xs text-gray-500 truncate">{{ t.restaurant }}, {{ t.city }}</p>
-              </div>
-            </div>
+    <!-- Split Panel: stacks vertically on mobile -->
+    <div class="flex flex-col lg:flex-row gap-0 rounded-3xl overflow-hidden border border-gray-100 shadow-md">
+      <!-- LEFT: Sourcing Partners -->
+      <div class="flex-1 bg-gradient-to-br from-teal-50 to-emerald-50 p-6 sm:p-8 md:p-10">
+        <div class="flex items-center gap-3 mb-5 sm:mb-6">
+          <div
+            class="w-9 h-9 sm:w-10 sm:h-10 bg-teal-600 rounded-xl flex items-center justify-center text-white text-lg sm:text-xl">
+            🌾
           </div>
+          <div>
+            <h3 class="text-base sm:text-lg font-extrabold text-gray-900">Sourcing Partners</h3>
+            <p class="text-xs text-gray-500">Where quality begins</p>
+          </div>
+        </div>
+        <!-- 1 col on small mobile, 2 col from sm+ -->
+        <div class="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 gap-2 sm:gap-3">
+          @for (brand of sourcingBrands; track brand) {
+          @if ($index < 4 || showEcosystem) { <div class="logo-pill">
+            <span
+              class="flex-shrink-0 w-6 h-6 sm:w-9 sm:h-9 rounded-lg text-white text-[10px] sm:text-xs font-extrabold flex items-center justify-center"
+              [style.background]="brand.color">
+              {{ brand.abbr }}
+            </span>
+            <span class="text-[10px] sm:text-sm truncate">{{ brand.name }}</span>
+        </div>
+        }
         }
       </div>
     </div>
-  </section>
-  <!-- SECTION 6: CONTACT US                                                   -->
-  <section class="bg-gray-50 py-10 sm:py-24 px-4 sm:px-8 border-t border-gray-200" id="contact-section">
-    <div class="max-w-6xl mx-auto">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        
-        <!-- Left: Contact Info -->
-        <div class="space-y-8 fade-up">
-          <div>
-            <span class="text-teal-600 text-xs sm:text-sm font-semibold uppercase tracking-widest">Get in Touch</span>
-            <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mt-3 leading-tight">
-              Ready to Upgrade Your <br>
-              <span class="text-teal-600">Kitchen Supply Chain?</span>
-            </h2>
-            <p class="text-gray-500 mt-4 text-base sm:text-lg max-w-md">
-              Whether you're a cloud kitchen or a five-star hotel, we have the scale and reliability to support your growth.
-            </p>
-          </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <!-- phone -->
-            <div class="flex items-start gap-4">
-              <div class="w-12 h-12 rounded-2xl bg-teal-100 flex items-center justify-center text-teal-600 text-xl flex-shrink-0">
-                <i class="pi pi-phone"></i>
-              </div>
-              <div>
-                <p class="text-xs text-gray-400 font-bold uppercase mb-1">Call Us</p>
-                <a href="tel:+919876543210" class="text-gray-900 font-bold hover:text-teal-600 transition-colors">+91 98765 43210</a>
-              </div>
-            </div>
+    <!-- Divider: horizontal on mobile, vertical on desktop -->
+    <div class="lg:hidden h-px bg-gray-200 mx-6"></div>
+    <div class="hidden lg:flex flex-col items-center justify-center bg-white px-2 py-8 relative z-10">
+      <div class="w-px flex-1 bg-gradient-to-b from-transparent via-gray-200 to-transparent"></div>
+      <div
+        class="w-9 h-9 rounded-full bg-white border-2 border-gray-200 flex items-center justify-center my-4 shadow-sm text-base">
+        ↔
+      </div>
+      <div class="w-px flex-1 bg-gradient-to-b from-transparent via-gray-200 to-transparent"></div>
+    </div>
 
-            <!-- email -->
-            <div class="flex items-start gap-4">
-              <div class="w-12 h-12 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-600 text-xl flex-shrink-0">
-                <i class="pi pi-envelope"></i>
-              </div>
-              <div>
-                <p class="text-xs text-gray-400 font-bold uppercase mb-1">Email Us</p>
-                <a href="mailto:support@vimek.com" class="text-gray-900 font-bold hover:text-blue-600 transition-colors">support@vimek.com</a>
-              </div>
-            </div>
+    <!-- RIGHT: Trusted Restaurants -->
+    <div class="flex-1 bg-gradient-to-br from-blue-50 to-indigo-50 p-6 sm:p-8 md:p-10">
+      <div class="flex items-center gap-3 mb-5 sm:mb-6">
+        <div
+          class="w-9 h-9 sm:w-10 sm:h-10 bg-blue-700 rounded-xl flex items-center justify-center text-white text-lg sm:text-xl">
+          🍽️
+        </div>
+        <div>
+          <h3 class="text-base sm:text-lg font-extrabold text-gray-900">Trusted Restaurants</h3>
+          <p class="text-xs text-gray-500">Where flavour comes to life</p>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 gap-2 sm:gap-3">
+        @for (rest of trustedRestaurants; track rest) {
+        @if ($index < 4 || showEcosystem) { <div class="logo-pill">
+          <span
+            class="flex-shrink-0 w-6 h-6 sm:w-9 sm:h-9 rounded-lg text-white text-[10px] sm:text-xs font-extrabold flex items-center justify-center"
+            [style.background]="rest.color">
+            {{ rest.abbr }}
+          </span>
+          <span class="text-[10px] sm:text-sm truncate">{{ rest.name }}</span>
+      </div>
+      }
+      }
+    </div>
 
-            <!-- Location -->
-            <div class="flex items-start gap-4">
-              <div class="w-12 h-12 rounded-2xl bg-amber-100 flex items-center justify-center text-amber-600 text-xl flex-shrink-0">
-                <i class="pi pi-map-marker"></i>
-              </div>
-              <div>
-                <p class="text-xs text-gray-400 font-bold uppercase mb-1">Headquarters</p>
-                <p class="text-gray-900 font-bold">Mumbai, Maharashtra</p>
-              </div>
-            </div>
+    <!-- View More Ecosystem (Mobile Only) -->
+    <div class="mt-6 text-center lg:hidden">
+      <button (click)="toggleEcosystem()"
+        class="text-blue-700 font-bold text-xs flex items-center justify-center gap-2 mx-auto py-2 px-4 rounded-full bg-blue-50 border border-blue-100">
+        {{ showEcosystem ? 'View Less' : 'View Full Ecosystem' }}
+        <svg class="w-4 h-4 transition-transform duration-300" [class.rotate-180]="showEcosystem" fill="none"
+          stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+    </div>
+  </div>
+  </div>
+  </div>
+</section>
+<!-- SECTION 5: OWNER MESSAGE + TESTIMONIALS                                -->
+<section class="bg-gradient-to-br from-slate-900 via-gray-900 to-teal-950 py-10 sm:py-20 px-4 sm:px-8"
+  id="testimonials-section">
+  <div class="max-w-6xl mx-auto">
+    <!-- Header -->
+    <div class="text-center mb-10 sm:mb-14">
+      <span class="text-teal-400 text-xs sm:text-sm font-semibold uppercase tracking-widest">Voices That Matter</span>
+      <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white mt-2">
+        Built on <span class="text-teal-400">Trust & Results</span>
+      </h2>
+    </div>
 
-            <!-- hours -->
-            <div class="flex items-start gap-4">
-              <div class="w-12 h-12 rounded-2xl bg-purple-100 flex items-center justify-center text-purple-600 text-xl flex-shrink-0">
-                <i class="pi pi-clock"></i>
-              </div>
-              <div>
-                <p class="text-xs text-gray-400 font-bold uppercase mb-1">Support Hours</p>
-                <p class="text-gray-900 font-bold">24/7 for Partners</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Social Links / CTAs -->
-          <div class="flex flex-wrap gap-4 pt-4">
-            <button class="inline-flex items-center gap-2 bg-[#25D366] text-white px-6 py-3 rounded-full font-bold shadow-lg hover:bg-[#128C7E] transition-all" (click)="openWhatsAppChat()">
-              <i class="pi pi-whatsapp"></i> Chat on WhatsApp
-            </button>
-            <button class="inline-flex items-center gap-2 bg-slate-900 text-white px-6 py-3 rounded-full font-bold shadow-lg hover:bg-slate-800 transition-all">
-              <i class="pi pi-calendar"></i> Schedule a Visit
-            </button>
-          </div>
-
-          <!-- Compliance Info (Moved from Footer) -->
-          <div class="pt-8 border-t border-gray-100">
-            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em] mb-4">Registered Business Information</p>
-            <div class="flex flex-wrap gap-x-8 gap-y-3">
-              <div class="text-[11px] text-gray-500 flex items-center gap-2">
-                <span class="font-bold text-gray-400">FSSAI LICENSE:</span>
-                <span class="tracking-wider">10019022006523</span>
-              </div>
-              <div class="text-[11px] text-gray-500 flex items-center gap-2">
-                <span class="font-bold text-gray-400">CIN:</span>
-                <span class="tracking-wider">U74999KA2020PTC139876</span>
-              </div>
-              <div class="text-[11px] text-gray-500 flex items-center gap-2">
-                <span class="font-bold text-gray-400">GSTIN:</span>
-                <span class="tracking-wider">29AABCV1234R1ZX</span>
-              </div>
-            </div>
+    <!-- Owner Message Card -->
+    <div class="bg-white/5 border border-white/10 rounded-3xl p-6 sm:p-8 md:p-10 mb-8 sm:mb-10 backdrop-blur-sm">
+      <div class="flex flex-col sm:flex-row gap-5 sm:gap-8 items-start">
+        <!-- Avatar -->
+        <div class="flex-shrink-0">
+          <div
+            class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-teal-500 to-blue-600 flex items-center justify-center text-white text-xl sm:text-2xl font-extrabold shadow-lg">
+            {{ ownerMessage.initials }}
           </div>
         </div>
 
-        <!-- Right: Visual Support Card -->
-        <div class="relative fade-up" style="animation-delay: 0.2s">
-          <div class="bg-gradient-to-br from-teal-500 to-blue-600 rounded-[2.5rem] p-8 sm:p-12 text-white shadow-2xl relative overflow-hidden">
-            <!-- Decorative circle -->
-            <div class="absolute -top-24 -right-24 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
-            
-            <div class="relative z-10">
-              <div class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold mb-6">
-                <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-                Instant Support Available
-              </div>
-              <h3 class="text-2xl sm:text-3xl font-extrabold mb-4 leading-tight">Become a Vimek Partner Today</h3>
-              <ul class="space-y-4 mb-8">
-                <li class="flex items-center gap-3 text-sm sm:text-base font-medium">
-                  <span class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-xs">✓</span>
-                  Wholesale pricing for bulk quantities
-                </li>
-                <li class="flex items-center gap-3 text-sm sm:text-base font-medium">
-                  <span class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-xs">✓</span>
-                  Dedicated relationship manager
-                </li>
-                <li class="flex items-center gap-3 text-sm sm:text-base font-medium">
-                  <span class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-xs">✓</span>
-                  Custom credit terms for eligible businesses
-                </li>
-              </ul>
-              
-              <div class="p-6 bg-white/10 backdrop-blur-sm rounded-3xl border border-white/20">
-                <p class="text-xs text-white/70 uppercase font-bold tracking-wider mb-2">Our Promise</p>
-                <p class="text-sm sm:text-base italic font-serif leading-relaxed">
-                  "No more chasing multiple vendors. No more last-minute shortages. Just fresh supplies, every single morning."
-                </p>
-              </div>
-            </div>
+        <!-- Message -->
+        <div class="flex-1 min-w-0">
+          <div class="flex items-start sm:items-center gap-3 flex-col sm:flex-row flex-wrap mb-3 sm:mb-4">
+            <h3 class="text-white font-extrabold text-lg sm:text-xl">{{ ownerMessage.name }}</h3>
+            <span
+              class="bg-teal-500/20 text-teal-400 text-xs font-semibold px-3 py-1 rounded-full border border-teal-500/30 whitespace-nowrap">
+              {{ ownerMessage.experience }}
+            </span>
           </div>
+          <p class="text-teal-500/40 text-4xl sm:text-6xl leading-none font-serif mb-1 select-none">
+            "
+          </p>
+          <p class="text-gray-300 text-xs sm:text-lg leading-relaxed italic -mt-2 sm:-mt-4 transition-all duration-300"
+            [class.line-clamp-3]="!showFullMessage" [class.line-clamp-none]="showFullMessage">
+            {{ ownerMessage.message }}
+          </p>
+          <button (click)="toggleMessage()"
+            class="sm:hidden mt-2 text-teal-400 text-[10px] font-bold uppercase tracking-wider">
+            {{ showFullMessage ? 'Read Less' : 'Read Full Message' }}
+          </button>
         </div>
-
       </div>
     </div>
-  </section>
+
+    <!-- Testimonials label -->
+    <!-- <p class="text-gray-400 text-sm font-medium mb-4 text-center">
+      💬 What our restaurant partners say
+    </p> -->
+
+    <!-- Horizontal scroll — cards fill screen width on mobile -->
+    <!-- <div class="flex gap-4 sm:gap-5 overflow-x-auto pb-4"
+      style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch">
+      @for (t of testimonials; track t) {
+      <div class="testimonial-card" style="scroll-snap-align: start">
+        <div class="stars text-base sm:text-lg mb-2 sm:mb-3">
+          @for (s of getStars(t.rating); track s) {
+          <span>★</span>
+          }
+        </div>
+        <p class="text-gray-600 text-xs sm:text-sm leading-relaxed mb-4 sm:mb-5 italic">
+          "{{ t.message }}"
+        </p>
+        <div class="flex items-center gap-3 pt-3 sm:pt-4 border-t border-gray-100">
+          <div
+            class="w-9 h-9 rounded-xl flex items-center justify-center text-white text-xs font-extrabold flex-shrink-0"
+            [style.background]="t.avatarColor">
+            {{ t.initials }}
+          </div>
+          <div class="min-w-0">
+            <p class="font-bold text-gray-900 text-xs sm:text-sm truncate">{{ t.owner }}</p>
+            <p class="text-xs text-gray-500 truncate">{{ t.restaurant }}, {{ t.city }}</p>
+          </div>
+        </div>
+      </div>
+      }
+    </div> -->
+  </div>
+</section>
+<!-- SECTION 6: CONTACT US                                                   -->
+<section class="bg-gray-50 py-10 sm:py-24 px-4 sm:px-8 border-t border-gray-200" id="contact-section">
+  <div class="max-w-6xl mx-auto">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+
+      <!-- Left: Contact Info -->
+      <div class="space-y-8 fade-up">
+        <div>
+          <span class="text-teal-600 text-xs sm:text-sm font-semibold uppercase tracking-widest">Get in Touch</span>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mt-3 leading-tight">
+            Ready to Upgrade Your <br>
+            <span class="text-teal-600">Kitchen Supply Chain?</span>
+          </h2>
+          <p class="text-gray-500 mt-4 text-base sm:text-lg max-w-md">
+            Whether you're a cloud kitchen or a five-star hotel, we have the scale and reliability to support your
+            growth.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <!-- phone -->
+          <div class="flex items-start gap-4">
+            <div
+              class="w-12 h-12 rounded-2xl bg-teal-100 flex items-center justify-center text-teal-600 text-xl flex-shrink-0">
+              <i class="pi pi-phone"></i>
+            </div>
+            <div>
+              <p class="text-xs text-gray-400 font-bold uppercase mb-1">Call Us</p>
+              <a href="tel:+917021140461" class="text-gray-900 font-bold hover:text-teal-600 transition-colors">+91
+                7021140461</a>
+            </div>
+          </div>
+
+          <!-- email -->
+          <div class="flex items-start gap-4">
+            <div
+              class="w-12 h-12 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-600 text-xl flex-shrink-0">
+              <i class="pi pi-envelope"></i>
+            </div>
+            <div>
+              <p class="text-xs text-gray-400 font-bold uppercase mb-1">Email Us</p>
+              <a href="mailto:support@vimek.com"
+                class="text-gray-900 font-bold hover:text-blue-600 transition-colors">support@vimek.com</a>
+            </div>
+          </div>
+
+          <!-- Location -->
+          <div class="flex items-start gap-4">
+            <div
+              class="w-12 h-12 rounded-2xl bg-amber-100 flex items-center justify-center text-amber-600 text-xl flex-shrink-0">
+              <i class="pi pi-map-marker"></i>
+            </div>
+            <div>
+              <p class="text-xs text-gray-400 font-bold uppercase mb-1">Headquarters</p>
+              <p class="text-gray-900 font-bold">Mumbai, Maharashtra</p>
+            </div>
+          </div>
+
+          <!-- hours -->
+          <div class="flex items-start gap-4">
+            <div
+              class="w-12 h-12 rounded-2xl bg-purple-100 flex items-center justify-center text-purple-600 text-xl flex-shrink-0">
+              <i class="pi pi-clock"></i>
+            </div>
+            <div>
+              <p class="text-xs text-gray-400 font-bold uppercase mb-1">Support Hours</p>
+              <p class="text-gray-900 font-bold">24/7 for Partners</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Social Links / CTAs -->
+        <div class="flex flex-wrap gap-4 pt-4">
+          <button
+            class="inline-flex items-center gap-2 bg-[#25D366] text-white px-6 py-3 rounded-full font-bold shadow-lg hover:bg-[#128C7E] transition-all"
+            (click)="openWhatsAppChat()">
+            <i class="pi pi-whatsapp"></i> Chat on WhatsApp
+          </button>
+          <button
+            class="inline-flex items-center gap-2 bg-slate-900 text-white px-6 py-3 rounded-full font-bold shadow-lg hover:bg-slate-800 transition-all">
+            <i class="pi pi-calendar"></i> Schedule a Visit
+          </button>
+        </div>
+
+        <!-- Compliance Info (Moved from Footer) -->
+        <div class="pt-8 border-t border-gray-100">
+          <p class="text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em] mb-4">Registered Business Information
+          </p>
+          <div class="flex flex-wrap gap-x-8 gap-y-3">
+            <div class="text-[11px] text-gray-500 flex items-center gap-2">
+              <span class="font-bold text-gray-400">FSSAI LICENSE:</span>
+              <span class="tracking-wider">10019022006523</span>
+            </div>
+            <div class="text-[11px] text-gray-500 flex items-center gap-2">
+              <span class="font-bold text-gray-400">CIN:</span>
+              <span class="tracking-wider">U74999KA2020PTC139876</span>
+            </div>
+            <div class="text-[11px] text-gray-500 flex items-center gap-2">
+              <span class="font-bold text-gray-400">GSTIN:</span>
+              <span class="tracking-wider">29AABCV1234R1ZX</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Visual Support Card -->
+      <div class="relative fade-up" style="animation-delay: 0.2s">
+        <div
+          class="bg-gradient-to-br from-teal-500 to-blue-600 rounded-[2.5rem] p-8 sm:p-12 text-white shadow-2xl relative overflow-hidden">
+          <!-- Decorative circle -->
+          <div class="absolute -top-24 -right-24 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
+
+          <div class="relative z-10">
+            <div
+              class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold mb-6">
+              <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+              Instant Support Available
+            </div>
+            <h3 class="text-2xl sm:text-3xl font-extrabold mb-4 leading-tight">Become a Vimek Partner Today</h3>
+            <ul class="space-y-4 mb-8">
+              <li class="flex items-center gap-3 text-sm sm:text-base font-medium">
+                <span class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-xs">✓</span>
+                Wholesale pricing for bulk quantities
+              </li>
+              <li class="flex items-center gap-3 text-sm sm:text-base font-medium">
+                <span class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-xs">✓</span>
+                Dedicated relationship manager
+              </li>
+              <li class="flex items-center gap-3 text-sm sm:text-base font-medium">
+                <span class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-xs">✓</span>
+                Custom credit terms for eligible businesses
+              </li>
+            </ul>
+
+            <div class="p-6 bg-white/10 backdrop-blur-sm rounded-3xl border border-white/20">
+              <p class="text-xs text-white/70 uppercase font-bold tracking-wider mb-2">Our Promise</p>
+              <p class="text-sm sm:text-base italic font-serif leading-relaxed">
+                "No more chasing multiple vendors. No more last-minute shortages. Just fresh supplies, every single
+                morning."
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
 </div>

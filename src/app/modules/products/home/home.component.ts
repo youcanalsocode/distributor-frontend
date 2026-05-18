@@ -572,7 +572,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     }
   }
   openWhatsAppChat() {
-    const phoneNumber = '9004207375';
+    const phoneNumber = '7021140461';
     const message = 'Hello, I run a restaurant and I am looking to purchase supplies in bulk. Please share your catalog and pricing.';
 
     const encodedMessage = encodeURIComponent(message);
