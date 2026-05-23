@@ -469,25 +469,20 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
 
   // ── Section 4: Brand & Restaurant Logos ───────────────────────────────────
   sourcingBrands: BrandLogo[] = [
-    { name: 'Amul Dairies', abbr: 'AM', color: '#dc2626' },
-    { name: 'Mother Dairy', abbr: 'MD', color: '#16a34a' },
-    { name: 'ITC Agri', abbr: 'IT', color: '#7c3aed' },
-    { name: 'Suguna Foods', abbr: 'SG', color: '#ea580c' },
-    { name: 'Fresh & Pure Farms', abbr: 'FP', color: '#0891b2' },
-    { name: 'Jain Irrigation', abbr: 'JI', color: '#d97706' },
-    { name: 'Himalayan Organic', abbr: 'HO', color: '#059669' },
-    { name: 'NaturalFarm Co.', abbr: 'NF', color: '#be185d' },
+    { name: 'Amul', abbr: 'AM', color: '#dc2626' },
+    { name: 'Govardhan', abbr: 'GD', color: '#16a34a' },
+    { name: 'Derista', abbr: 'DT', color: '#7c3aed' },
+    { name: 'Balaji Hungritos', abbr: 'BH', color: '#ea580c' },
+  
   ];
 
   trustedRestaurants: BrandLogo[] = [
-    { name: 'Bukhara, ITC', abbr: 'BK', color: '#b45309' },
-    { name: 'Mainland China', abbr: 'MC', color: '#dc2626' },
-    { name: 'Punjab Grill', abbr: 'PG', color: '#15803d' },
-    { name: 'Theobroma', abbr: 'TB', color: '#92400e' },
-    { name: 'Social (Impresario)', abbr: 'SC', color: '#6d28d9' },
-    { name: 'Barbeque Nation', abbr: 'BN', color: '#c2410c' },
-    { name: 'Farzi Café', abbr: 'FC', color: '#0f766e' },
-    { name: 'The Beer Café', abbr: 'BC', color: '#1d4ed8' },
+    { name: 'Tea Villa cafe juhu', abbr: 'TC', color: '#b45309' },
+    { name: 'Prasadam pure veg', abbr: 'PP', color: '#dc2626' },
+    { name: 'Love in Langos', abbr: 'LG', color: '#15803d' },
+    { name: 'Anand Stall', abbr: 'AS', color: '#92400e' },
+    { name: 'Atul Dairy (Serving since 2008)', abbr: 'AD', color: '#6d28d9' },
+    
   ];
 
   // ── Section 5: Owner Message + Testimonials ────────────────────────────────

@@ -1,35 +1,85 @@
-<div class="min-h-screen bg-gray-50 flex flex-col">
-  <nav class="bg-slate-900 border-b border-slate-700 shadow-md">
+<div class="min-h-screen bg-slate-50 flex flex-col pb-16 sm:pb-0">
+  <!-- Desktop & Mobile Top Bar -->
+  <nav class="bg-slate-900 border-b border-slate-800 shadow-lg sticky top-0 z-40">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between h-16">
         <div class="flex">
-          <div class="flex-shrink-0 flex items-center text-white font-extrabold text-2xl tracking-widest bg-clip-text text-transparent bg-gradient-to-r from-amber-400 to-yellow-600">
-            ADMIN
+          <!-- Branding -->
+          <div class="flex-shrink-0 flex items-center text-white font-black text-xl sm:text-2xl tracking-widest bg-clip-text text-transparent bg-gradient-to-r from-amber-400 to-yellow-500">
+            VIMEK ADMIN
           </div>
-          <div class="hidden sm:ml-8 sm:flex sm:space-x-8">
-            <a routerLink="/admin/orders" routerLinkActive="border-amber-500 text-amber-500" class="border-transparent text-slate-300 hover:border-slate-300 hover:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors">
+          <!-- Desktop-only Links -->
+          <div class="hidden sm:ml-10 sm:flex sm:space-x-8">
+            <a
+              routerLink="/admin/orders"
+              routerLinkActive="border-amber-500 text-amber-400 bg-slate-800/30"
+              class="border-transparent text-slate-300 hover:border-slate-300 hover:text-white inline-flex items-center px-3 pt-1 border-b-2 text-sm font-semibold transition-all"
+            >
               <i class="fas fa-shopping-bag mr-2"></i> Orders
             </a>
-            <a routerLink="/admin/products" routerLinkActive="border-amber-500 text-amber-500" class="border-transparent text-slate-300 hover:border-slate-300 hover:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors">
+            <a
+              routerLink="/admin/products"
+              routerLinkActive="border-amber-500 text-amber-400 bg-slate-800/30"
+              class="border-transparent text-slate-300 hover:border-slate-300 hover:text-white inline-flex items-center px-3 pt-1 border-b-2 text-sm font-semibold transition-all"
+            >
               <i class="fas fa-box mr-2"></i> Products
             </a>
-            <a routerLink="/admin/categories" routerLinkActive="border-amber-500 text-amber-500" class="border-transparent text-slate-300 hover:border-slate-300 hover:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors">
+            <a
+              routerLink="/admin/categories"
+              routerLinkActive="border-amber-500 text-amber-400 bg-slate-800/30"
+              class="border-transparent text-slate-300 hover:border-slate-300 hover:text-white inline-flex items-center px-3 pt-1 border-b-2 text-sm font-semibold transition-all"
+            >
               <i class="fas fa-tags mr-2"></i> Categories
             </a>
           </div>
         </div>
+        <!-- Right side user actions -->
         <div class="flex items-center">
-          <button (click)="logout()" class="text-slate-300 hover:text-white px-4 py-2 rounded-md text-sm font-semibold bg-slate-800 hover:bg-red-600 transition duration-300 ease-in-out shadow">
-            Sign out
+          <button
+            (click)="logout()"
+            class="text-slate-300 hover:text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs sm:text-sm font-bold bg-slate-800 hover:bg-red-600 active:scale-95 transition duration-200 shadow-md border border-slate-700/50"
+          >
+            <i class="fas fa-sign-out-alt sm:mr-2"></i><span class="hidden sm:inline">Sign out</span>
           </button>
         </div>
       </div>
     </div>
   </nav>
 
-  <main class="flex-grow max-w-7xl mx-auto py-8 sm:px-6 lg:px-8 w-full fade-in">
+  <!-- Main Content Layout -->
+  <main class="flex-grow max-w-7xl mx-auto px-4 pt-6 pb-24 sm:py-8 sm:px-6 lg:px-8 w-full fade-in">
     <router-outlet></router-outlet>
   </main>
+
+  <!-- Mobile Bottom Navigation Bar (Visible only on mobile screens < 640px) -->
+  <div class="sm:hidden fixed bottom-0 left-0 right-0 bg-slate-900/95 border-t border-slate-800 shadow-[0_-8px_30px_rgb(0,0,0,0.3)] backdrop-blur-md z-50 transition-all duration-300">
+    <div class="grid grid-cols-3 h-16">
+      <a
+        routerLink="/admin/orders"
+        routerLinkActive="text-amber-400 border-amber-500 bg-slate-800/40 font-bold"
+        class="flex flex-col items-center justify-center text-[10px] font-semibold text-slate-400 hover:text-white transition-all border-t-2 border-transparent gap-1"
+      >
+        <i class="fas fa-shopping-bag text-lg"></i>
+        <span>Orders</span>
+      </a>
+      <a
+        routerLink="/admin/products"
+        routerLinkActive="text-amber-400 border-amber-500 bg-slate-800/40 font-bold"
+        class="flex flex-col items-center justify-center text-[10px] font-semibold text-slate-400 hover:text-white transition-all border-t-2 border-transparent gap-1"
+      >
+        <i class="fas fa-box text-lg"></i>
+        <span>Products</span>
+      </a>
+      <a
+        routerLink="/admin/categories"
+        routerLinkActive="text-amber-400 border-amber-500 bg-slate-800/40 font-bold"
+        class="flex flex-col items-center justify-center text-[10px] font-semibold text-slate-400 hover:text-white transition-all border-t-2 border-transparent gap-1"
+      >
+        <i class="fas fa-tags text-lg"></i>
+        <span>Categories</span>
+      </a>
+    </div>
+  </div>
 </div>
 
 <style>
@@ -41,3 +91,4 @@
   to { opacity: 1; transform: translateY(0); }
 }
 </style>
+

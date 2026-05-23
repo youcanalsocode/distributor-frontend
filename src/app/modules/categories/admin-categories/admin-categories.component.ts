@@ -30,6 +30,7 @@ export class AdminCategoriesComponent implements OnInit {
   selectedFile: File | null = null;
 
   isSubmitting = false;
+  activeTab: 'list' | 'form' = 'list';
 
   get envApiUrl() {
     return environment.apiUrl;
@@ -64,6 +65,7 @@ export class AdminCategoriesComponent implements OnInit {
 
   editCategory(category: Category) {
     this.isEditing = true;
+    this.activeTab = 'form';
     this.currentCategoryId = category.id;
     this.name = category.name;
     this.description = category.description || '';
@@ -73,6 +75,7 @@ export class AdminCategoriesComponent implements OnInit {
 
   cancelEdit() {
     this.isEditing = false;
+    this.activeTab = 'list';
     this.currentCategoryId = null;
     this.resetForm();
   }
@@ -119,6 +122,7 @@ export class AdminCategoriesComponent implements OnInit {
           next: () => {
             this.messageService.add({ severity: 'success', summary: 'Category Added', detail: `"${savedName}" added.` });
             this.resetForm();
+            this.activeTab = 'list';
             this.loadCategories();
           },
           error: (err) => {

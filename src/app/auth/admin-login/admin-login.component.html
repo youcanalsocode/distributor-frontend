@@ -1,8 +1,8 @@
 <div class="min-h-screen bg-slate-900 flex flex-col justify-center py-6 sm:py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
   <!-- Background Decorative Elements -->
   <div class="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/dark-matter.png')] opacity-40 pointer-events-none"></div>
-  <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-amber-500/10 rounded-full blur-[120px] pointer-events-none"></div>
-  <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px] pointer-events-none"></div>
+  <div class="absolute top-1/4 -left-1/4 sm:left-1/4 w-64 h-64 sm:w-96 sm:h-96 bg-amber-500/10 rounded-full blur-[80px] sm:blur-[120px] pointer-events-none"></div>
+  <div class="absolute bottom-1/4 -right-1/4 sm:right-1/4 w-64 h-64 sm:w-96 sm:h-96 bg-blue-500/10 rounded-full blur-[80px] sm:blur-[120px] pointer-events-none"></div>
 
   <!-- Back Link -->
   <a
@@ -27,18 +27,18 @@
   </a>
 
   <!-- Header Section -->
-  <div class="sm:mx-auto sm:w-full sm:max-w-md text-center relative z-10 mb-8">
+  <div class="sm:mx-auto sm:w-full sm:max-w-md text-center relative z-10 mb-6 sm:mb-8">
     <div
-      class="w-16 h-16 sm:w-20 sm:h-20 mx-auto bg-gradient-to-br from-amber-500 to-yellow-600 rounded-3xl flex items-center justify-center shadow-2xl shadow-amber-500/20 mb-6"
+      class="w-14 h-14 sm:w-20 sm:h-20 mx-auto bg-gradient-to-br from-amber-500 to-yellow-600 rounded-2xl sm:rounded-3xl flex items-center justify-center shadow-2xl shadow-amber-500/20 mb-4 sm:mb-6"
     >
-      <svg class="w-8 h-8 sm:w-10 sm:h-10 text-slate-900" fill="currentColor" viewBox="0 0 20 20">
+      <svg class="w-7 h-7 sm:w-10 sm:h-10 text-slate-900" fill="currentColor" viewBox="0 0 20 20">
         <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
       </svg>
     </div>
-    <h2 class="text-3xl font-black text-white tracking-tight">
+    <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight">
       Admin Portal
     </h2>
-    <p class="mt-2 text-sm text-slate-400 font-medium tracking-wide uppercase">
+    <p class="mt-2 text-xs sm:text-sm text-slate-400 font-medium tracking-wide uppercase px-4">
       Vimek Restomart Distribution
     </p>
   </div>
@@ -46,7 +46,7 @@
   <!-- Form Card -->
   <div class="sm:mx-auto sm:w-full sm:max-w-md relative z-10">
     <div
-      class="bg-slate-800/50 backdrop-blur-xl py-10 px-6 sm:px-10 shadow-2xl shadow-black/50 rounded-[2.5rem] border border-slate-700/50"
+      class="bg-slate-800/50 backdrop-blur-xl py-8 sm:py-10 px-6 sm:px-10 shadow-2xl shadow-black/50 rounded-3xl sm:rounded-[2.5rem] border border-slate-700/50"
     >
       @if (errorMessage) {
         <div
@@ -63,7 +63,7 @@
         <div>
           <label for="username" class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 ml-1">Username</label>
           <div class="relative group">
-            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-500 group-focus-within:text-amber-500 transition-colors">
+            <div class="absolute inset-y-0 left-0 pl-3.5 sm:pl-4 flex items-center pointer-events-none text-slate-500 group-focus-within:text-amber-500 transition-colors">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
             </div>
             <input
@@ -73,7 +73,7 @@
               autocomplete="username"
               required
               [(ngModel)]="username"
-              class="block w-full pl-12 pr-4 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm transition-all"
+              class="block w-full pl-11 sm:pl-12 pr-4 py-3 sm:py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm transition-all"
               placeholder="Enter admin username"
             />
           </div>
@@ -82,7 +82,7 @@
         <div>
           <label for="password" class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 ml-1">Secret Key</label>
           <div class="relative group">
-            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-500 group-focus-within:text-amber-500 transition-colors">
+            <div class="absolute inset-y-0 left-0 pl-3.5 sm:pl-4 flex items-center pointer-events-none text-slate-500 group-focus-within:text-amber-500 transition-colors">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
             </div>
             <input
@@ -92,7 +92,7 @@
               autocomplete="current-password"
               required
               [(ngModel)]="password"
-              class="block w-full pl-12 pr-4 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm transition-all"
+              class="block w-full pl-11 sm:pl-12 pr-4 py-3 sm:py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm transition-all"
               placeholder="••••••••"
             />
           </div>
@@ -101,7 +101,7 @@
         <div class="pt-2">
           <button
             type="submit"
-            class="w-full flex justify-center py-4 px-4 border border-transparent rounded-2xl shadow-xl shadow-amber-500/10 text-sm font-bold text-slate-900 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900 focus:ring-amber-500 transition-all duration-200 active:scale-[0.98]"
+            class="w-full flex justify-center py-3.5 sm:py-4 px-4 border border-transparent rounded-2xl shadow-xl shadow-amber-500/10 text-sm font-bold text-slate-900 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900 focus:ring-amber-500 transition-all duration-200 active:scale-[0.98]"
           >
             Authenticate Portal
           </button>

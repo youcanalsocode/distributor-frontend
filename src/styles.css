@@ -1,3 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import 'tailwindcss';
+/* Hide left arrow */
+.prev-btn {
+  display: none !important;
+}
+
+/* Hide dots */
+.slider-dots {
+  display: none !important;
+}

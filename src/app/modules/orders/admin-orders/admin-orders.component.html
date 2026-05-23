@@ -58,10 +58,67 @@
           [class.border-slate-200]="!isExpanded(order.id)"
         >
 
-          <!-- Order Summary Row (always visible, clickable) -->
+          <!-- Mobile Summary Card (Visible on mobile only < 640px) -->
           <button
             type="button"
-            class="w-full text-left px-5 py-4 flex flex-wrap items-center gap-x-6 gap-y-2 hover:bg-slate-50 transition"
+            class="sm:hidden w-full text-left px-4 py-4 flex flex-col gap-3 hover:bg-slate-50 transition"
+            (click)="toggleExpand(order.id)"
+          >
+            <!-- Top Row: Order ID and Status -->
+            <div class="flex justify-between items-center w-full">
+              <span class="text-sm font-bold text-amber-600">Order #{{ order.id }}</span>
+              <span
+                class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-extrabold"
+                [class]="getStatusConfig(order.status).bg + ' ' + getStatusConfig(order.status).text"
+              >
+                <span class="w-1.5 h-1.5 rounded-full inline-block" [class]="getStatusConfig(order.status).dot"></span>
+                {{ getStatusConfig(order.status).label }}
+              </span>
+            </div>
+
+            <!-- Middle Row: Restaurant Info -->
+            <div class="w-full">
+              <p class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Restaurant</p>
+              <p class="font-bold text-slate-800 text-sm truncate">
+                {{ order.restaurant_name || ('REST-' + order.restaurant_id) }}
+              </p>
+              @if (order.restaurant_phone) {
+                <div class="mt-1 flex items-center text-xs text-blue-600 font-medium">
+                  <i class="fas fa-phone-alt mr-1 text-[10px]"></i>
+                  <a [href]="'tel:' + order.restaurant_phone" (click)="$event.stopPropagation()">{{ order.restaurant_phone }}</a>
+                </div>
+              }
+            </div>
+
+            <!-- Bottom Row: Items, Date, Total, and Expand -->
+            <div class="flex justify-between items-end border-t border-slate-100 pt-3 mt-1 w-full gap-2">
+              <div>
+                <p class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Details</p>
+                <p class="text-xs text-slate-600 font-semibold mt-0.5">
+                  {{ order.items.length }} {{ order.items.length === 1 ? 'Item' : 'Items' }} • {{ order.created_at | date: 'dd MMM, hh:mm a' }}
+                </p>
+              </div>
+              <div class="text-right flex items-center gap-3">
+                <div>
+                  <p class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Total Amount</p>
+                  <p class="text-sm font-black text-slate-900 mt-0.5">₹{{ getOrderTotal(order) | number: '1.2-2' }}</p>
+                </div>
+                <!-- Expand Chevron -->
+                <div class="text-slate-400">
+                  <i
+                    class="fas transition-transform duration-200"
+                    [class.fa-chevron-down]="!isExpanded(order.id)"
+                    [class.fa-chevron-up]="isExpanded(order.id)"
+                  ></i>
+                </div>
+              </div>
+            </div>
+          </button>
+
+          <!-- Desktop Summary Row (Visible on screens >= 640px) -->
+          <button
+            type="button"
+            class="hidden sm:flex w-full text-left px-5 py-4 flex-wrap items-center gap-x-6 gap-y-2 hover:bg-slate-50 transition"
             (click)="toggleExpand(order.id)"
           >
             <!-- Order Number -->
@@ -131,7 +188,7 @@
 
           <!-- Expanded Detail Panel -->
           @if (isExpanded(order.id)) {
-            <div class="border-t border-slate-100 bg-slate-50 px-5 py-5 space-y-5">
+            <div class="border-t border-slate-100 bg-slate-50 px-4 py-4 sm:px-5 sm:py-5 space-y-5">
 
               <!-- Restaurant Info Card -->
               <div class="bg-white rounded-xl border border-slate-200 p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -165,12 +222,45 @@
                 }
               </div>
 
-              <!-- Order Items Table -->
+              <!-- Order Items Section (Mobile Cards + Desktop Table) -->
               <div>
-                <h4 class="text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
+                <h4 class="text-sm font-bold text-slate-700 mb-3 flex items-center gap-2">
                   <i class="fas fa-list-ul text-amber-500"></i> Order Items
                 </h4>
-                <div class="overflow-x-auto rounded-lg border border-slate-200">
+
+                <!-- Mobile Items List (Visible only on mobile) -->
+                <div class="sm:hidden space-y-2">
+                  @for (item of order.items; track item.id; let i = $index) {
+                    <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between gap-4">
+                      <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-2 mb-0.5">
+                          <span class="text-[10px] text-slate-500 font-bold bg-slate-100 w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0">
+                            {{ i + 1 }}
+                          </span>
+                          <span class="text-sm font-bold text-slate-800 truncate">
+                            {{ item.product_name || 'Product #' + item.product_id }}
+                          </span>
+                        </div>
+                        <p class="text-xs text-slate-500 pl-7">
+                          ₹{{ item.price | number: '1.2-2' }} x {{ item.quantity }}
+                        </p>
+                      </div>
+                      <div class="text-right flex-shrink-0">
+                        <p class="text-[9px] text-slate-400 uppercase font-bold tracking-wider">Subtotal</p>
+                        <p class="text-sm font-extrabold text-slate-900">₹{{ (item.price * item.quantity) | number: '1.2-2' }}</p>
+                      </div>
+                    </div>
+                  }
+                  
+                  <!-- Grand Total Card for Mobile -->
+                  <div class="bg-amber-500/10 border border-amber-500/20 p-4 rounded-xl flex justify-between items-center mt-3 shadow-sm">
+                    <span class="text-xs font-bold text-amber-900 uppercase tracking-wider">Grand Total</span>
+                    <span class="text-base font-black text-amber-700">₹{{ getOrderTotal(order) | number: '1.2-2' }}</span>
+                  </div>
+                </div>
+
+                <!-- Desktop Table View (Visible only on tablet/desktop) -->
+                <div class="hidden sm:block overflow-x-auto rounded-lg border border-slate-200">
                   <table class="min-w-full divide-y divide-slate-200">
                     <thead class="bg-slate-100">
                       <tr>
@@ -205,24 +295,26 @@
               </div>
 
               <!-- Action: Update Status -->
-              <div class="flex flex-wrap items-center gap-3 pt-2">
-                <span class="text-sm font-semibold text-slate-600">Update Status:</span>
-                @for (status of statusOptions; track status) {
-                  <button
-                    type="button"
-                    class="px-3 py-1.5 rounded-lg text-xs font-bold border transition"
-                    [disabled]="updatingStatusId() === order.id"
-                    [class]="order.status === status
-                      ? getStatusConfig(status).bg + ' ' + getStatusConfig(status).text + ' border-transparent cursor-default'
-                      : 'bg-white text-slate-600 border-slate-300 hover:border-amber-400 hover:text-amber-600'"
-                    (click)="updateStatus(order, status)"
-                  >
-                    @if (updatingStatusId() === order.id && order.status !== status) {
-                      <i class="fas fa-spinner fa-spin mr-1"></i>
-                    }
-                    {{ getStatusConfig(status).label }}
-                  </button>
-                }
+              <div class="flex flex-wrap items-center gap-2 sm:gap-3 pt-2">
+                <span class="text-sm font-semibold text-slate-600 w-full sm:w-auto mb-1 sm:mb-0">Update Status:</span>
+                <div class="flex flex-wrap gap-2">
+                  @for (status of statusOptions; track status) {
+                    <button
+                      type="button"
+                      class="px-3 py-2 sm:py-1.5 rounded-xl text-xs font-bold border transition active:scale-95 touch-manipulation"
+                      [disabled]="updatingStatusId() === order.id"
+                      [class]="order.status === status
+                        ? getStatusConfig(status).bg + ' ' + getStatusConfig(status).text + ' border-transparent cursor-default'
+                        : 'bg-white text-slate-600 border-slate-300 hover:border-amber-400 hover:text-amber-600'"
+                      (click)="updateStatus(order, status)"
+                    >
+                      @if (updatingStatusId() === order.id && order.status !== status) {
+                        <i class="fas fa-spinner fa-spin mr-1"></i>
+                      }
+                      {{ getStatusConfig(status).label }}
+                    </button>
+                  }
+                </div>
               </div>
 
             </div>

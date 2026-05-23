@@ -10,9 +10,35 @@
     </div>
   </div>
 
+  <!-- Mobile Tabs (Visible only on mobile screens < 1280px) -->
+  <div class="xl:hidden flex border border-slate-200 bg-white p-1 rounded-2xl shadow-sm mb-4">
+    <button
+      type="button"
+      (click)="activeTab = 'list'"
+      [class]="activeTab === 'list'
+        ? 'bg-amber-600 text-white font-bold shadow-md shadow-amber-600/10'
+        : 'text-slate-500 hover:text-slate-800 font-semibold'"
+      class="flex-1 text-center py-3 rounded-xl text-sm transition-all flex items-center justify-center gap-2"
+    >
+      <i class="fas fa-box"></i>
+      <span>Catalog</span>
+    </button>
+    <button
+      type="button"
+      (click)="activeTab = 'form'"
+      [class]="activeTab === 'form'
+        ? 'bg-amber-600 text-white font-bold shadow-md shadow-amber-600/10'
+        : 'text-slate-500 hover:text-slate-800 font-semibold'"
+      class="flex-1 text-center py-3 rounded-xl text-sm transition-all flex items-center justify-center gap-2"
+    >
+      <i class="fas" [class]="isEditing ? 'fa-edit' : 'fa-plus'"></i>
+      <span>{{ isEditing ? 'Edit Product' : 'Add Product' }}</span>
+    </button>
+  </div>
+
   <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
     <!-- Form Section -->
-    <div class="xl:col-span-1">
+    <div class="xl:col-span-1" [ngClass]="{'hidden xl:block': activeTab !== 'form', 'block': activeTab === 'form'}">
       <div class="bg-white shadow sm:rounded-lg border border-slate-200 sticky top-6">
         <div class="px-4 py-5 sm:p-6">
           <div class="flex justify-between items-center mb-4">
@@ -149,7 +175,7 @@
     </div>
 
     <!-- List Section -->
-    <div class="xl:col-span-2">
+    <div class="xl:col-span-2" [ngClass]="{'hidden xl:block': activeTab !== 'list', 'block': activeTab === 'list'}">
       <div class="bg-white shadow sm:rounded-lg overflow-hidden border border-slate-200">
         @if (isLoading) {
           <div class="p-8 text-center text-slate-500">
@@ -213,18 +239,18 @@
                       </div>
                     </div>
                   </div>
-                  <div class="flex-shrink-0 flex items-center gap-2">
+                  <div class="flex-shrink-0 flex items-center gap-3 ml-auto w-full justify-end sm:w-auto mt-3 sm:mt-0">
                     <button
                       (click)="editProduct(p)"
-                      class="inline-flex items-center p-2 border border-slate-300 rounded-md shadow-sm text-slate-600 bg-white hover:bg-slate-50 focus:outline-none transition"
+                      class="inline-flex items-center p-3 sm:p-2 border border-slate-300 rounded-xl shadow-sm text-slate-600 bg-white hover:bg-slate-50 focus:outline-none transition active:scale-95 touch-manipulation"
                     >
-                      <i class="fas fa-edit"></i>
+                      <i class="fas fa-edit text-base"></i>
                     </button>
                     <button
                       (click)="deleteProduct(p.id)"
-                      class="inline-flex items-center p-2 border border-transparent rounded-md shadow-sm text-red-600 bg-red-100 hover:bg-red-200 focus:outline-none transition"
+                      class="inline-flex items-center p-3 sm:p-2 border border-transparent rounded-xl shadow-sm text-red-600 bg-red-50 hover:bg-red-100 focus:outline-none transition active:scale-95 touch-manipulation"
                     >
-                      <i class="fas fa-trash"></i>
+                      <i class="fas fa-trash text-base"></i>
                     </button>
                   </div>
                 </div>

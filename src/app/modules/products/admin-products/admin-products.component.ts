@@ -37,6 +37,7 @@ export class AdminProductsComponent implements OnInit {
   unit = '';
   selectedFile: File | null = null;
   isSubmitting = false;
+  activeTab: 'list' | 'form' = 'list';
 
   get envApiUrl() {
     return environment.apiUrl;
@@ -80,6 +81,7 @@ export class AdminProductsComponent implements OnInit {
 
   editProduct(product: Product) {
     this.isEditing = true;
+    this.activeTab = 'form';
     this.currentProductId = product.id;
     this.name = product.name;
     this.description = product.description || '';
@@ -93,6 +95,7 @@ export class AdminProductsComponent implements OnInit {
 
   cancelEdit() {
     this.isEditing = false;
+    this.activeTab = 'list';
     this.currentProductId = null;
     this.resetForm();
   }
@@ -156,6 +159,7 @@ export class AdminProductsComponent implements OnInit {
             console.log('[onSubmit] add success');
             this.messageService.add({ severity: 'success', summary: 'Product Added', detail: `"${savedName}" added.` });
             this.resetForm();
+            this.activeTab = 'list';
             this.loadData();
           },
           error: (err) => {
